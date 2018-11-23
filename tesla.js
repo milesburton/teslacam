@@ -12,7 +12,7 @@ const fs = require('fs');
 const IMAGE_DIR = '/root/teslacam/images';
 const BACKUP_DIR = '/root/teslacam/video';
 const IMAGE_MOUNT_POINT = '/mnt';
-const RECORD_WINDOW_MS = 15 * 60 * 1000;
+const RECORD_WINDOW_MS = 1 * 60 * 1000;
 
 const sleep = ms => new Promise(r => setTimeout.call(this, r, Math.max(ms, 1)));
 
@@ -75,15 +75,19 @@ const startup = () => {
   unmountLocal(0);
 };
 
-const init = async () => {
+const waitForVideoFiles = async (minusLagTime = 0) => {
+  console.log('Waiting for video files');
+  await sleep(RECORD_WINDOW_MS - minusLagTime);
+};
+
+const init = () => {
   startup();
 
   let imageNum = 0;
 
   mount(imageNum);
 
-  console.log('Waiting ten minutes for files to accumulate');
-  await sleep(RECORD_WINDOW_MS);
+  waitForVideoFiles();
 
   while (true) {
     unmount(imageNum);
@@ -98,7 +102,9 @@ const init = async () => {
 
     const elapsedTimeMs = t1 - t0;
     console.log(`Took ${elapsedTimeMs} milliseconds to move`);
-    await sleep(RECORD_WINDOW_MS - elapsedTimeMs); // Need to wait 15 minutes minus elapsedTime
+
+    waitForVideoFiles();
+
     imageNum ^= 1;
   }
 };
