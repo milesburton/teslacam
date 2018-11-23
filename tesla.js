@@ -14,8 +14,7 @@ const BACKUP_DIR = '/root/teslacam/video';
 const IMAGE_MOUNT_POINT = '/mnt';
 const RECORD_WINDOW_MS = 1 * 60 * 1000;
 
-const sleep = async(ms) => 
-    await new Promise(r => setTimeout(r, ms));
+const sleep = async ms => new Promise(r => setTimeout(r, ms));
 
 const logExec = buffer => console.log(buffer.toString());
 
@@ -57,17 +56,28 @@ const fixLocal = (imageNum) => {
   }
 };
 
+const countFilesInDirectory = dirPath => fs
+  .readdirSync(dirPath, { withFileTypes: true })
+  .filter(f => typeof f === 'string');
+
 const copyLocal = (imageNum) => {
   console.log(
     `Preparing to copy videos from ${IMAGE_MOUNT_POINT}/teslacam to ${BACKUP_DIR} for image ${imageNum}`,
   );
 
-  const files = fs
-    .readdirSync(`${IMAGE_MOUNT_POINT}/teslacam`, { withFileTypes: true })
-    .filter(f => typeof f === 'string');
+  const teslacamPath = `${IMAGE_MOUNT_POINT}/teslacam`;
+  const filesInPath = countFilesInDirectory(teslacamPath);
 
-  if (files.length > 0) {
-    logExec(execSync(`mv ${IMAGE_MOUNT_POINT}/teslacam/* ${BACKUP_DIR}`));
+   console(`Found ${filesInPath} files in ${teslacamPath}`);
+
+  if (filesInPath.length > 0) {
+    const filesBeforeCopy = countFilesInDirectory(BACKUP_DIR);
+    logExec(execSync(`mv ${teslacamPath}/* ${BACKUP_DIR}`));
+
+    const filesAfterCopy = countFilesInDirectory(BACKUP_DIR);
+    if (filesAfterCopy - filesBeforeCopy < filesInPath) {
+      console.log('Copy error, number of files moved is incorrect');
+    }
   }
 };
 
@@ -87,8 +97,13 @@ const performSanityCheck = () => {
   };
 
   const mountAndCheckUsbImage = (imageNum) => {
+    const teslaCamDirectoryLocal = `${IMAGE_MOUNT_POINT}/teslacam`;
     mountLocal(imageNum);
-    createIfNotExists(`${IMAGE_MOUNT_POINT}/teslacam`);
+    createIfNotExists(teslaCamDirectoryLocal);
+    const teslaCamFiles = countFilesInDirectory(teslaCamDirectoryLocal);
+    if (teslaCamFiles > 0) {
+      // TODO: do copy
+    }
     unmountLocal(imageNum);
   };
 
@@ -149,4 +164,3 @@ const init = async () => {
 };
 
 init();
-
