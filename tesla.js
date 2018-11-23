@@ -89,6 +89,9 @@ const benchmark = (fn) => {
 };
 
 const processVideo = (imageNum) => {
+  mount(imageNum);
+
+  waitForVideoFiles();
   unmount(imageNum);
   mount(imageNum ^ 1);
 
@@ -105,10 +108,6 @@ const init = () => {
   startup();
 
   let imageNum = 0;
-
-  mount(imageNum);
-
-  waitForVideoFiles();
 
   while (true) {
     processVideo(imageNum);
