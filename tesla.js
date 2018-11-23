@@ -80,6 +80,27 @@ const waitForVideoFiles = async (minusLagTime = 0) => {
   await sleep(RECORD_WINDOW_MS - minusLagTime);
 };
 
+const benchmark = (fn) => {
+  const t0 = now();
+  fn();
+  const elapsedTimeMs = now() - t0;
+  console.log(`Took ${elapsedTimeMs} milliseconds to move`);
+  return elapsedTimeMs;
+};
+
+const processVideo = (imageNum) => {
+  unmount(imageNum);
+  mount(imageNum ^ 1);
+
+  const elapsedTimeMs = benchmark(() => {
+    fixLocal(imageNum);
+    mountLocal(imageNum);
+    copyLocal(imageNum);
+    unmountLocal(imageNum);
+  });
+  waitForVideoFiles(elapsedTimeMs);
+};
+
 const init = () => {
   startup();
 
@@ -90,21 +111,7 @@ const init = () => {
   waitForVideoFiles();
 
   while (true) {
-    unmount(imageNum);
-    mount(imageNum ^ 1);
-    const t0 = now();
-
-    fixLocal(imageNum);
-    mountLocal(imageNum);
-    copyLocal(imageNum);
-    unmountLocal(imageNum);
-    const t1 = now();
-
-    const elapsedTimeMs = t1 - t0;
-    console.log(`Took ${elapsedTimeMs} milliseconds to move`);
-
-    waitForVideoFiles();
-
+    processVideo(imageNum);
     imageNum ^= 1;
   }
 };
