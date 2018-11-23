@@ -14,7 +14,8 @@ const BACKUP_DIR = '/root/teslacam/video';
 const IMAGE_MOUNT_POINT = '/mnt';
 const RECORD_WINDOW_MS = 1 * 60 * 1000;
 
-const sleep = ms => new Promise(r => setTimeout.call(this, r, Math.max(ms, 1)));
+const sleep = async(ms) => 
+    await new Promise(r => setTimeout(r, ms));
 
 const logExec = buffer => console.log(buffer.toString());
 
@@ -22,6 +23,7 @@ const unmount = (imageNum) => {
   console.log(`Unmounting image ${imageNum}`);
   logExec(execSync('modprobe -r g_mass_storage'));
 };
+
 const mount = (imageNum) => {
   console.log(`Preparing to mount image ${imageNum}`);
   logExec(
@@ -69,10 +71,41 @@ const copyLocal = (imageNum) => {
   }
 };
 
+const performSanityCheck = () => {
+  const createIfNotExists = (dirName) => {
+    if (!fs.existsSync(dirName)) {
+      fs.mkdirSync(dirName);
+    }
+  };
+
+  const createImageIfNotExists = (imageNum) => {
+    const expectedFilename = `${IMAGE_DIR}/cam${imageNum}`;
+    if (!fs.existsSync(expectedFilename)) {
+      logExec(execSync(`dd bs=1M if=/dev/zero of=${IMAGE_DIR}/cam{imageNum} count=1024`));
+      logExec(execSync(`mkdosfs ${IMAGE_DIR}/cam{imageNum} -F 32 -I`));
+    }
+  };
+
+  const mountAndCheckUsbImage = (imageNum) => {
+    mountLocal(imageNum);
+    createIfNotExists(`${IMAGE_MOUNT_POINT}/teslacam`);
+    unmountLocal(imageNum);
+  };
+
+  createIfNotExists(IMAGE_MOUNT_POINT);
+  createIfNotExists(IMAGE_DIR);
+  createImageIfNotExists(0);
+  createImageIfNotExists(1);
+  mountAndCheckUsbImage(0);
+  mountAndCheckUsbImage(1);
+};
+
 const startup = () => {
   console.log('Starting Tesla Sync script');
   unmount('All');
   unmountLocal(0);
+
+  performSanityCheck();
 };
 
 const waitForVideoFiles = async (minusLagTime = 0) => {
@@ -88,10 +121,10 @@ const benchmark = (fn) => {
   return elapsedTimeMs;
 };
 
-const processVideo = (imageNum) => {
+const processVideo = async (imageNum) => {
   mount(imageNum);
 
-  waitForVideoFiles();
+  await waitForVideoFiles();
   unmount(imageNum);
   mount(imageNum ^ 1);
 
@@ -101,18 +134,19 @@ const processVideo = (imageNum) => {
     copyLocal(imageNum);
     unmountLocal(imageNum);
   });
-  waitForVideoFiles(elapsedTimeMs);
+  await waitForVideoFiles(elapsedTimeMs);
 };
 
-const init = () => {
+const init = async () => {
   startup();
 
   let imageNum = 0;
 
   while (true) {
-    processVideo(imageNum);
+    await processVideo(imageNum);
     imageNum ^= 1;
   }
 };
 
 init();
+
