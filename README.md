@@ -18,6 +18,9 @@ Using a couple of tricks I've learned through tinkering with various single boar
 ## Software Requirements
 1. 2018-11-13-raspbian-stretch-lite or later
 2. Etcher to write the disk image to the SDHC card (dd, win32diskimager etc etc will also work)
+3. daemontools package
+4. NodeJS 10.x for Arm v6
+5. OTG Mode enabled in the boot configuration
 
 # Research & notes
 * Tesla V9 Dashcam records up to one hour, in a circular buffer type fashion split into one minute increments
@@ -64,5 +67,6 @@ With all this in mind, logically speaking the following steps need to be followe
 ## TODO
  - Write companion script to upload files to a remote location
  - Experiment with streaming, it's trivial to stream to youtube with FFMPEG
+ - Explain setup instructors
  - Write decent installation script to automatically configure the application on a Pi
  - Buy Tesla Roadster
