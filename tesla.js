@@ -57,8 +57,8 @@ const fixLocal = (imageNum) => {
 };
 
 const countFilesInDirectory = dirPath => fs
-  .readdirSync(dirPath, { withFileTypes: true })
-  .filter(f => typeof f === 'string');
+  .readdirSync(dirPath, { withFileTypes: true }).length;
+  //.filter(f => typeof f === 'string').length;
 
 const copyLocal = (imageNum) => {
   console.log(
@@ -68,9 +68,9 @@ const copyLocal = (imageNum) => {
   const teslacamPath = `${IMAGE_MOUNT_POINT}/teslacam`;
   const filesInPath = countFilesInDirectory(teslacamPath);
 
-   console(`Found ${filesInPath} files in ${teslacamPath}`);
+   console.log(`Found ${filesInPath} files in ${teslacamPath}`);
 
-  if (filesInPath.length > 0) {
+  if (filesInPath > 0) {
     const filesBeforeCopy = countFilesInDirectory(BACKUP_DIR);
 
     logExec(execSync(`touch ${BACKUP_DIR}/lock`));
@@ -105,7 +105,9 @@ const performSanityCheck = () => {
     createIfNotExists(teslaCamDirectoryLocal);
     const teslaCamFiles = countFilesInDirectory(teslaCamDirectoryLocal);
     if (teslaCamFiles > 0) {
-      // TODO: do copy
+	copyLocal(imageNum);	
+    }else{
+	console.log('No files found');
     }
     unmountLocal(imageNum);
   };
