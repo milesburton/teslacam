@@ -71,4 +71,5 @@ With all this in mind, logically speaking the following steps need to be followe
  - Write decent installation script to automatically configure the application on a Pi
  - Rotate the video storage to avoid running out of space
  - Use a read only file system to avoid corruption of the operating system
+ - Security harden the install
  - Buy Tesla Roadster
