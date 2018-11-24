@@ -12,7 +12,7 @@ const fs = require('fs');
 const IMAGE_DIR = '/root/teslacam/images';
 const BACKUP_DIR = '/root/teslacam/video';
 const IMAGE_MOUNT_POINT = '/mnt';
-const RECORD_WINDOW_MS = 1 * 60 * 1000;
+const RECORD_WINDOW_MS = 15 * 60 * 1000;
 
 const sleep = async ms => new Promise(r => setTimeout(r, ms));
 
@@ -72,7 +72,10 @@ const copyLocal = (imageNum) => {
 
   if (filesInPath.length > 0) {
     const filesBeforeCopy = countFilesInDirectory(BACKUP_DIR);
+
+    logExec(execSync(`touch ${BACKUP_DIR}/lock`));
     logExec(execSync(`mv ${teslacamPath}/* ${BACKUP_DIR}`));
+    logExec(execSync(`rm ${BACKUP_DIR}/lock`));
 
     const filesAfterCopy = countFilesInDirectory(BACKUP_DIR);
     if (filesAfterCopy - filesBeforeCopy < filesInPath) {

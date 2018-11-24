@@ -1,0 +1,2 @@
+#!/bin/sh
+exec multilog  t n100 s16777215 ./main 2>&1
