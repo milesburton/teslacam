@@ -3,7 +3,7 @@
 ## Overview
 As of late 2018 Tesla released V9 which among a number of improvements included dash cam functionality. This works by placing a suitably sized USB drive in one of the available USB ports at the front of the vehicle (Model S).
 
-One drawback of this system, not uncommon in dash cams, there's no easy way to push this video to the 'cloud' - nor any any capability to view in near real-time. This project aims to make this possible.
+One drawback of this system, not uncommon in dash cams, there's no easy way to push this video to the 'cloud' - nor any capability to view in near real-time. This project aims to make this possible.
 
 Using a couple of tricks I've learned through tinkering with various single board computers, it is possible emulate a USB drive on the fly. In essence we are going emulate a USB drive, and periodically store the data on the SDHC. Once we have the video we can do what ever we'd like - maybe live stream, upload to your favourite cloud provider or simply backup the files when you return home.
 
