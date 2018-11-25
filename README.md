@@ -80,9 +80,8 @@ With all this in mind, logically speaking the following steps need to be followe
 	* Unmount the first image on the Pi
 	
 ## TODO
- - Write companion script to upload files to a remote location
  - Experiment with streaming, it's trivial to stream to youtube with FFMPEG
- - Explain setup instructions
+ - Explain setup instructions (more detail required)
  - Write decent installation script to automatically configure the application on a Pi
  - Rotate the video storage to avoid running out of space
  - Use a read only file system to avoid corruption of the operating system
