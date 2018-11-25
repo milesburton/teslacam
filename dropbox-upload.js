@@ -6,6 +6,7 @@ const fs = require('fs');
 const BACKUP_DIR = '/root/teslacam/video';
 const DROPBOX_UPLOADER = '/root/dropbox_uploader.sh';
 const LOCK_FILE_NAME = 'lock';
+const WAIT_INTERVAL = 30 * 1000;
 
 const sleep = async ms => new Promise(r => setTimeout(r, ms));
 
@@ -34,7 +35,7 @@ const isOnline = async () => {
   }
 }
 
-const attemptUpload = (filename, opts = { deleteWhenComplete: true}) => {
+const attemptUpload = (filename, opts = { deleteWhenComplete: true }) => {
 
   try {
     execSync(`${DROPBOX_UPLOADER} upload ${BACKUP_DIR}/${filename} .`, { bubbleError: true })
@@ -47,9 +48,18 @@ const attemptUpload = (filename, opts = { deleteWhenComplete: true}) => {
   }
 };
 
-const getVideoFileNames = (files) => files.map(({ name }) => name).filter(f =>f.endsWith('mp4'));
+const getVideoFileNames = (files) => files.map(({ name }) => name).filter(f => f.endsWith('mp4'));
 
 const hasLockFile = (files) => !!files.find(({ name }) => name === LOCK_FILE_NAME);
+
+const uploadVideoFiles = () => {
+  const videoFiles = getVideoFileNames(files);
+
+  console.log(`Preparing to upload ${videoFiles.length}`);
+  const uploadedFiles = videoFiles.map(attemptUpload).filter(v => v);
+
+  console.log(`Uploaded ${uploadedFiles.length}/${videoFiles.length}`);
+};
 
 const init = async () => {
 
@@ -58,19 +68,18 @@ const init = async () => {
   const files = fs
     .readdirSync(BACKUP_DIR, { withFileTypes: true });
 
-  if (isOnline && !hasLockFile(files)) {
-    console.log('TeslaCam is online and no lock file discovered');
+  while (true) {
 
-    const [test, ...rest] = getVideoFileNames(files);
-    const videoFiles = [test];
+    if (isOnline && !hasLockFile(files)) {
+      console.log('TeslaCam is online and no lock file discovered');
 
-    console.log(`Preparing to upload ${videoFiles.length}`);
-    const uploadedFiles = videoFiles.map(attemptUpload).filter(v => v);
+      uploadVideoFiles();
 
-    console.log(`Uploaded ${uploadedFiles.length}/${videoFiles.length}`);
+    } else {
+      console.log('No internet or lock file discovered. Waiting till next attempt');
+    }
 
-  } else {
-    console.log('No internet or lock file discovered. Waiting till next attempt');
+    await sleep(WAIT_INTERVAL);
   }
 
 };
