@@ -3,6 +3,7 @@
 /* eslint no-bitwise: 0 */
 /* eslint no-await-in-loop: 0 */
 
+const { benchmark, execSync, sleep } = require('./src/common.js');
 const { execSync: execSyncNoLogging } = require('child_process');
 const {
   performance: { now },
@@ -13,23 +14,6 @@ const IMAGE_DIR = '/root/teslacam/images';
 const BACKUP_DIR = '/root/teslacam/video';
 const IMAGE_MOUNT_POINT = '/mnt';
 const RECORD_WINDOW_MS = 15 * 60 * 1000;
-
-const sleep = async ms => new Promise(r => setTimeout(r, ms));
-
-const execSync = (cmd, opts = { bubbleError: false }) => {
-  console.log(`Preparing to run command [${cmd}]`);
-  try {
-    const buffer = execSyncNoLogging(cmd);
-
-    console.log('Execution result sucess =====');
-    console.log(buffer.toString());
-    console.log('=============================');
-  } catch (err) {
-    console.log('Execution result error ======');
-    console.log(err.toString());
-    console.log('=============================');
-  }
-};
 
 const unmount = (imageNum) => {
   console.log(`Unmounting image ${imageNum}`);
@@ -132,13 +116,6 @@ const waitForVideoFiles = async (minusLagTime = 0) => {
   await sleep(RECORD_WINDOW_MS - minusLagTime);
 };
 
-const benchmark = (fn) => {
-  const t0 = now();
-  fn();
-  const elapsedTimeMs = now() - t0;
-  console.log(`Took ${elapsedTimeMs} milliseconds to move`);
-  return elapsedTimeMs;
-};
 
 const processVideo = async (imageNum) => {
   mount(imageNum);
