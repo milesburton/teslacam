@@ -1,5 +1,8 @@
 const internetAvailable = require("internet-available");
 const { execSync: execSyncNoLogging } = require('child_process');
+const {
+  performance: { now },
+} = require('perf_hooks');
 
 const fs = require('fs');
 
@@ -17,12 +20,20 @@ const execSync = (cmd, opts = { bubbleError: false }) => {
 
     console.log('Execution result sucess =====');
     console.log(buffer.toString());
-    console.log('=============================');
+    console.log('End =========================');
   } catch (err) {
     console.log('Execution result error ======');
     console.log(err.toString());
-    console.log('=============================');
+    console.log('End =========================');
   }
+};
+
+const benchmark = (fn) => {
+  const t0 = now();
+  fn();
+  const elapsedTimeMs = now() - t0;
+  console.log(`Took ${elapsedTimeMs} milliseconds to move`);
+  return elapsedTimeMs;
 };
 
 const isOnline = async () => {
@@ -52,12 +63,11 @@ const getVideoFileNames = (files) => files.map(({ name }) => name).filter(f => f
 
 const hasLockFile = (files) => !!files.find(({ name }) => name === LOCK_FILE_NAME);
 
-const uploadVideoFiles = () => {
+const uploadVideoFiles = (files) => {
   const videoFiles = getVideoFileNames(files);
 
-  console.log(`Preparing to upload ${videoFiles.length}`);
+  console.log(`Preparing to upload ${videoFiles.length} videos`);
   const uploadedFiles = videoFiles.map(attemptUpload).filter(v => v);
-
   console.log(`Uploaded ${uploadedFiles.length}/${videoFiles.length}`);
 };
 
@@ -65,15 +75,17 @@ const init = async () => {
 
   console.log('TeslaCam Dropbox Upload daemon');
 
-  const files = fs
-    .readdirSync(BACKUP_DIR, { withFileTypes: true });
-
   while (true) {
+
+    const files = fs
+      .readdirSync(BACKUP_DIR, { withFileTypes: true });
 
     if (isOnline && !hasLockFile(files)) {
       console.log('TeslaCam is online and no lock file discovered');
 
-      uploadVideoFiles();
+      benchmark(() => {
+        uploadVideoFiles(files);
+      });
 
     } else {
       console.log('No internet or lock file discovered. Waiting till next attempt');
