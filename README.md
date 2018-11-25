@@ -46,6 +46,7 @@ Using a couple of tricks I've learned through tinkering with various single boar
 * The Dash cam and USB ports only operate in the following situations
   * The car is powered on by unlocking the vehicle
   * Climate control is left on when you leave the car
+  * It would appear as of V9 the USB ports are powered whilst charging (TBC). May not apply if you use range mode.
 * Climate control will only run for 3 hours - and is a rather wasteful from an energy perspective. This means the dashcam is not suitable for 24hr recording, a 'normal' dash cam is better suited if you have this requirement. 
 * The Tesla Dash cam tends to be vastly clearer than a interior camera, particularly at night - very easy to make out number plates.
 * FAT32, the file system supported by Tesla, cannot be mounted twice without corruption
