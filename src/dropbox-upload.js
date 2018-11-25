@@ -1,18 +1,15 @@
 #!/bin/node
 
+/* eslint no-await-in-loop: 0 */
+
+const { BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL  } = require('../etc/config.js');
 const { benchmark, execSync, sleep } = require('./common.js');
 const internetAvailable = require('internet-available');
-const { execSync: execSyncNoLogging } = require('child_process');
 const {
   performance: { now },
 } = require('perf_hooks');
 
 const fs = require('fs');
-
-const BACKUP_DIR = '/root/teslacam/video';
-const DROPBOX_UPLOADER = '/root/dropbox_uploader.sh';
-const LOCK_FILE_NAME = 'lock';
-const WAIT_INTERVAL = 30 * 1000;
 
 
 const isOnline = async () => {

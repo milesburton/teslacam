@@ -3,17 +3,12 @@
 /* eslint no-bitwise: 0 */
 /* eslint no-await-in-loop: 0 */
 
+const { IMAGE_DIR, BACKUP_DIR, IMAGE_MOUNT_POINT, RECORD_WINDOW_MS } = require('../etc/config.js');
 const { benchmark, execSync, sleep } = require('./common.js');
-const { execSync: execSyncNoLogging } = require('child_process');
 const {
   performance: { now },
 } = require('perf_hooks');
 const fs = require('fs');
-
-const IMAGE_DIR = '/root/teslacam/images';
-const BACKUP_DIR = '/root/teslacam/video';
-const IMAGE_MOUNT_POINT = '/mnt';
-const RECORD_WINDOW_MS = 15 * 60 * 1000;
 
 const unmount = (imageNum) => {
   console.log(`Unmounting image ${imageNum}`);
