@@ -11,7 +11,7 @@ Using a couple of tricks I've learned through tinkering with various single boar
 1. 2017 (AP 2.5) or beyond Tesla
 2. Raspberry Pi Zero W (only this model is supported)
 3. A wireless access point within reasonable distance of the Pi (mobile phone, home router etc)
-4. A sufficiently large SDHC card - minimum of 16gig is recommended, class 10 at a minimum
+4. A sufficiently large SDHC card - Class 10 or better, at least 16Gig, ideally the largest you can buy. 
 5. High quality short USB A to USB Micro cable - Anker is quite decent
 6. Optional, a case to house the Raspberry Pi - anything with ventilation would be fine
 
