@@ -21,6 +21,7 @@ Using a couple of tricks I've learned through tinkering with various single boar
 3. daemontools package
 4. NodeJS 10.x for Arm v6
 5. OTG Mode enabled in the boot configuration
+6. [Dropbox uploader](https://github.com/andreafabrizi/Dropbox-Uploader)
 
 # Research & notes
 * Tesla V9 Dashcam records up to one hour, in a circular buffer type fashion split into one minute increments
@@ -72,4 +73,7 @@ With all this in mind, logically speaking the following steps need to be followe
  - Rotate the video storage to avoid running out of space
  - Use a read only file system to avoid corruption of the operating system
  - Security harden the install
- - Buy Tesla Roadster
+ - Buy Tesla Roadster 
+ 
+ ## Shameless plug
+ If you found this useful, feel free to use my [Tesla Referral code for free supercharging](https://ts.la/miles16015) 
