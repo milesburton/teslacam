@@ -21,6 +21,20 @@ Using a couple of tricks I've learned through tinkering with various single boar
 3. daemontools package
 4. NodeJS 10.x for Arm v6
 5. OTG Mode enabled in the boot configuration
+6. [Dropbox uploader](https://github.com/andreafabrizi/Dropbox-Uploader)
+
+## Instructions (Detail to come)
+1. [Download](https://www.raspberrypi.org/downloads/raspbian/) and burn the latest "lite" Raspbian to a suitable SDHC card using [Etcher](https://www.balena.io/etcher/) (or equivalent) 
+2. Modify the /boot partition to [enable USB OTG](https://gist.github.com/gbaman/50b6cca61dd1c3f88f41) We need to enable g_mass_storage and dw2.
+3. Add your [WIFI configuration details](https://www.raspberrypi-spy.co.uk/2017/04/manually-setting-up-pi-wifi-using-wpa_supplicant-conf/) (consider adding several, including a portable hotspot such as your phone)
+4. Install daemontools. Follow [these steps](https://isotope11.com/blog/manage-your-services-with-daemontools) up until "Making Services"
+5. Install [Nodejs for Linux Arm V6](https://nodejs.org/en/download/). Gunzip this to /opt/node, symlink to /usr/bin
+6. As root (sudo su)
+  * Clone [Dropbox-Uploader](https://github.com/andreafabrizi/Dropbox-Uploader) (if you want dropbox upload capability). Be sure to follow the instructions including creating a 'TeslaCam' app on the dropbox portal
+  * Clone this repository to /root/teslacam
+  * Create the services sym links as follows cd /etc/service ln -s /root/teslacam/services/* .
+7. Plug the Pi Zero W into the Tesla media USB ports (the front ports). Make sure you use the data port on the Pi, google if you are unsure.
+8. Reboot, once the automatic configuration completes (circa 20 minutes) the car should detect the Pi as a USB drive.
 
 # Research & notes
 * Tesla V9 Dashcam records up to one hour, in a circular buffer type fashion split into one minute increments
@@ -32,6 +46,7 @@ Using a couple of tricks I've learned through tinkering with various single boar
 * The Dash cam and USB ports only operate in the following situations
   * The car is powered on by unlocking the vehicle
   * Climate control is left on when you leave the car
+  * It would appear as of V9 the USB ports are powered whilst charging (TBC). May not apply if you use range mode.
 * Climate control will only run for 3 hours - and is a rather wasteful from an energy perspective. This means the dashcam is not suitable for 24hr recording, a 'normal' dash cam is better suited if you have this requirement. 
 * The Tesla Dash cam tends to be vastly clearer than a interior camera, particularly at night - very easy to make out number plates.
 * FAT32, the file system supported by Tesla, cannot be mounted twice without corruption
@@ -72,4 +87,7 @@ With all this in mind, logically speaking the following steps need to be followe
  - Rotate the video storage to avoid running out of space
  - Use a read only file system to avoid corruption of the operating system
  - Security harden the install
- - Buy Tesla Roadster
+ - Buy Tesla Roadster 
+ 
+ ## Shameless plug
+ If you found this useful, feel free to use my [Tesla Referral code for free supercharging](https://ts.la/miles16015) 
