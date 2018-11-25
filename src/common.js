@@ -17,6 +17,10 @@ const execSync = (cmd, opts = { bubbleError: false }) => {
     console.log('Execution result error ======');
     console.log(err.toString());
     console.log('End =========================');
+
+    if (opts.bubbleError) {
+      throw err;
+    }
   }
 };
 
@@ -28,4 +32,4 @@ const benchmark = (fn) => {
   return elapsedTimeMs;
 };
 
-module.exports = {sleep, execSync, benchmark};
+module.exports = { sleep, execSync, benchmark };

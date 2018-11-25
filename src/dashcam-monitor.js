@@ -3,12 +3,11 @@
 /* eslint no-bitwise: 0 */
 /* eslint no-await-in-loop: 0 */
 
-const { IMAGE_DIR, BACKUP_DIR, IMAGE_MOUNT_POINT, RECORD_WINDOW_MS } = require('../etc/config.js');
-const { benchmark, execSync, sleep } = require('./common.js');
-const {
-  performance: { now },
-} = require('perf_hooks');
 const fs = require('fs');
+const {
+  IMAGE_DIR, BACKUP_DIR, IMAGE_MOUNT_POINT, RECORD_WINDOW_MS,
+} = require('../etc/config.js');
+const { benchmark, execSync, sleep } = require('./common.js');
 
 const unmount = (imageNum) => {
   console.log(`Unmounting image ${imageNum}`);

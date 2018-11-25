@@ -2,14 +2,13 @@
 
 /* eslint no-await-in-loop: 0 */
 
-const { BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL  } = require('../etc/config.js');
-const { benchmark, execSync, sleep } = require('./common.js');
 const internetAvailable = require('internet-available');
-const {
-  performance: { now },
-} = require('perf_hooks');
 
 const fs = require('fs');
+const { benchmark, execSync, sleep } = require('./common.js');
+const {
+  BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL,
+} = require('../etc/config.js');
 
 
 const isOnline = async () => {
@@ -25,7 +24,11 @@ const isOnline = async () => {
 const attemptUpload = (filename, opts = { deleteWhenComplete: true }) => {
   try {
     execSync(`${DROPBOX_UPLOADER} upload ${BACKUP_DIR}/${filename} .`, { bubbleError: true });
-    execSync(`rm ${BACKUP_DIR}/${filename}`);
+
+    if (opts.deleteWhenComplete) {
+	    execSync(`rm ${BACKUP_DIR}/${filename}`);
+    }
+
     console.log(`Uploaded ${filename}`);
     return true;
   } catch (err) {
