@@ -3,7 +3,7 @@
 /* eslint no-bitwise: 0 */
 /* eslint no-await-in-loop: 0 */
 
-const { execSync } = require('child_process');
+const { execSync : execSyncNoLogging } = require('child_process');
 const {
   performance: { now },
 } = require('perf_hooks');
@@ -16,49 +16,49 @@ const RECORD_WINDOW_MS = 15 * 60 * 1000;
 
 const sleep = async ms => new Promise(r => setTimeout(r, ms));
 
-const logExec = buffer => console.log(buffer.toString());
+const execSync = (cmd, opts = { bubbleError : false }) => {
+	console.log(`Preparing to run command [${cmd}]`);
+	try {
+	const buffer = execSyncNoLogging(cmd);
+
+	console.log('Execution result sucess =====');
+	console.log(buffer.toString());
+	console.log('=============================');
+	} catch(err){
+
+	console.log('Execution result error ======');
+	console.log(err.toString());
+	console.log('=============================');
+	}
+}
 
 const unmount = (imageNum) => {
   console.log(`Unmounting image ${imageNum}`);
-  logExec(execSync('modprobe -r g_mass_storage'));
+  execSync('modprobe -r g_mass_storage');
 };
 
 const mount = (imageNum) => {
   console.log(`Preparing to mount image ${imageNum}`);
-  logExec(
-    execSync(`sudo modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} stall=0,0, ro=0,0 removable=1,1`),
-  );
+    execSync(`sudo modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} stall=0,0, ro=0,0 removable=1,1`);
 };
 
 const mountLocal = (imageNum) => {
   console.log(`Preparing to local mount image ${imageNum}`);
-  logExec(execSync(`mount ${IMAGE_DIR}/cam${imageNum} ${IMAGE_MOUNT_POINT}`));
+  execSync(`mount ${IMAGE_DIR}/cam${imageNum} ${IMAGE_MOUNT_POINT}`);
 };
 
 const unmountLocal = (imageNum) => {
   console.log(`Preparing to unmount local image ${imageNum}`);
-
-  try {
-    logExec(execSync('umount /mnt'));
-  } catch (e) {
-    console.log('Ignoring error');
-  }
+    execSync('umount /mnt');
 };
 
 const fixLocal = (imageNum) => {
   console.log('Attempting to fix image');
-  try {
-    logExec(execSync(`fsck -a ${IMAGE_DIR}/cam${imageNum}`));
-  } catch (error) {
-    console.log(
-      'Discovered Errors, consuming error message. Hopefully not fatal',
-    );
-  }
+    execSync(`fsck -a ${IMAGE_DIR}/cam${imageNum}`);
 };
 
 const countFilesInDirectory = dirPath => fs
   .readdirSync(dirPath, { withFileTypes: true }).length;
-  //.filter(f => typeof f === 'string').length;
 
 const copyLocal = (imageNum) => {
   console.log(
@@ -73,9 +73,9 @@ const copyLocal = (imageNum) => {
   if (filesInPath > 0) {
     const filesBeforeCopy = countFilesInDirectory(BACKUP_DIR);
 
-    logExec(execSync(`touch ${BACKUP_DIR}/lock`));
-    logExec(execSync(`mv ${teslacamPath}/* ${BACKUP_DIR}`));
-    logExec(execSync(`rm ${BACKUP_DIR}/lock`));
+    execSync(`touch ${BACKUP_DIR}/lock`);
+    execSync(`mv ${teslacamPath}/* ${BACKUP_DIR}`);
+    execSync(`rm ${BACKUP_DIR}/lock`);
 
     const filesAfterCopy = countFilesInDirectory(BACKUP_DIR);
     if (filesAfterCopy - filesBeforeCopy < filesInPath) {
@@ -94,8 +94,8 @@ const performSanityCheck = () => {
   const createImageIfNotExists = (imageNum) => {
     const expectedFilename = `${IMAGE_DIR}/cam${imageNum}`;
     if (!fs.existsSync(expectedFilename)) {
-      logExec(execSync(`dd bs=1M if=/dev/zero of=${IMAGE_DIR}/cam{imageNum} count=1024`));
-      logExec(execSync(`mkdosfs ${IMAGE_DIR}/cam{imageNum} -F 32 -I`));
+      execSync(`dd bs=1M if=/dev/zero of=${IMAGE_DIR}/cam{imageNum} count=1024`);
+      execSync(`mkdosfs ${IMAGE_DIR}/cam{imageNum} -F 32 -I`);
     }
   };
 
