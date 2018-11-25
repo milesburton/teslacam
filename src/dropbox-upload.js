@@ -1,4 +1,6 @@
-const { benchmark, execSync, sleep } = require('./src/common.js');
+#!/bin/node
+
+const { benchmark, execSync, sleep } = require('./common.js');
 const internetAvailable = require('internet-available');
 const { execSync: execSyncNoLogging } = require('child_process');
 const {

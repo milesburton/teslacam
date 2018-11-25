@@ -3,7 +3,7 @@
 /* eslint no-bitwise: 0 */
 /* eslint no-await-in-loop: 0 */
 
-const { benchmark, execSync, sleep } = require('./src/common.js');
+const { benchmark, execSync, sleep } = require('./common.js');
 const { execSync: execSyncNoLogging } = require('child_process');
 const {
   performance: { now },
