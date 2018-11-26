@@ -87,6 +87,8 @@ With all this in mind, logically speaking the following steps need to be followe
  - Use a read only file system to avoid corruption of the operating system
  - Rename video files so they order neatly on Linux/Windows/OSX
  - Security harden the install
+ - Make performance metrics more useful (time to upload video etc)
+ - Use a decent logger
  - Buy Tesla Roadster 
  
  ## Shameless plug
