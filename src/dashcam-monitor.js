@@ -71,8 +71,8 @@ const performSanityCheck = () => {
   const createImageIfNotExists = (imageNum) => {
     const expectedFilename = `${IMAGE_DIR}/cam${imageNum}`;
     if (!fs.existsSync(expectedFilename)) {
-      execSync(`dd bs=1M if=/dev/zero of=${IMAGE_DIR}/cam{imageNum} count=1024`);
-      execSync(`mkdosfs ${IMAGE_DIR}/cam{imageNum} -F 32 -I`);
+      execSync(`dd bs=1M if=/dev/zero of=${IMAGE_DIR}/cam${imageNum} count=1024`);
+      execSync(`mkdosfs ${IMAGE_DIR}/cam${imageNum} -F 32 -I`);
     }
   };
 
