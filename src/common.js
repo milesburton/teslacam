@@ -10,13 +10,13 @@ const execSync = (cmd, opts = { bubbleError: false }) => {
   try {
     const buffer = execSyncNoLogging(cmd);
 
-    console.log('Execution result sucess =====');
+    console.log('======================= process');
     console.log(buffer.toString());
-    console.log('End =========================');
+    console.log('======================= /process');
   } catch (err) {
-    console.log('Execution result error ======');
-    console.log(err.toString());
-    console.log('End =========================');
+    console.log('======================= error');
+    console.log(JSON.stringify(err));
+    console.log('======================= /error');
 
     if (opts.bubbleError) {
       throw err;
