@@ -35,7 +35,29 @@ const fixLocal = (imageNum) => {
 };
 
 const countFilesInDirectory = dirPath => fs
-  .readdirSync(dirPath, { withFileTypes: true }).length;
+  .readdirSync(dirPath, { withFileTypes: true })
+  .filter(f=>f.isFile())
+  .length;
+
+const removeErroneousVideos = dirPath => fs
+	.readdirSync(dirPath, { withFileTypes: true})
+	.filter(f=>f.isFile())
+        .map(({name})=>name)
+        .filter(n=>fs.existsSync(`${BACKUP_DIR}/${n}`))
+        .map(name=> {
+        	const {size} = fs.statSync(`${BACKUP_DIR}/${n}`);
+		return { name, size };	
+	})
+	.filter(({size})=>!size)
+	.forEach(({name, size})=>{
+		console.log(`Video ${name} is 0 bytes. Deleting file`);		
+		try {
+			execSync(`rm ${name}`);
+			console.log(`Deleted ${name}`);
+		} catch (e) {
+			console.log(`Failed to delete ${name}`);
+		}
+	});
 
 const copyLocal = (imageNum) => {
   console.log(
@@ -43,6 +65,9 @@ const copyLocal = (imageNum) => {
   );
 
   const teslacamPath = `${IMAGE_MOUNT_POINT}/teslacam`;
+
+  removeErroneousVideos(teslacamPath);
+
   const filesInPath = countFilesInDirectory(teslacamPath);
 
   console.log(`Found ${filesInPath} files in ${teslacamPath}`);
