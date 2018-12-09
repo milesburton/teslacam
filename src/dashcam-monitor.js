@@ -48,9 +48,9 @@ const removeErroneousVideos = dirPath => fs
         	const {size} = fs.statSync(`${BACKUP_DIR}/${n}`);
 		return { name, size };	
 	})
-	.filter(({size})=>!size)
+	.filter(({size})=>size>100)
 	.forEach(({name, size})=>{
-		console.log(`Video ${name} is 0 bytes. Deleting file`);		
+		console.log(`Video ${name} is ${size} bytes. Deleting file`);
 		try {
 			execSync(`rm ${name}`);
 			console.log(`Deleted ${name}`);
