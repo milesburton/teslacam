@@ -15,13 +15,26 @@ const withSettingsSubscription = (WrappedComponent) =>
 
         state = {data: []};
 
+        socket = socketIOClient(':8080');
+
         componentDidMount() {
-            const socket = socketIOClient(':8080');
-            socket.on("services", data => this.setState({data}));
+            this.socket.on('services', this.onReceivedData);
         }
 
+        componentWillUnmount() {
+            this.socket.removeListener('services', this.onReceivedData);
+        }
+
+        onReceivedData = (data) => {
+            this.setState({data});
+        };
+
+        toggleVideo = (label) => {
+            this.socket.emit('toggle-service', {label});
+        };
+
         render() {
-            return <WrappedComponent data={this.state.data} {...this.props} />;
+            return <WrappedComponent onToggleVideo={this.toggleVideo} data={this.state.data} {...this.props} />;
         }
 
     };
@@ -30,28 +43,33 @@ const withSettingsSubscription = (WrappedComponent) =>
 class VideoPage extends Component {
 
     static propTypes = {
-        data: PropTypes.array.isRequired
+        data: PropTypes.array.isRequired,
+        onToggleVideo: PropTypes.func.isRequired
     };
 
     static defaultProp = {
         data: []
     };
 
+    toggle = (label) => {
+        this.props.onToggleVideo(label);
+    };
+
     render() {
-        console.log(JSON.stringify(this.props.data));
+
         return (
             <Page>
                 <List
                     dataSource={this.props.data}
                     renderHeader={() =>
-                        <ListHeader style={{fontSize: 15}} className="testClass">Settings</ListHeader> }
+                        <ListHeader style={{fontSize: 15}}>Settings</ListHeader> }
                     renderRow={({label, state}, idx) => (
                         <ListItem key={idx}>
                             <div className="center">
                                 {label}
                             </div>
                             <div className="right">
-                                <Switch checked={state} />
+                                <Switch checked={state}  onChange={()=>this.toggle(label)}  />
                             </div>
                         </ListItem>
                     )}/>

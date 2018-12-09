@@ -16,23 +16,29 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const fs = require('fs');
-const {getServiceStatus} = require('./service-api');
+const {getServiceStatus, toggleService} = require('./service-api');
 const {services} = require('./service.config.js');
 const {adaptVideoModelToUiVideoModel} = require('./client-model-adapter');
 const BACKUP_DIR = __dirname + '/../../../../video';
 
 setInterval(()=> {
-    io.emit('services', getServiceStatus(services));
+    io.emit('services', getServiceStatus());
 }, 5000);
 
 fs.watch(BACKUP_DIR, () => {
     io.emit('video', adaptVideoModelToUiVideoModel(getVideoFiles(BACKUP_DIR)));
 });
 
-io.on('connection', function (socket) {
+io.on('connection', (socket)=> {
     socket.emit('video', getVideoFiles(BACKUP_DIR));
-    socket.emit('services', getServiceStatus(services));
+    socket.emit('services', getServiceStatus());
+
+    socket.on('toggle-service', ({label})=> {
+        toggleService(label);
+        socket.emit('services', getServiceStatus());
+    });
 });
+
 
 app.use(cors());
 app.use(errorhandling());
