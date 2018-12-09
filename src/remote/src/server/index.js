@@ -16,54 +16,22 @@ const app = express();
 const server = require('http').Server(app);
 const io = require('socket.io')(server);
 const fs = require('fs');
-const {execSync} = require(__dirname + '/../../../common');
-
+const {getServiceStatus} = require('./service-api');
+const {services} = require('./service.config.js');
+const {adaptVideoModelToUiVideoModel} = require('./client-model-adapter');
 const BACKUP_DIR = __dirname + '/../../../../video';
 
-const services = [
-    {
-        label: 'Dashcam Service',
-        type: 'service',
-        scriptCheckRunning: 'svok /root/teslacam/services/dashcam-monitor',        
-        scriptStart: 'svc -u /root/teslacam/services/dashcam-monitor',
-        scriptStop: 'svc -d /root/teslacam/services/dashcam-monitor',
-        state: false
-    },
-    {
-        label: 'Dropbox Service',
-        type: 'service',
-        scriptCheckRunning: 'svok /root/teslacam/services/dropbox-upload',
-        scriptStart: 'svc -u /root/teslacam/services/dropbox-upload',
-        scriptStop: 'svc -d /root/teslacam/services/dropbox-upload',
-        state: false
-    },
-];
-
-const getServiceStatus = () => services.map((s)=> {
-
-    let isRunning = false;
-    try {
-        execSync(s.scriptCheckRunning);
-        isRunning = true;
-    } catch (e) {
-        console.log(`Service ${s.label} errored with [${e.toString()}]`);
-    }
-
-
-    return {...s, state: isRunning};
-});
-
 setInterval(()=> {
-    io.emit('services', getServiceStatus());
+    io.emit('services', getServiceStatus(services));
 }, 5000);
 
 fs.watch(BACKUP_DIR, () => {
-    io.emit('video', getVideoFiles(BACKUP_DIR));
+    io.emit('video', adaptVideoModelToUiVideoModel(getVideoFiles(BACKUP_DIR)));
 });
 
 io.on('connection', function (socket) {
     socket.emit('video', getVideoFiles(BACKUP_DIR));
-    socket.emit('services', getServiceStatus());
+    socket.emit('services', getServiceStatus(services));
 });
 
 app.use(cors());
@@ -72,4 +40,3 @@ app.use('/video/', express.static(BACKUP_DIR), serveIndex(BACKUP_DIR));
 
 app.get('/api/video', (req, res) => res.send({videoFiles: getVideoFiles(BACKUP_DIR)}));
 server.listen(8080, () => console.log('Listening on port 8080!'));
-console.log(__dirname);

@@ -26,6 +26,27 @@ const withVideoSubscription = (WrappedComponent) =>
     };
 
 
+const videoListItem = ({name, size}) => (
+    <>
+    <div className="left">
+        <video controls width="250">
+            <source src={`video/${name}`}
+                    type="video/mp4"/>
+        </video>
+    </div>
+    <div className="center">
+        <span className="list-item__title">{name}</span><span
+        className="list-item__subtitle">{(size / 1024 / 1024).toFixed(1)}Mb</span>
+    </div>
+    </>
+);
+
+const renderRow = (row, idx) => {
+    return <ListItem key={idx}>
+        {videoListItem(row)}
+    </ListItem>;
+};
+
 class VideoPage extends Component {
 
     static propTypes = {
@@ -42,26 +63,9 @@ class VideoPage extends Component {
                 <List
                     dataSource={this.props.data}
                     renderHeader={() =>
-                        <ListHeader style={{fontSize: 15}} className="testClass">Latest Video</ListHeader> }
-                    renderRow={(row, idx) => (
-                        <ListItem key={idx}>
-                            <div className="left">
-
-                                <video controls width="250">
-
-                                    <source src={`video/${row.name}`}
-                                            type="video/mp4"/>
-
-                                    Sorry, your browser doesn't support embedded videos.
-                                </video>
-
-                            </div>
-                            <div className="center">
-                                <span className="list-item__title">{row.name}</span><span
-                                className="list-item__subtitle">Something</span>
-                            </div>
-                        </ListItem>
-                    )}/>
+                        <ListHeader style={{fontSize: 15}}>Videos</ListHeader> }
+                    renderRow={renderRow}
+                />
             </Page>
         );
     }
