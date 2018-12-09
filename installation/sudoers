@@ -1,0 +1,12 @@
+Cmnd_Alias START_DASHCAM=/usr/bin/svc -u ~/teslacam/services/dashcam-monitor
+Cmnd_Alias STOP_DASHCAM=/usr/bin/svc -d ~/teslacam/services/dashcam-monitor
+Cmnd_Alias STATUS_DASHCAM=/usr/bin/svok ~/teslacam/services/dashcam-monitor
+Cmnd_Alias STATUS_DASHCAM_HUMAN=/usr/bin/svstat ~/teslacam/services/dashcam-monitor
+
+
+Cmnd_Alias START_DROPBOX=/usr/bin/svc -u ~/teslacam/services/dropbox-upload
+Cmnd_Alias STOP_DROPBOX=/usr/bin/svc -d ~/teslacam/services/dropbox-upload
+Cmnd_Alias STATUS_DROPBOX=/usr/bin/svok ~/teslacam/services/dropbox-monitor
+Cmnd_Alias STATUS_DROPBOX_HUMAN=/usr/bin/svstat ~/teslacam/services/dropbox-monitor
+
+pi ALL=NOPASSWD: START_DASHCAM,STOP_DASHCAM,STATUS_DASHCAM,START_DROPBOX,STOP_DROPBOX,STATUS_DROPBOX,STATUS_DASHCAM_HUMAN,STATUS_DROPBOX_HUMAN
