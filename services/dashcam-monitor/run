@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /root/teslacam/src/dashcam-monitor.js 
+exec ~/teslacam/src/dashcam-monitor.js

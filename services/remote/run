@@ -1,2 +1,2 @@
 #!/bin/sh
-exec npm  --prefix /root/teslacam/src/remote run dev
+exec npm  --prefix ~/teslacam/src/remote run dev

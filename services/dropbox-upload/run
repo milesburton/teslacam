@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /root/teslacam/src/dropbox-upload.js 
+exec ~/teslacam/src/dropbox-upload.js
