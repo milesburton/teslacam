@@ -4,9 +4,6 @@ const {execSync} = require('./common');
 
 const [path, script, command] = process.argv;
 
-console.log(command);
-
-
 const getServices = dirPath => fs
     .readdirSync(dirPath, { withFileTypes: true})
     .filter(f=>f.isDirectory())
@@ -34,6 +31,6 @@ switch(command){
             });
         break;
     default:
-        console.log('Unknown command. [start|stop]')
+        console.log('Unknown command. [start|stop|status]')
 
 }
