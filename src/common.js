@@ -28,7 +28,7 @@ const benchmark = (fn) => {
   const t0 = now();
   fn();
   const elapsedTimeMs = now() - t0;
-  console.log(`Took ${elapsedTimeMs} milliseconds to move`);
+  console.log(`Took ${elapsedTimeMs} milliseconds`);
   return elapsedTimeMs;
 };
 
