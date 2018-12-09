@@ -4,7 +4,10 @@
   "description": "",
   "main": "tesla.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/services start",
+    "stop": "node src/services stop",
+    "status": "node src/services status"
   },
   "author": "",
   "license": "ISC",
