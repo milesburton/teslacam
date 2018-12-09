@@ -1,0 +1,191 @@
+@400000005c0bed6c067c936c 
+@400000005c0bed6c067cb694 > teslacam-remote@1.0.0 dev /root/teslacam/src/remote
+@400000005c0bed6c067cca1c > concurrently "npm run server" "npm run client"
+@400000005c0bed6c067cd5d4 
+@400000005c0bed7413948ce4 
+@400000005c0bed741394ac24 > teslacam-remote@1.0.0 dev /root/teslacam/src/remote
+@400000005c0bed741394bfac > concurrently "npm run server" "npm run client"
+@400000005c0bed741394cf4c 
+@400000005c0bed7907d6a914 
+@400000005c0bed7907d6d024 > teslacam-remote@1.0.0 dev /root/teslacam/src/remote
+@400000005c0bed7907d6e3ac > concurrently "npm run server" "npm run client"
+@400000005c0bed7907d6f34c 
+@400000005c0bed7d34638984 
+@400000005c0bed7d3463a8c4 > teslacam-remote@1.0.0 dev /root/teslacam/src/remote
+@400000005c0bed7d3463bc4c > concurrently "npm run server" "npm run client"
+@400000005c0bed7d3463cbec 
+@400000005c0bed822df67cb4 
+@400000005c0bed822df69fdc > teslacam-remote@1.0.0 dev /root/teslacam/src/remote
+@400000005c0bed822df6b364 > concurrently "npm run server" "npm run client"
+@400000005c0bed822df6c304 
+@400000005c0bed871c40c7cc 
+@400000005c0bed871c40e70c > teslacam-remote@1.0.0 dev /root/teslacam/src/remote
+@400000005c0bed871c40fa94 > concurrently "npm run server" "npm run client"
+@400000005c0bed871c410a34 
+@400000005c0bed8c11852d14 
+@400000005c0bed8c1185503c > teslacam-remote@1.0.0 dev /root/teslacam/src/remote
+@400000005c0bed8c118563c4 > concurrently "npm run server" "npm run client"
+@400000005c0bed8c11857364 
+@400000005c0bed911834dc7c 
+@400000005c0bed911834fbbc > teslacam-remote@1.0.0 dev /root/teslacam/src/remote
+@400000005c0bed9118350f44 > concurrently "npm run server" "npm run client"
+@400000005c0bed9118351afc 
+@400000005c0bed960fdaebfc 
+@400000005c0bed960fdb0b3c > teslacam-remote@1.0.0 dev /root/teslacam/src/remote
+@400000005c0bed960fdb1ec4 > concurrently "npm run server" "npm run client"
+@400000005c0bed960fdb3634 
+@400000005c0bed9a3a75e77c 
+@400000005c0bed9a3a760e8c > teslacam-remote@1.0.0 dev /root/teslacam/src/remote
+@400000005c0bed9a3a762214 > concurrently "npm run server" "npm run client"
+@400000005c0bed9a3a7631b4 
+@400000005c0cefe91317c394 
+@400000005c0cefe91317f65c > teslacam-remote@1.0.0 dev /root/teslacam/src/remote
+@400000005c0cefe9131809e4 > concurrently "npm run server" "npm run client"
+@400000005c0cefe913181d6c 
+@400000005c0ceff924c769b4 [0] 
+@400000005c0ceff926f486cc [0] > teslacam-remote@1.0.0 server /root/teslacam/src/remote
+@400000005c0ceff926f4a60c [0] > nodemon src/server/index.js
+@400000005c0ceff926f4b5ac [0] 
+@400000005c0ceff92939bbdc [1] 
+@400000005c0ceff929b256dc [1] > teslacam-remote@1.0.0 client /root/teslacam/src/remote
+@400000005c0ceff929b2761c [1] > webpack-dev-server --host 0.0.0.0 --mode development --devtool inline-source-map --hot
+@400000005c0ceff929b28d8c [1] 
+@400000005c0cf00409dc21bc [0] [33m[nodemon] 1.18.7[39m
+@400000005c0cf0040c594334 [0] [33m[nodemon] to restart at any time, enter `rs`[39m
+@400000005c0cf0040d843a5c [0] [33m[nodemon] watching: /root/teslacam/src/remote/src/server/**/*[39m
+@400000005c0cf0040f2860f4 [0] [32m[nodemon] starting `node src/server/index.js`[39m
+@400000005c0cf00d11f7ff9c [0] /root/teslacam/src/remote/src/server
+@400000005c0cf00d14ae6d0c [0] Listening on port 8080!
+@400000005c0cf0120b787854 [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf012132183ac [0] ======================= process
+@400000005c0cf0121441e7cc [0] 
+@400000005c0cf012151243a4 [0] ======================= /process
+@400000005c0cf012151b4c24 [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf0121a2978bc [0] ======================= process
+@400000005c0cf0121ac2940c [0] 
+@400000005c0cf0121acb3ae4 [0] ======================= /process
+@400000005c0cf0121f579904 [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf01224665df4 [0] ======================= process
+@400000005c0cf012256255dc [0] 
+@400000005c0cf012261bc684 [0] ======================= /process
+@400000005c0cf012261be1dc [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf01229c1a0ec [0] ======================= process
+@400000005c0cf0122ab06204 [0] 
+@400000005c0cf0122adf3e1c [0] ======================= /process
+@400000005c0cf0122c29b3c4 [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf01231f4cba4 [0] ======================= process
+@400000005c0cf01233174ebc [0] 
+@400000005c0cf012336a317c [0] ======================= /process
+@400000005c0cf012336a4cd4 [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf012388c016c [0] ======================= process
+@400000005c0cf01239c07644 [0] 
+@400000005c0cf01239c94814 [0] ======================= /process
+@400000005c0cf0123aa0433c [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf0130433012c [0] ======================= process
+@400000005c0cf01304aa7734 [0] 
+@400000005c0cf0130552d0dc [0] ======================= /process
+@400000005c0cf0130552f404 [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf01309bfcbd4 [0] ======================= process
+@400000005c0cf0130aad15ec [0] 
+@400000005c0cf0130ab589fc [0] ======================= /process
+@400000005c0cf0173b151d4c [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf018025a8424 [0] ======================= process
+@400000005c0cf01802f272ac [0] 
+@400000005c0cf01802fb0214 [0] ======================= /process
+@400000005c0cf01802fb1984 [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf01806ffb1d4 [0] ======================= process
+@400000005c0cf018082e1fb4 [0] 
+@400000005c0cf0180836c68c [0] ======================= /process
+@400000005c0cf01b37cf29ac [1] clean-webpack-plugin: /root/teslacam/src/remote/dist has been removed.
+@400000005c0cf01c3b13e8b4 [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf01d04ab2ecc [0] ======================= process
+@400000005c0cf01d05c9877c [0] 
+@400000005c0cf01d0684e83c [0] ======================= /process
+@400000005c0cf01d06850394 [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf01d0a2e9b04 [0] ======================= process
+@400000005c0cf01d0af27f74 [0] 
+@400000005c0cf01d0b5f089c [0] ======================= /process
+@400000005c0cf01e0873eecc [1] [34mℹ[39m [90m｢wds｣[39m: Project is running at [1m[34mhttp://0.0.0.0:3000/[39m[22m
+@400000005c0cf01e08ef4cd4 [1] [34mℹ[39m [90m｢wds｣[39m: webpack output is served from [1m[34m/[39m[22m
+@400000005c0cf01f12bf33b4 [1] [33m⚠[39m [90m｢wds｣[39m: Unable to open browser. If you are running in a headless environment, please do not use the --open flag
+@400000005c0cf0201026b26c [1] [34mℹ[39m [90m｢wdm｣[39m: wait until bundle finished: /
+@400000005c0cf0220012f584 [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf022031004fc [0] ======================= process
+@400000005c0cf02203ce441c [0] 
+@400000005c0cf02203d6e70c [0] ======================= /process
+@400000005c0cf02203d6fe7c [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf02208106a3c [0] ======================= process
+@400000005c0cf02208ac7774 [0] 
+@400000005c0cf02208e6ec4c [0] ======================= /process
+@400000005c0cf0270011fb84 [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf0270496f31c [0] ======================= process
+@400000005c0cf02704971e14 [0] 
+@400000005c0cf027049725e4 [0] ======================= /process
+@400000005c0cf0270497319c [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf02707abef94 [0] ======================= process
+@400000005c0cf027085a4094 [0] 
+@400000005c0cf02708929e44 [0] ======================= /process
+@400000005c0cf02c004a0efc [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf02c080c0154 [0] ======================= process
+@400000005c0cf02c08efae7c [0] 
+@400000005c0cf02c0939deac [0] ======================= /process
+@400000005c0cf02c0939fa04 [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf02c0f76fdf4 [0] ======================= process
+@400000005c0cf02c10370a04 [0] 
+@400000005c0cf02c104663b4 [0] ======================= /process
+@400000005c0cf03101b14404 [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf0310a069104 [0] ======================= process
+@400000005c0cf0310af0ae9c [0] 
+@400000005c0cf0310af945d4 [0] ======================= /process
+@400000005c0cf0310af95d44 [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf03111307594 [0] ======================= process
+@400000005c0cf03111dd4bac [0] 
+@400000005c0cf03113089cac [0] ======================= /process
+@400000005c0cf03601dbe614 [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf03607fd4f9c [0] ======================= process
+@400000005c0cf036088e0294 [0] 
+@400000005c0cf0360896ad54 [0] ======================= /process
+@400000005c0cf0360896c4c4 [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf0360ececb5c [0] ======================= process
+@400000005c0cf0360f8b0eac [0] 
+@400000005c0cf0360f93a5e4 [0] ======================= /process
+@400000005c0cf03b01dc66fc [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf03b0a2d6284 [0] ======================= process
+@400000005c0cf03b0b700ffc [0] 
+@400000005c0cf03b0be3154c [0] ======================= /process
+@400000005c0cf03b0be330a4 [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf03b11c8aa6c [0] ======================= process
+@400000005c0cf03b1235cbec [0] 
+@400000005c0cf03b1307e8fc [0] ======================= /process
+@400000005c0cf0400274596c [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf04007cab294 [0] ======================= process
+@400000005c0cf040090de8c4 [0] 
+@400000005c0cf04009167ffc [0] ======================= /process
+@400000005c0cf0400916976c [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf0400d4d6734 [0] ======================= process
+@400000005c0cf0400e6a8f34 [0] 
+@400000005c0cf0400e72dc34 [0] ======================= /process
+@400000005c0cf0450274e9f4 [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf045069036c4 [0] ======================= process
+@400000005c0cf0450690698c [0] 
+@400000005c0cf04506906d74 [0] ======================= /process
+@400000005c0cf04506907d14 [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf04508c96d84 [0] ======================= process
+@400000005c0cf04509ef4814 [0] 
+@400000005c0cf04509f8065c [0] ======================= /process
+@400000005c0cf04a02d13ac4 [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf04a084a083c [0] ======================= process
+@400000005c0cf04a090cac5c [0] 
+@400000005c0cf04a09152c24 [0] ======================= /process
+@400000005c0cf04a09153fac [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf04a0d4b34b4 [0] ======================= process
+@400000005c0cf04a0dba55ec [0] 
+@400000005c0cf04a0e43b5e4 [0] ======================= /process
+@400000005c0cf04f030d93fc [0] Preparing to run command [svok /root/teslacam/services/dashcam-monitor]
+@400000005c0cf04f0a09252c [0] ======================= process
+@400000005c0cf04f0b6f6034 [0] 
+@400000005c0cf04f0b780edc [0] ======================= /process
+@400000005c0cf04f0b782a34 [0] Preparing to run command [svok /root/teslacam/services/dropbox-upload]
+@400000005c0cf04f121599bc [0] ======================= process
+@400000005c0cf04f1284788c [0] 
+@400000005c0cf04f128cfc3c [0] ======================= /process
