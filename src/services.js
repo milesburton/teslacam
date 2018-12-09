@@ -10,7 +10,7 @@ console.log(command);
 const getServices = dirPath => fs
     .readdirSync(dirPath, { withFileTypes: true})
     .filter(f=>f.isDirectory())
-    .map(({name}), name);
+    .map(({ name }) => name);
 
 
 switch(command){
