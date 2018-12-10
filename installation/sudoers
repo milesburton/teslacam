@@ -10,8 +10,8 @@ Cmnd_Alias STATUS_DROPBOX=/usr/bin/svok /home/pi/teslacam/services/dropbox-monit
 Cmnd_Alias STATUS_DROPBOX_HUMAN=/usr/bin/svstat ~/teslacam/services/dropbox-monitor
 
 Cmnd_Alias UMOUNT_IMAGE=/bin/umount /mnt
-Cmnd_Alias MOUNT_IMAGE_0=/bin/mount -t vfat -o gid=pi,uid=pi /home/pi/teslacam/images/cam0 /mnt
-Cmnd_Alias MOUNT_IMAGE_1=/bin/mount -t vfat -o gid=pi,uid=pi /home/pi/teslacam/images/cam1 /mnt
+Cmnd_Alias MOUNT_IMAGE_0=/bin/mount -t vfat -o gid=pi\,uid=pi /home/pi/teslacam/images/cam0 /mnt
+Cmnd_Alias MOUNT_IMAGE_1=/bin/mount -t vfat -o gid=pi\,uid=pi /home/pi/teslacam/images/cam1 /mnt
 
 Cmnd_Alias UMOUNT_TESLA=/sbin/modprobe -r g_mass_storage
 Cmnd_Alias MOUNT_TESLA_IMAGE_0=/sbin/modprobe g_mass_storage file\=~/teslacam/images/cam0 stall\=0\,0\, ro\=0\,0 removable\=1\,1
