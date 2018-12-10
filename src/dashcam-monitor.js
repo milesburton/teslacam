@@ -61,7 +61,7 @@ const removeErroneousVideos = dirPath => fs
 
 const copyLocal = (imageNum) => {
   console.log(
-    `Preparing to copy videos from ${IMAGE_MOUNT_POINT}/teslacam to ${BACKUP_DIR} for image ${imageNum}`,
+    `Preparing to copy videos from ${IMAGE_MOUNT_POINT}/TeslaCam to ${BACKUP_DIR} for image ${imageNum}`,
   );
 
   const teslacamPath = `${IMAGE_MOUNT_POINT}/TeslaCam`;
