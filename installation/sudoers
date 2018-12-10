@@ -1,17 +1,17 @@
-Cmnd_Alias START_DASHCAM=/usr/bin/svc -u ~/teslacam/services/dashcam-monitor
-Cmnd_Alias STOP_DASHCAM=/usr/bin/svc -d ~/teslacam/services/dashcam-monitor
-Cmnd_Alias STATUS_DASHCAM=/usr/bin/svok ~/teslacam/services/dashcam-monitor
-Cmnd_Alias STATUS_DASHCAM_HUMAN=/usr/bin/svstat ~/teslacam/services/dashcam-monitor
+Cmnd_Alias START_DASHCAM=/usr/bin/svc -u /home/pi/teslacam/services/dashcam-monitor
+Cmnd_Alias STOP_DASHCAM=/usr/bin/svc -d /home/pi/teslacam/services/dashcam-monitor
+Cmnd_Alias STATUS_DASHCAM=/usr/bin/svok /home/pi/teslacam/services/dashcam-monitor
+Cmnd_Alias STATUS_DASHCAM_HUMAN=/usr/bin/svstat /home/pi/teslacam/services/dashcam-monitor
 
 
-Cmnd_Alias START_DROPBOX=/usr/bin/svc -u ~/teslacam/services/dropbox-upload
-Cmnd_Alias STOP_DROPBOX=/usr/bin/svc -d ~/teslacam/services/dropbox-upload
-Cmnd_Alias STATUS_DROPBOX=/usr/bin/svok ~/teslacam/services/dropbox-monitor
+Cmnd_Alias START_DROPBOX=/usr/bin/svc -u /home/pi/teslacam/services/dropbox-upload
+Cmnd_Alias STOP_DROPBOX=/usr/bin/svc -d /home/pi/teslacam/services/dropbox-upload
+Cmnd_Alias STATUS_DROPBOX=/usr/bin/svok /home/pi/teslacam/services/dropbox-monitor
 Cmnd_Alias STATUS_DROPBOX_HUMAN=/usr/bin/svstat ~/teslacam/services/dropbox-monitor
 
 Cmnd_Alias UMOUNT_IMAGE=/bin/umount /mnt
-Cmnd_Alias MOUNT_IMAGE_0=/bin/mount ~/teslacam/images/cam0 /mnt
-Cmnd_Alias MOUNT_IMAGE_1=/bin/mount ~/teslacam/images/cam1 /mnt
+Cmnd_Alias MOUNT_IMAGE_0=/bin/mount /home/pi/teslacam/images/cam0 /mnt
+Cmnd_Alias MOUNT_IMAGE_1=/bin/mount /home/pi/teslacam/images/cam1 /mnt
 
 Cmnd_Alias UMOUNT_TESLA=/sbin/modprobe -r g_mass_storage
 Cmnd_Alias MOUNT_TESLA_IMAGE_0=/sbin/modprobe g_mass_storage file\=~/teslacam/images/cam0 stall\=0\,0\, ro\=0\,0 removable\=1\,1
