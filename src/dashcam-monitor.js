@@ -22,6 +22,7 @@ const mount = (imageNum) => {
 const mountLocal = (imageNum) => {
   console.log(`Preparing to local mount image ${imageNum}`);
   execSync(`sudo /bin/mount ${IMAGE_DIR}/cam${imageNum} ${IMAGE_MOUNT_POINT}`);
+  execSync(`sudo chown pi:pi /mnt`);
 };
 
 const unmountLocal = (imageNum) => {
