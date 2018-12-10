@@ -102,7 +102,7 @@ const performSanityCheck = () => {
   };
 
   const mountAndCheckUsbImage = (imageNum) => {
-    const teslaCamDirectoryLocal = `${IMAGE_MOUNT_POINT}/teslacam`;
+    const teslaCamDirectoryLocal = `${IMAGE_MOUNT_POINT}/TeslaCam`;
     mountLocal(imageNum);
     createIfNotExists(teslaCamDirectoryLocal);
     const teslaCamFiles = countFilesInDirectory(teslaCamDirectoryLocal);
