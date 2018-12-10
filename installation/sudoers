@@ -10,13 +10,11 @@ Cmnd_Alias STATUS_DROPBOX=/usr/bin/svok /home/pi/teslacam/services/dropbox-monit
 Cmnd_Alias STATUS_DROPBOX_HUMAN=/usr/bin/svstat ~/teslacam/services/dropbox-monitor
 
 Cmnd_Alias UMOUNT_IMAGE=/bin/umount /mnt
-Cmnd_Alias MOUNT_IMAGE_0=/bin/mount /home/pi/teslacam/images/cam0 /mnt
-Cmnd_Alias MOUNT_IMAGE_1=/bin/mount /home/pi/teslacam/images/cam1 /mnt
+Cmnd_Alias MOUNT_IMAGE_0=/bin/mount -t vfat -o gid=pi,uid=pi /home/pi/teslacam/images/cam0 /mnt
+Cmnd_Alias MOUNT_IMAGE_1=/bin/mount -t vfat -o gid=pi,uid=pi /home/pi/teslacam/images/cam1 /mnt
 
 Cmnd_Alias UMOUNT_TESLA=/sbin/modprobe -r g_mass_storage
 Cmnd_Alias MOUNT_TESLA_IMAGE_0=/sbin/modprobe g_mass_storage file\=~/teslacam/images/cam0 stall\=0\,0\, ro\=0\,0 removable\=1\,1
 Cmnd_Alias MOUNT_TESLA_IMAGE_1=/sbin/modprobe g_mass_storage file\=~/teslacam/images/cam1 stall\=0\,0\, ro\=0\,0 removable\=1\,1
 
-Cmnd_Alias PI_OWN=/bin/chown pi\:pi /mnt
-
-pi ALL=NOPASSWD: START_DASHCAM,STOP_DASHCAM,STATUS_DASHCAM,START_DROPBOX,STOP_DROPBOX,STATUS_DROPBOX,STATUS_DASHCAM_HUMAN,STATUS_DROPBOX_HUMAN,UMOUNT_TESLA,MOUNT_TESLA_IMAGE_0,MOUNT_TESLA_IMAGE_1,UMOUNT_IMAGE,MOUNT_IMAGE_0,MOUNT_IMAGE_1,PI_OWN
+pi ALL=NOPASSWD: START_DASHCAM,STOP_DASHCAM,STATUS_DASHCAM,START_DROPBOX,STOP_DROPBOX,STATUS_DROPBOX,STATUS_DASHCAM_HUMAN,STATUS_DROPBOX_HUMAN,UMOUNT_TESLA,MOUNT_TESLA_IMAGE_0,MOUNT_TESLA_IMAGE_1,UMOUNT_IMAGE,MOUNT_IMAGE_0,MOUNT_IMAGE_1

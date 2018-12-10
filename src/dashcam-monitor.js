@@ -21,8 +21,7 @@ const mount = (imageNum) => {
 
 const mountLocal = (imageNum) => {
   console.log(`Preparing to local mount image ${imageNum}`);
-  execSync(`sudo /bin/mount ${IMAGE_DIR}/cam${imageNum} ${IMAGE_MOUNT_POINT}`);
-  execSync(`sudo chown pi:pi /mnt`);
+  execSync(`sudo /bin/mount -t vfat -o gid=pi,uid=pi ${IMAGE_DIR}/cam${imageNum} ${IMAGE_MOUNT_POINT}`);
 };
 
 const unmountLocal = (imageNum) => {
