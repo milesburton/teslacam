@@ -11,22 +11,22 @@ const { benchmark, execSync, sleep } = require('./common.js');
 
 const unmount = (imageNum) => {
   console.log(`Unmounting image ${imageNum}`);
-  execSync('modprobe -r g_mass_storage');
+  execSync('sudo /sbin/modprobe -r g_mass_storage');
 };
 
 const mount = (imageNum) => {
   console.log(`Preparing to mount image ${imageNum}`);
-  execSync(`sudo modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} stall=0,0, ro=0,0 removable=1,1`);
+  execSync(`sudo /sbin/modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} stall=0,0, ro=0,0 removable=1,1`);
 };
 
 const mountLocal = (imageNum) => {
   console.log(`Preparing to local mount image ${imageNum}`);
-  execSync(`mount ${IMAGE_DIR}/cam${imageNum} ${IMAGE_MOUNT_POINT}`);
+  execSync(`sudo /bin/mount ${IMAGE_DIR}/cam${imageNum} ${IMAGE_MOUNT_POINT}`);
 };
 
 const unmountLocal = (imageNum) => {
   console.log(`Preparing to unmount local image ${imageNum}`);
-  execSync('umount /mnt');
+  execSync('sudo /bin/umount /mnt');
 };
 
 const fixLocal = (imageNum) => {
