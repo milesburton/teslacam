@@ -17,4 +17,16 @@ Cmnd_Alias UMOUNT_TESLA=/sbin/modprobe -r g_mass_storage
 Cmnd_Alias MOUNT_TESLA_IMAGE_0=/sbin/modprobe g_mass_storage file\=~/teslacam/images/cam0 stall\=0\,0\, ro\=0\,0 removable\=1\,1
 Cmnd_Alias MOUNT_TESLA_IMAGE_1=/sbin/modprobe g_mass_storage file\=~/teslacam/images/cam1 stall\=0\,0\, ro\=0\,0 removable\=1\,1
 
-pi ALL=NOPASSWD: START_DASHCAM,STOP_DASHCAM,STATUS_DASHCAM,START_DROPBOX,STOP_DROPBOX,STATUS_DROPBOX,STATUS_DASHCAM_HUMAN,STATUS_DROPBOX_HUMAN,UMOUNT_TESLA,MOUNT_TESLA_IMAGE_0,MOUNT_TESLA_IMAGE_1,UMOUNT_IMAGE,MOUNT_IMAGE_0,MOUNT_IMAGE_1
+Cmnd_Alias STAT_DASHCAM=sudo svstat /home/pi/services/dashcam-monitor
+Cmnd_Alias STAT_DROPBOX=sudo svstat /home/pi/services/dropbox-upload
+Cmnd_Alias STAT_REMOTE=sudo svstat /home/pi/services/remote
+Cmnd_Alias START_DASHCAM=sudo svc -u /home/pi/services/dashcam-monitor
+Cmnd_Alias START_DROPBOX=sudo svc -u /home/pi/services/dropbox-upload
+Cmnd_Alias START_REMOTE=sudo svc -u /home/pi/services/remote
+Cmnd_Alias STOP_DASHCAM=sudo svc -d /home/pi/services/dashcam-monitor
+Cmnd_Alias STOP_DROPBOX=sudo svc -d /home/pi/services/dropbox-upload
+Cmnd_Alias STOP_REMOTE=sudo svc -d /home/pi/services/remote
+
+pi ALL=NOPASSWD: START_DASHCAM,STOP_DASHCAM,STATUS_DASHCAM,START_DROPBOX,STOP_DROPBOX,STATUS_DROPBOX,STATUS_DASHCAM_HUMAN
+pi ALL=NOPASSWD: STATUS_DROPBOX_HUMAN,UMOUNT_TESLA,MOUNT_TESLA_IMAGE_0,MOUNT_TESLA_IMAGE_1,UMOUNT_IMAGE,MOUNT_IMAGE_0,MOUNT_IMAGE_1
+pi ALL=NOPASSWD: STAT_DASHCAM,STAT_DROPBOX,STAT_REMOTE,START_DASHCAM,START_DROPBOX,START_REMOTE,STOP_DASHCAM,STOP_DROPBOX,STOP_REMOTE
