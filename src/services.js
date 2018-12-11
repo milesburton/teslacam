@@ -1,6 +1,7 @@
 #!/usr/bin/node
 const fs = require('fs');
 const {execSync} = require('./common');
+const {HOME_PATH} = require('./../etc/config');
 
 const [path, script, command] = process.argv;
 
@@ -15,19 +16,19 @@ switch(command){
     case 'start':
         getServices('./services')
             .forEach(s=>{
-                execSync(`svc -u ${s}`);
+                execSync(`svc -u ${HOME_PATH}/${s}`);
             });
         break;
     case 'stop':
         getServices('./services')
             .forEach(s=>{
-                execSync(`svc -d ${s}`);
+                execSync(`svc -d ${HOME_PATH}/${s}`);
             });
         break;
     case 'status':
         getServices('./services')
             .forEach(s=>{
-                execSync(`svstat ${s}`);
+                execSync(`svstat ${HOME_PATH}/${s}`);
             });
         break;
     default:
