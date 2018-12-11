@@ -15,9 +15,9 @@ const execSync = (cmd, opts = {bubbleError: false}) => {
             console.log('======================= /process');
         }
     } catch (err) {
-        console.log('Process failed');
+        console.log(`Process failed: code [${err.status}]`);
         console.log('======================= error');
-        console.log(JSON.stringify(err));
+        console.log(err.stderr.toString());
         console.log('======================= /error');
 
         if (opts.bubbleError) {

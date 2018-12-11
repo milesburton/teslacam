@@ -46,17 +46,13 @@ const removeErroneousVideos = dirPath => fs
         .filter(n=>fs.existsSync(`${BACKUP_DIR}/${n}`))
         .map(name=> {
         	const {size} = fs.statSync(`${BACKUP_DIR}/${n}`);
+console.log(size);
 		return { name, size };	
 	})
-	.filter(({size})=>size<100)
+	.filter(({size})=>size<1000000)
 	.forEach(({name, size})=>{
 		console.log(`Video ${name} is ${size} bytes. Deleting file`);
-		try {
-			execSync(`rm ${name}`);
-			console.log(`Deleted ${name}`);
-		} catch (e) {
-			console.log(`Failed to delete ${name}`);
-		}
+		execSync(`rm ${name}`);
 	});
 
 const copyLocal = (imageNum) => {
