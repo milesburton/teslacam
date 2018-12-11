@@ -10,7 +10,7 @@ const execSync = (cmd, opts = {bubbleError: false}) => {
     try {
         const buffer = execSyncNoLogging(cmd);
         console.log('Process completed successfully');
-        if (buffer) {
+        if (buffer.trim().length>0) {
             console.log('======================= process');
             console.log(buffer.toString());
             console.log('======================= /process');
