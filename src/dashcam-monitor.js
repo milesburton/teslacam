@@ -43,11 +43,8 @@ const removeErroneousVideos = dirPath => fs
 	.readdirSync(dirPath, { withFileTypes: true})
 	.filter(f=>f.isFile())
         .map(({name})=>name)
-        .filter(n=>fs.existsSync(`${BACKUP_DIR}/${n}`))
         .map(name=> {
-        	const {size} = fs.statSync(`${BACKUP_DIR}/${n}`);
-console.log(size);
-console.log(name);
+        	const {size} = fs.statSync(`${BACKUP_DIR}/${name}`);
 		return { name, size };
 	})
 	.filter(({size})=>size<1000000)
