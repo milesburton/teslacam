@@ -9,8 +9,7 @@ const execSync = (cmd, opts = {bubbleError: false}) => {
     console.log(`Running [${cmd}]`);
     try {
         const buffer = execSyncNoLogging(cmd);
-        console.log('Process completed successfully');
-        if (buffer.trim().length>0) {
+        if (buffer.toString().trim().length>0) { // TODO clean up
             console.log('======================= process');
             console.log(buffer.toString());
             console.log('======================= /process');
