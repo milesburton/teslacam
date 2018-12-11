@@ -8,17 +8,20 @@ const sleep = async ms => new Promise(r => setTimeout(r, ms));
 const execSync = (cmd, opts = {bubbleError: false}) => {
     console.log(`Running [${cmd}]`);
     try {
-        const buffer = execSyncNoLogging(cmd);
-        if (buffer.toString().trim().length>0) { // TODO clean up
+        const buffer = execSyncNoLogging(cmd).toString().trim();
+        if (buffer) {
             console.log('======================= process');
-            console.log(buffer.toString());
+            console.log(buffer);
             console.log('======================= /process');
         }
     } catch (err) {
+        const buffer = err.stderr.toString().trim();
         console.log(`Process failed: code [${err.status}]`);
-        console.log('======================= error');
-        console.log(err.stderr.toString());
-        console.log('======================= /error');
+        if (buffer) {
+            console.log('======================= error');
+            console.log(buffer);
+            console.log('======================= /error');
+        }
 
         if (opts.bubbleError) {
             throw err;
