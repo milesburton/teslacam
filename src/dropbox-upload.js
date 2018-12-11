@@ -7,7 +7,7 @@ const internetAvailable = require('internet-available');
 const fs = require('fs');
 const { benchmark, execSync, sleep } = require('./common.js');
 const {
-  BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL,
+  BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL, DELETE_ON_UPLOAD
 } = require('../etc/config.js');
 
 
@@ -45,7 +45,7 @@ const uploadVideoFiles = (files) => {
   const videoFiles = getVideoFileNames(files);
 
   console.log(`Preparing to upload ${videoFiles.length} videos`);
-  const uploadedFiles = videoFiles.map(f=>attemptUpload(f)).filter(v => v);
+  const uploadedFiles = videoFiles.map(f=>attemptUpload(f, {deleteWhenComplete: DELETE_ON_UPLOAD)).filter(v => v);
   console.log(`Uploaded ${uploadedFiles.length}/${videoFiles.length}`);
 };
 

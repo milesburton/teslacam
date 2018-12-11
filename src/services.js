@@ -15,19 +15,19 @@ switch(command){
     case 'start':
         getServices('./services')
             .forEach(s=>{
-                execSync(`svc -u ${s}`);
+                execSync(`sudo svc -u ${s}`);
             });
         break;
     case 'stop':
         getServices('./services')
             .forEach(s=>{
-                execSync(`svc -d ${s}`);
+                execSync(`sudo svc -d ${s}`);
             });
         break;
     case 'status':
         getServices('./services')
             .forEach(s=>{
-                execSync(`svstat ${s}`);
+                execSync(`sudo svstat ${s}`);
             });
         break;
     default:
