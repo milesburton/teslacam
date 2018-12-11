@@ -47,7 +47,8 @@ const removeErroneousVideos = dirPath => fs
         .map(name=> {
         	const {size} = fs.statSync(`${BACKUP_DIR}/${n}`);
 console.log(size);
-		return { name, size };	
+console.log(name);
+		return { name, size };
 	})
 	.filter(({size})=>size<1000000)
 	.forEach(({name, size})=>{
