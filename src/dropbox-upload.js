@@ -23,7 +23,7 @@ const isOnline = async () => {
 
 const attemptUpload = (filename, opts = { deleteWhenComplete : true }) => {
   try {
-    execSync(`${DROPBOX_UPLOADER} upload ${BACKUP_DIR}/${filename} .`, { bubbleError: true });
+    execSync(`${DROPBOX_UPLOADER} upload -s ${BACKUP_DIR}/${filename} .`, { bubbleError: true });
 
     if (opts.deleteWhenComplete) {
 	    execSync(`rm ${BACKUP_DIR}/${filename}`);
