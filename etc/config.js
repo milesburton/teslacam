@@ -1,5 +1,5 @@
 const HOME_PATH = '/home/pi/teslacam';
-const IMAGE_DIR = ``${HOME_PATH}/images``;
+const IMAGE_DIR = `${HOME_PATH}/images`;
 const BACKUP_DIR = `${HOME_PATH}/video`;
 const IMAGE_MOUNT_POINT = '/mnt';
 const RECORD_WINDOW_MS = 5 * 60 * 1000;
