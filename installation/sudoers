@@ -6,8 +6,8 @@ Cmnd_Alias STATUS_DASHCAM_HUMAN=/usr/bin/svstat /home/pi/teslacam/services/dashc
 
 Cmnd_Alias START_DROPBOX=/usr/bin/svc -u /home/pi/teslacam/services/dropbox-upload
 Cmnd_Alias STOP_DROPBOX=/usr/bin/svc -d /home/pi/teslacam/services/dropbox-upload
-Cmnd_Alias STATUS_DROPBOX=/usr/bin/svok /home/pi/teslacam/services/dropbox-monitor
-Cmnd_Alias STATUS_DROPBOX_HUMAN=/usr/bin/svstat ~/teslacam/services/dropbox-monitor
+Cmnd_Alias STATUS_DROPBOX=/usr/bin/svok /home/pi/teslacam/services/dropbox-upload
+Cmnd_Alias STATUS_DROPBOX_HUMAN=/usr/bin/svstat /home/pi/teslacam/services/dropbox-upload
 
 Cmnd_Alias UMOUNT_IMAGE=/bin/umount /mnt
 Cmnd_Alias MOUNT_IMAGE_0=/bin/mount -t vfat -o gid=pi\,uid=pi /home/pi/teslacam/images/cam0 /mnt
