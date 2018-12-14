@@ -6,3 +6,5 @@ const adaptVideoModelToUiVideoModel = (serverSideVideos) => {
     }));
 
 };
+
+module.exports = {adaptVideoModelToUiVideoModel};

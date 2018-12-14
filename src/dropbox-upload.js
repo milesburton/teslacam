@@ -23,7 +23,7 @@ const isOnline = async () => {
 
 const attemptUpload = (filename, opts = { deleteWhenComplete : true }) => {
   try {
-    execSync(`${DROPBOX_UPLOADER} upload -s ${BACKUP_DIR}/${filename} .`, { bubbleError: true });
+    execSync(`${DROPBOX_UPLOADER} -s upload ${BACKUP_DIR}/${filename} .`, { bubbleError: true });
 
     if (opts.deleteWhenComplete) {
 	    execSync(`rm ${BACKUP_DIR}/${filename}`);
@@ -45,7 +45,7 @@ const uploadVideoFiles = (files) => {
   const videoFiles = getVideoFileNames(files);
 
   console.log(`Preparing to upload ${videoFiles.length} videos`);
-  const uploadedFiles = videoFiles.map(f=>attemptUpload(f, {deleteWhenComplete: DELETE_ON_UPLOAD)).filter(v => v);
+  const uploadedFiles = videoFiles.map(f=>attemptUpload(f, {deleteWhenComplete: DELETE_ON_UPLOAD})).filter(v => v);
   console.log(`Uploaded ${uploadedFiles.length}/${videoFiles.length}`);
 };
 
