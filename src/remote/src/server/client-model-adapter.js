@@ -1,10 +1,6 @@
-const adaptVideoModelToUiVideoModel = (serverSideVideos) => {
+const adaptVideoModelToUiVideoModel = serverSideVideos => serverSideVideos.map(video => ({
+  ...video,
+  type: 'video'
+}));
 
-    return serverSideVideos.map(video=>({
-        ...video,
-        type: 'video'
-    }));
-
-};
-
-module.exports = {adaptVideoModelToUiVideoModel};
+module.exports = { adaptVideoModelToUiVideoModel };

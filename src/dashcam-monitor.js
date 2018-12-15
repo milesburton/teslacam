@@ -2,6 +2,7 @@
 
 /* eslint no-bitwise: 0 */
 /* eslint no-await-in-loop: 0 */
+/* eslint no-constant-condition: 0 */
 
 const fs = require('fs');
 const {
@@ -36,23 +37,23 @@ const fixLocal = (imageNum) => {
 
 const countFilesInDirectory = dirPath => fs
   .readdirSync(dirPath, { withFileTypes: true })
-  .filter(f=>f.isFile())
+  .filter(f => f.isFile())
   .length;
 
 const removeErroneousVideos = dirPath => fs
-	.readdirSync(dirPath, { withFileTypes: true})
-	.filter(f=>f.isFile())
-        .map(({name})=>name)
-        .filter(n=>fs.existsSync(`${BACKUP_DIR}/${n}`))
-        .map(name=> {
-        	const {size} = fs.statSync(`${BACKUP_DIR}/${name}`);
-		return { name, size };
-	})
-	.filter(({size})=>size<1000000)
-	.forEach(({name, size})=>{
-		console.log(`Video ${name} is ${size} bytes. Deleting file`);
-		execSync(`rm ${name}`);
-	});
+  .readdirSync(dirPath, { withFileTypes: true })
+  .filter(f => f.isFile())
+  .map(({ name }) => name)
+  .filter(n => fs.existsSync(`${BACKUP_DIR}/${n}`))
+  .map((name) => {
+    const { size } = fs.statSync(`${BACKUP_DIR}/${name}`);
+    return { name, size };
+  })
+  .filter(({ size }) => size < 1000000)
+  .forEach(({ name, size }) => {
+    console.log(`Video ${name} is ${size} bytes. Deleting file`);
+    execSync(`rm ${name}`);
+  });
 
 const copyLocal = (imageNum) => {
   console.log(

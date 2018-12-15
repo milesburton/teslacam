@@ -1,7 +1,7 @@
 #!/bin/node
 
 /* eslint no-await-in-loop: 0 */
-
+/* eslint no-constant-condition: 0 */
 const internetAvailable = require('internet-available');
 
 const fs = require('fs');
@@ -21,12 +21,12 @@ const isOnline = async () => {
   }
 };
 
-const attemptUpload = (filename, opts = { deleteWhenComplete : true }) => {
+const attemptUpload = (filename, opts = { deleteWhenComplete: true }) => {
   try {
     execSync(`${DROPBOX_UPLOADER} -s upload ${BACKUP_DIR}/${filename} .`, { bubbleError: true });
 
     if (opts.deleteWhenComplete) {
-	    execSync(`rm ${BACKUP_DIR}/${filename}`);
+      execSync(`rm ${BACKUP_DIR}/${filename}`);
     }
 
     console.log(`Uploaded ${filename}`);
@@ -45,7 +45,9 @@ const uploadVideoFiles = (files) => {
   const videoFiles = getVideoFileNames(files);
 
   console.log(`Preparing to upload ${videoFiles.length} videos`);
-  const uploadedFiles = videoFiles.map(f=>attemptUpload(f, {deleteWhenComplete: DELETE_ON_UPLOAD})).filter(v => v);
+  const uploadedFiles = videoFiles
+    .map(f => attemptUpload(f, { deleteWhenComplete: DELETE_ON_UPLOAD }))
+    .filter(v => v);
   console.log(`Uploaded ${uploadedFiles.length}/${videoFiles.length}`);
 };
 
