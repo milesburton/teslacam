@@ -13,7 +13,7 @@ const listOldestVideo = dirPath => fs
   .readdirSync(dirPath, { withFileTypes: true })
   .filter(f => f.isFile())
   .map(({ name }) => name)
-  .filter(n=>n.endsWith('.mp4'))
+  .filter(n => n.endsWith('.mp4'))
   .filter(n => fs.existsSync(`${BACKUP_DIR}/${n}`))
   .map((name) => {
     const { size, birthtimeMs } = fs.statSync(`${BACKUP_DIR}/${name}`);
@@ -25,21 +25,20 @@ const getFilesystemStats = (path) => {
   const desiredMaxUtilisation = MAX_DISK_UTILISATION_PERCENT;
   const capacity = +execSync(`df -P ${path}/. | tail -1 | awk '{print $2}'`) * 1024;
   const used = +execSync(`df -P ${path}/. | tail -1 | awk '{print $3}'`) * 1024;
-  const usedPercent = used/capacity;
+  const usedPercent = used / capacity;
   const overallocationInBytes = Math.max(0, (usedPercent - desiredMaxUtilisation) * capacity);
 
   console.log('Used %', usedPercent.toFixed(2));
   console.log('Capacity Gb', (capacity / 1024 / 1024 / 1024).toFixed(2));
-  console.log('Desired Max Utilisation Gb', ((desiredMaxUtilisation * capacity)/1024/1024/1024).toFixed(2));
-  console.log('Actual Utilisation Gb', (used/1024/1024/1024).toFixed(2));
-  console.log('Overallocation Mb', (overallocationInBytes / 1024/1014).toFixed(2));
+  console.log('Desired Max Utilisation Gb', ((desiredMaxUtilisation * capacity) / 1024 / 1024 / 1024).toFixed(2));
+  console.log('Actual Utilisation Gb', (used / 1024 / 1024 / 1024).toFixed(2));
+  console.log('Overallocation Mb', (overallocationInBytes / 1024 / 1014).toFixed(2));
 
   return { overallocationInBytes };
 };
 
 const getVideosToDelete = (minimumDiskSpaceToRecoverInBytes, path) => {
-
-  if(!minimumDiskSpaceToRecoverInBytes){
+  if (!minimumDiskSpaceToRecoverInBytes) {
     return [];
   }
 
