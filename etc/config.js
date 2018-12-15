@@ -7,6 +7,7 @@ const DROPBOX_UPLOADER = '/home/pi/dropbox_uploader.sh';
 const DELETE_ON_UPLOAD = false;
 const LOCK_FILE_NAME = 'lock';
 const WAIT_INTERVAL = 30 * 1000;
+const MAX_DISK_UTILISATION_PERCENT = .8;
 
 module.exports = {
   IMAGE_DIR,
@@ -17,5 +18,6 @@ module.exports = {
   LOCK_FILE_NAME,
   WAIT_INTERVAL,
   HOME_PATH,
-  DELETE_ON_UPLOAD
+  DELETE_ON_UPLOAD,
+  MAX_DISK_UTILISATION_PERCENT
 };
