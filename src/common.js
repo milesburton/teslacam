@@ -3,31 +3,39 @@ const {
   performance: { now },
 } = require('perf_hooks');
 
+const outputShellResult = (preamble, buffer)=>{
+
+const trimmedBuffer = buffer.toString().trim();
+
+  if(!buffer){
+   return;
+  }
+
+  if(buffer.includes('\n')){
+      console.log(`======================= ${preamble}`);
+      console.log(trimmedBuffer);
+      console.log(`======================= /${preamble}`);
+ }else{
+      console.log(`${preamble}: ${buffer}`);
+ }
+return buffer;
+};
 
 const sleep = async ms => new Promise(r => setTimeout(r, ms));
 
 const execSync = (cmd, opts = { bubbleError: false, noop: false }) => {
   console.log(`Running [${cmd}]`);
   try {
-    const buffer = !opts.noop ? execSyncNoLogging(cmd).toString().trim() : '';
-    if (buffer) {
-      console.log('======================= process');
-      console.log(buffer);
-      console.log('======================= /process');
-      return buffer;
-    }
+    const buffer = !opts.noop ? execSyncNoLogging(cmd) : '';
+    return outputShellResult('Success', buffer); 
   } catch (err) {
-    const buffer = err.stderr.toString().trim();
-    console.log(`Process failed: code [${err.status}]`);
-    if (buffer) {
-      console.log('======================= error');
-      console.log(buffer);
-      console.log('======================= /error');
-    }
+    const buffer = err.stderr;
+    const result = outputShellResult(`Failed: code [${err.status}]`, buffer);
 
     if (opts.bubbleError) {
       throw err;
     }
+	return result;
   }
 
   return '';
