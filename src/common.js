@@ -7,18 +7,18 @@ const outputShellResult = (preamble, buffer) => {
 
   const trimmedBuffer = buffer ? buffer.toString().trim() : '';
 
-  if (!buffer) {
+  if (!trimmedBuffer) {
     return '';
   }
 
-  if (buffer.split('\n').length>1) {
+  if (trimmedBuffer.split('\n').length>2) {
     console.log(`======================= ${preamble}`);
     console.log(trimmedBuffer);
     console.log(`======================= /${preamble}`);
   } else {
-    console.log(`${preamble}: ${buffer}`);
+    console.log(`${preamble}: ${trimmedBuffer}`);
   }
-  return buffer;
+  return trimmedBuffer;
 };
 
 const sleep = async ms => new Promise(r => setTimeout(r, ms));
