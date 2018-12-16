@@ -10,7 +10,7 @@ const outputShellResult = (preamble, buffer) => {
     return '';
   }
 
-  if (buffer.includes('\n')) {
+  if (buffer.split('\n').length>1) {
     console.log(`======================= ${preamble}`);
     console.log(trimmedBuffer);
     console.log(`======================= /${preamble}`);
