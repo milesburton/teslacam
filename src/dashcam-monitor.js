@@ -43,13 +43,13 @@ const countFilesInDirectory = dirPath => fs
 const removeErroneousVideos = dirPath => fs
   .readdirSync(dirPath, { withFileTypes: true })
   .filter(f => f.isFile())
-  .map(({ name }) => name)
+  .map(({ name }) => `${dirPath}/${name}`)
   .filter(n => fs.existsSync(n))
-  .map((name) => {
+  .map(name => {
     const { size } = fs.statSync(name);
     return { name, size };
   })
-  .filter(({ size }) => size < 1000000)
+  .filter(({ size }) => size < 500000)
   .forEach(({ name, size }) => {
     console.log(`Video ${name} is ${size} bytes. Deleting file`);
     execSync(`rm ${name}`);
@@ -122,6 +122,7 @@ const startup = () => {
   console.log('Starting Tesla Sync script');
   unmount('All');
   unmountLocal(0);
+  removeErroneousVideos(BACKUP_DIR);
 
   performSanityCheck();
 };
