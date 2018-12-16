@@ -37,7 +37,7 @@ Cmnd_Alias MOUNT_IMAGE_0=           /bin/mount -t vfat -o gid=pi\,uid=pi /home/p
 Cmnd_Alias MOUNT_IMAGE_1=           /bin/mount -t vfat -o gid=pi\,uid=pi /home/pi/teslacam/images/cam1 /mnt
 
 Cmnd_Alias UMOUNT_TESLA=            /sbin/modprobe -r g_mass_storage
-Cmnd_Alias MOUNT_TESLA_IMAGE_0=     /sbin/modprobe g_mass_storage file\=~/teslacam/images/cam0 stall\=0\,0\, ro\=0\,0 removable\=1\,1
-Cmnd_Alias MOUNT_TESLA_IMAGE_1=     /sbin/modprobe g_mass_storage file\=~/teslacam/images/cam1 stall\=0\,0\, ro\=0\,0 removable\=1\,1
+Cmnd_Alias MOUNT_TESLA_IMAGE_0=     /sbin/modprobe g_mass_storage file\=/home/pi/teslacam/images/cam0 stall\=0\,0\, ro\=0\,0 removable\=1\,1
+Cmnd_Alias MOUNT_TESLA_IMAGE_1=     /sbin/modprobe g_mass_storage file\=/home/pi/teslacam/images/cam1 stall\=0\,0\, ro\=0\,0 removable\=1\,1
 
 pi ALL=NOPASSWD:UMOUNT_IMAGE, MOUNT_IMAGE_0, MOUNT_IMAGE_1, UMOUNT_TESLA, MOUNT_TESLA_IMAGE_0, MOUNT_TESLA_IMAGE_1
