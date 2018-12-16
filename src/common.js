@@ -4,7 +4,8 @@ const {
 } = require('perf_hooks');
 
 const outputShellResult = (preamble, buffer) => {
-  const trimmedBuffer = buffer.toString().trim();
+
+  const trimmedBuffer = buffer?.toString()?.trim();
 
   if (!buffer) {
     return '';
