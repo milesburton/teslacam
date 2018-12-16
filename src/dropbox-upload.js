@@ -62,7 +62,7 @@ const onlyNewVideos = (videos)=>(fn)=> {
 
   const uploadedVideos = fn(videosToUpload);
 
-  uploadHistory.push(...uploadedVideos);
+  uploadHistory = [...uploadHistory, ...uploadedVideos];
 
   return uploadedVideos;
 };
