@@ -77,7 +77,7 @@ const init = async () => {
     if (isOnline && !hasLockFile(files)) {
       console.log('TeslaCam is online and no lock file discovered');
 
-      benchmark(() => onlyNewVideos(getVideos(files)))(uploadVideoFiles);
+      benchmark(() => onlyNewVideos(getVideos(files))(uploadVideoFiles));
     } else {
       console.log('No internet or lock file discovered. Waiting till next attempt');
     }
