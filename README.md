@@ -1,5 +1,12 @@
 
 # Tesla Cam - An experimental application to repair, store and upload Tesla dash cam footage
+## Current capabilities
+ - [Backup] Storage of Tesla Cam videos
+ - [Dropbox] Upload videos to Dropbox when a internet connection is available
+ - [Remote] Basic Mobile App (Web UI) which lets you view videos on your phone, download videos and ability to enable/disable services at will. Available on port 3000 on the IP address of your Pi
+ - [Security] Services now run as the pi user and all super user commands are whitelisted
+ - [Housekeeping] System will delete old videos when remaining storage space falls below 20%
+
 ## Overview
 As of late 2018 Tesla released V9 which among a number of improvements included dash cam functionality. This works by placing a suitably sized USB drive in one of the available USB ports at the front of the vehicle (Model S).
 
@@ -79,21 +86,12 @@ With all this in mind, logically speaking the following steps need to be followe
 	* Move all video onto the Pi
 	* Unmount the first image on the Pi
 	
-## Current capabilities
- - [Backup] Storage of Tesla Cam videos
- - [Dropbox] Upload videos to Dropbox when a internet connection is available
- - [Remote] Basic Mobile App (Web UI) which lets you view videos on your phone, download videos and ability to enable/disable services at will. Available on port 3000 on the IP address of your Pi
- - [Security] Services now run as the pi user and all super user commands are whitelisted
-
 
 ## TODO
  - [Streaming] Experiment with streaming, it's trivial to stream to youtube with FFMPEG
  - [System|Remote] Intelligent service switching (ie, entirely disable dropbox)
  - [Remote] Remote configuration
- - [Dropbox] Prioritise emergency video upload
- - [Dropbox] Only upload if the video does not exist on the remote server
- - [Dropbox/Remote] Ability to toggle video deletion on upload 
- - [House keeping] Automatically rotate video as storage runs low
+ - [Dropbox] Prioritise emergency video upload 
  - [Github] Explain setup instructions (more detail required)
  - [Github] Write decent installation script to automatically configure the application on a Pi
  - [System] Use a read only file system to avoid corruption of the operating system
