@@ -91,6 +91,7 @@ With all this in mind, logically speaking the following steps need to be followe
  - [Streaming] Experiment with streaming, it's trivial to stream to youtube with FFMPEG
  - [System|Remote] Intelligent service switching (ie, entirely disable dropbox)
  - [Remote] Remote configuration
+ - [Remote] Infinite pagination
  - [Dropbox] Prioritise emergency video upload 
  - [Github] Explain setup instructions (more detail required)
  - [Github] Write decent installation script to automatically configure the application on a Pi
