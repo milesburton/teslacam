@@ -10,6 +10,7 @@ const {
   BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL, DELETE_ON_UPLOAD
 } = require('../etc/config.js');
 
+let uploadHistory = [];
 
 const isOnline = async () => {
   try {
@@ -37,18 +38,33 @@ const attemptUpload = (filename, opts = { deleteWhenComplete: true }) => {
   }
 };
 
-const getVideoFileNames = files => files.map(({ name }) => name).filter(f => f.endsWith('mp4'));
+const getVideos = files => files.map(({ name }) => name).filter(f => f.endsWith('mp4'));
 
 const hasLockFile = files => !!files.find(({ name }) => name === LOCK_FILE_NAME);
 
-const uploadVideoFiles = (files) => {
-  const videoFiles = getVideoFileNames(files);
+const uploadVideoFiles = (videos) => {
 
-  console.log(`Preparing to upload ${videoFiles.length} videos`);
-  const uploadedFiles = videoFiles
+  console.log(`Preparing to upload ${videos.length} videos`);
+  const uploadedFiles = videos
     .map(f => attemptUpload(f, { deleteWhenComplete: DELETE_ON_UPLOAD }))
     .filter(v => v);
-  console.log(`Uploaded ${uploadedFiles.length}/${videoFiles.length}`);
+
+  console.log(`Uploaded ${uploadedFiles.length}/${videos.length}`);
+  return uploadedFiles;
+
+};
+
+const onlyNewVideos = (videos)=>(fn)=> {
+
+  uploadHistory = uploadHistory.filter(f=>!videos.find(v=>v===f)); // Remove videos that do not exist from the history
+  const videosToUpload = videos
+      .filter(v=>!uploadHistory.find(f=>f===v));
+
+  const uploadedVideos = fn(videosToUpload);
+
+  uploadHistory.push(...uploadedVideos);
+
+  return uploadedVideos;
 };
 
 const init = async () => {
@@ -61,9 +77,7 @@ const init = async () => {
     if (isOnline && !hasLockFile(files)) {
       console.log('TeslaCam is online and no lock file discovered');
 
-      benchmark(() => {
-        uploadVideoFiles(files);
-      });
+      benchmark(() => onlyNewVideos(getVideos(files)))(uploadVideoFiles);
     } else {
       console.log('No internet or lock file discovered. Waiting till next attempt');
     }
