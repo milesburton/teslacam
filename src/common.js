@@ -5,7 +5,7 @@ const {
 
 const outputShellResult = (preamble, buffer) => {
 
-  const trimmedBuffer = buffer?.toString()?.trim();
+  const trimmedBuffer = buffer ? buffer.toString().trim() : '';
 
   if (!buffer) {
     return '';
