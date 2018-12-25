@@ -31,7 +31,7 @@ const attemptUpload = (filename, opts = { deleteWhenComplete: true }) => {
     }
 
     console.log(`Uploaded ${filename}`);
-    return true;
+    return filename;
   } catch (err) {
     console.log(`Failed to upload ${filename}`);
     return false;
@@ -56,14 +56,18 @@ const uploadVideoFiles = (videos) => {
 
 const onlyNewVideos = (videos)=>(fn)=> {
 
+
+console.log("HISTORY BEFORE: ", JSON.stringify(uploadHistory));
   uploadHistory = uploadHistory.filter(f=>!videos.find(v=>v===f)); // Remove videos that do not exist from the history
   const videosToUpload = videos
       .filter(v=>!uploadHistory.find(f=>f===v));
 
+console.log("HISTORY upload: ", JSON.stringify(videosToUpload));
   const uploadedVideos = fn(videosToUpload);
 
   uploadHistory = [...uploadHistory, ...uploadedVideos];
 
+console.log("HISTORY AFTER: ", JSON.stringify(uploadHistory));
   return uploadedVideos;
 };
 
