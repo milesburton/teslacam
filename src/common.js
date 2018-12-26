@@ -41,7 +41,14 @@ const execSync = (cmd, opts = { bubbleError: false, noop: false }) => {
 
 const benchmark = (fn) => {
   const t0 = now();
-  fn();
+  const output = fn();
+
+  const hasSomethingWorthLogging = (output || typeof output === 'object' && output.length);
+
+  if(!hasSomethingWorthLogging){
+    return;
+  }
+
   const elapsedTimeMs = now() - t0;
   console.log(`Took ${elapsedTimeMs} milliseconds`);
   return elapsedTimeMs;
