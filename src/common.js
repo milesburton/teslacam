@@ -2,6 +2,7 @@ const { execSync: execSyncNoLogging } = require('child_process');
 const {
   performance: { now },
 } = require('perf_hooks');
+const internetAvailable = require('internet-available');
 
 const outputShellResult = (preamble, buffer) => {
 
@@ -54,4 +55,14 @@ const benchmark = (fn) => {
   return elapsedTimeMs;
 };
 
-module.exports = { sleep, execSync, benchmark };
+const isOnline = async () => {
+  try {
+    await internetAvailable();
+    return true;
+  } catch (err) {
+    console.log(err.toString());
+    return false;
+  }
+};
+
+module.exports = { sleep, execSync, benchmark, isOnline };

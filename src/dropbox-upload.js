@@ -2,23 +2,12 @@
 
 /* eslint no-await-in-loop: 0 */
 /* eslint no-constant-condition: 0 */
-const internetAvailable = require('internet-available');
-
 const fs = require('fs');
-const { benchmark, execSync, sleep } = require('./common.js');
+const { benchmark, execSync, sleep, isOnline } = require('./common.js');
 const {
   BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL, DELETE_ON_UPLOAD
 } = require('../etc/config.js');
 
-const isOnline = async () => {
-  try {
-    await internetAvailable();
-    return true;
-  } catch (err) {
-    console.log(err.toString());
-    return false;
-  }
-};
 
 const attemptUpload = (filename, opts = { deleteWhenComplete: true, noop: false }) => {
   try {

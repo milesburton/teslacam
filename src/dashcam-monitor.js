@@ -6,9 +6,9 @@
 
 const fs = require('fs');
 const {
-  IMAGE_DIR, BACKUP_DIR, IMAGE_MOUNT_POINT, RECORD_WINDOW_MS,
+  IMAGE_DIR, BACKUP_DIR, IMAGE_MOUNT_POINT, RECORD_WINDOW_MS, IMAGE_SIZE_MB, PAUSE_RECORDING_ON_WIFI
 } = require('../etc/config.js');
-const { benchmark, execSync, sleep } = require('./common.js');
+const { benchmark, execSync, sleep, isOnline } = require('./common.js');
 
 const unmount = (imageNum) => {
   console.log(`Unmounting image ${imageNum}`);
@@ -92,7 +92,7 @@ const performSanityCheck = () => {
   const createImageIfNotExists = (imageNum) => {
     const expectedFilename = `${IMAGE_DIR}/cam${imageNum}`;
     if (!fs.existsSync(expectedFilename)) {
-      execSync(`dd bs=1M if=/dev/zero of=${IMAGE_DIR}/cam${imageNum} count=1024`);
+      execSync(`dd bs=1M if=/dev/zero of=${IMAGE_DIR}/cam${imageNum} count=${IMAGE_SIZE_MB}`);
       execSync(`mkdosfs ${IMAGE_DIR}/cam${imageNum} -F 32 -I`);
     }
   };
@@ -155,6 +155,7 @@ const init = async () => {
   let imageNum = 0;
 
   while (true) {
+    if(PAUSE_RECORDING_ON_WIFI) await !isOnline();
     await processVideo(imageNum);
     imageNum ^= 1;
   }
