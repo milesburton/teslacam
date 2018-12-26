@@ -6,7 +6,7 @@
 
 const fs = require('fs');
 const {
-  IMAGE_DIR, BACKUP_DIR, IMAGE_MOUNT_POINT, RECORD_WINDOW_MS, IMAGE_SIZE_MB, PAUSE_RECORDING_ON_WIFI
+  IMAGE_DIR, BACKUP_DIR, IMAGE_MOUNT_POINT, RECORD_WINDOW_MS, IMAGE_SIZE_MB, PAUSE_RECORDING_ON_WIFI, WAIT_INTERVAL
 } = require('../etc/config.js');
 const { benchmark, execSync, sleep, isOnline } = require('./common.js');
 
@@ -155,9 +155,12 @@ const init = async () => {
   let imageNum = 0;
 
   while (true) {
-    if(PAUSE_RECORDING_ON_WIFI) await !isOnline();
-    await processVideo(imageNum);
-    imageNum ^= 1;
+    if(PAUSE_RECORDING_ON_WIFI && isOnline()){
+      await sleep(WAIT_INTERVAL);
+    }else{
+      await processVideo(imageNum);
+      imageNum ^= 1;
+    }
   }
 };
 
