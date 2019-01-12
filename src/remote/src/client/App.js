@@ -4,12 +4,8 @@ import {
   Toolbar,
   ToolbarButton,
   Icon,
-  Button,
   List,
-  ListHeader,
   ListItem,
-  Carousel,
-  CarouselItem,
   Splitter,
   SplitterSide,
   SplitterContent

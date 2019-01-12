@@ -2,8 +2,6 @@ import PropTypes from 'prop-types';
 import React, {Component} from 'react';
 import socketIOClient from 'socket.io-client';
 import {
-    Button,
-    // List,
     ListHeader,
     ListItem,
     Page,
@@ -32,8 +30,9 @@ const withVideoSubscription = WrappedComponent => class extends Component {
 
     componentDidMount() {
         const socket = socketIOClient(':8080');
-        socket.on('video', data =>
-            this.setState({data})
+        socket.on('video', data => {
+                this.setState({data: data.filter((el, i) => i < 20)}); // Temporary limiting the number of videos until infinite scroll is implemented
+            }
         );
     }
 
