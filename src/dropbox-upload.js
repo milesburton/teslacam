@@ -1,69 +1,70 @@
 #!/bin/node
 
 /* eslint no-await-in-loop: 0 */
-
-const internetAvailable = require('internet-available');
-
+/* eslint no-constant-condition: 0 */
 const fs = require('fs');
-const { benchmark, execSync, sleep } = require('./common.js');
+const { benchmark, execSync, sleep, isOnline } = require('./common.js');
 const {
-  BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL,
+  BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL, DELETE_ON_UPLOAD
 } = require('../etc/config.js');
 
 
-const isOnline = async () => {
+const attemptUpload = (filename, opts = { deleteWhenComplete: true, noop: false }) => {
   try {
-    await internetAvailable();
-    return true;
-  } catch (err) {
-    console.log(err.toString());
-    return false;
-  }
-};
-
-const attemptUpload = (filename, opts = { deleteWhenComplete : true }) => {
-  try {
-    execSync(`${DROPBOX_UPLOADER} upload ${BACKUP_DIR}/${filename} .`, { bubbleError: true });
+    execSync(`${DROPBOX_UPLOADER} -s upload ${BACKUP_DIR}/${filename} .`, { bubbleError: true, noop: opts.noop });
 
     if (opts.deleteWhenComplete) {
-	    execSync(`rm ${BACKUP_DIR}/${filename}`);
+      execSync(`rm ${BACKUP_DIR}/${filename}`);
     }
 
     console.log(`Uploaded ${filename}`);
-    return true;
+    return filename;
   } catch (err) {
     console.log(`Failed to upload ${filename}`);
     return false;
   }
 };
 
-const getVideoFileNames = files => files.map(({ name }) => name).filter(f => f.endsWith('mp4'));
+const getVideos = files => files.map(({ name }) => name).filter(f => f.endsWith('mp4'));
 
 const hasLockFile = files => !!files.find(({ name }) => name === LOCK_FILE_NAME);
 
-const uploadVideoFiles = (files) => {
-  const videoFiles = getVideoFileNames(files);
+const uploadVideoFiles = (videos) => {
 
-  console.log(`Preparing to upload ${videoFiles.length} videos`);
-  const uploadedFiles = videoFiles.map(f=>attemptUpload(f)).filter(v => v);
-  console.log(`Uploaded ${uploadedFiles.length}/${videoFiles.length}`);
+  if (!videos.length) {
+    return [];
+  }
+
+  console.log(`Preparing to upload ${videos.length} videos`);
+  const uploadedFiles = videos
+    .map(f => attemptUpload(f, { deleteWhenComplete: DELETE_ON_UPLOAD, noop: false }))
+    .filter(v => v);
+
+  console.log(`Uploaded ${uploadedFiles.length}/${videos.length}`);
+  return uploadedFiles;
+};
+
+const onlyNewVideos = (uploadHistory, videos, fn) => {
+  // Remove videos that do not exist from the history
+  const newUploadHistory = uploadHistory.filter(f => videos.find(v => f === v));
+  const videosToUpload = videos.filter(v => !newUploadHistory.find(f => f === v));
+
+  const uploadedVideos = fn(videosToUpload);
+
+  return [...newUploadHistory, ...uploadedVideos];
 };
 
 const init = async () => {
   console.log('TeslaCam Dropbox Upload daemon');
+
+  let uploadHistory = [];
 
   while (true) {
     const files = fs
       .readdirSync(BACKUP_DIR, { withFileTypes: true });
 
     if (isOnline && !hasLockFile(files)) {
-      console.log('TeslaCam is online and no lock file discovered');
-
-      benchmark(() => {
-        uploadVideoFiles(files);
-      });
-    } else {
-      console.log('No internet or lock file discovered. Waiting till next attempt');
+      benchmark(() => uploadHistory = onlyNewVideos(uploadHistory, getVideos(files), uploadVideoFiles));
     }
 
     await sleep(WAIT_INTERVAL);

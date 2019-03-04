@@ -1,0 +1,2 @@
+#!/bin/sh
+exec setuidgid pi npm  --prefix /home/pi/teslacam/src/remote run dev

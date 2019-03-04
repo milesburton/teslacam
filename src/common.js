@@ -2,34 +2,67 @@ const { execSync: execSyncNoLogging } = require('child_process');
 const {
   performance: { now },
 } = require('perf_hooks');
+const internetAvailable = require('internet-available');
+
+const outputShellResult = (preamble, buffer) => {
+
+  const trimmedBuffer = buffer ? buffer.toString().trim() : '';
+
+  if (!trimmedBuffer) {
+    return '';
+  }
+
+  if (trimmedBuffer.split('\n').length>2) {
+    console.log(`======================= ${preamble}`);
+    console.log(trimmedBuffer);
+    console.log(`======================= /${preamble}`);
+  } else {
+    console.log(`${preamble}: ${trimmedBuffer}`);
+  }
+  return trimmedBuffer;
+};
 
 const sleep = async ms => new Promise(r => setTimeout(r, ms));
 
-const execSync = (cmd, opts = { bubbleError: false }) => {
-  console.log(`Preparing to run command [${cmd}]`);
+const execSync = (cmd, opts = { bubbleError: false, noop: false }) => {
+  console.log(`Running [${cmd}]`);
   try {
-    const buffer = execSyncNoLogging(cmd);
-
-    console.log('======================= process');
-    console.log(buffer.toString());
-    console.log('======================= /process');
+    const buffer = !opts.noop ? execSyncNoLogging(cmd) : '';
+    return outputShellResult('Success', buffer);
   } catch (err) {
-    console.log('======================= error');
-    console.log(JSON.stringify(err));
-    console.log('======================= /error');
+    const buffer = err.stderr;
+    const result = outputShellResult(`Failed: code [${err.status}]`, buffer);
 
     if (opts.bubbleError) {
       throw err;
     }
+    return result;
   }
 };
 
 const benchmark = (fn) => {
   const t0 = now();
-  fn();
+  const output = fn();
+
+  const hasSomethingWorthLogging = (output || typeof output === 'object' && output.length);
+
+  if(!hasSomethingWorthLogging){
+    return;
+  }
+
   const elapsedTimeMs = now() - t0;
-  console.log(`Took ${elapsedTimeMs} milliseconds to move`);
+  console.log(`Took ${elapsedTimeMs} milliseconds`);
   return elapsedTimeMs;
 };
 
-module.exports = { sleep, execSync, benchmark };
+const isOnline = async () => {
+  try {
+    await internetAvailable();
+    return true;
+  } catch (err) {
+    console.log(err.toString());
+    return false;
+  }
+};
+
+module.exports = { sleep, execSync, benchmark, isOnline };

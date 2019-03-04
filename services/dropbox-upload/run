@@ -1,2 +1,2 @@
 #!/bin/sh
-exec /root/teslacam/src/dropbox-upload.js 
+exec setuidgid pi /home/pi/teslacam/src/dropbox-upload.js

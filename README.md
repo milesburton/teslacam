@@ -1,5 +1,12 @@
 
 # Tesla Cam - An experimental application to repair, store and upload Tesla dash cam footage
+## Current capabilities
+ - [Backup] Storage of Tesla Cam videos
+ - [Dropbox] Upload videos to Dropbox when a internet connection is available
+ - [Remote] Basic Mobile App (Web UI) which lets you view videos on your phone, download videos and ability to enable/disable services at will. Available on port 3000 on the IP address of your Pi
+ - [Security] Services now run as the pi user and all super user commands are whitelisted
+ - [Housekeeping] System will delete old videos when remaining storage space falls below 20%
+
 ## Overview
 As of late 2018 Tesla released V9 which among a number of improvements included dash cam functionality. This works by placing a suitably sized USB drive in one of the available USB ports at the front of the vehicle (Model S).
 
@@ -79,17 +86,20 @@ With all this in mind, logically speaking the following steps need to be followe
 	* Move all video onto the Pi
 	* Unmount the first image on the Pi
 	
+
 ## TODO
- - Experiment with streaming, it's trivial to stream to youtube with FFMPEG
- - Explain setup instructions (more detail required)
- - Write decent installation script to automatically configure the application on a Pi
- - Rotate the video storage to avoid running out of space
- - Use a read only file system to avoid corruption of the operating system
- - Rename video files so they order neatly on Linux/Windows/OSX
- - Security harden the install
- - Make performance metrics more useful (time to upload video etc)
- - Use a decent logger
- - Buy Tesla Roadster 
+ - [Streaming] Experiment with streaming, it's trivial to stream to youtube with FFMPEG
+ - [System|Remote] Intelligent service switching (ie, entirely disable dropbox)
+ - [Remote] Remote configuration
+ - [Remote] Infinite pagination
+ - [Dropbox] Prioritise emergency video upload 
+ - [Github] Explain setup instructions (more detail required)
+ - [Github] Write decent installation script to automatically configure the application on a Pi
+ - [System] Use a read only file system to avoid corruption of the operating system
+ - [System] Make performance metrics more useful (time to upload video etc)
+ - [System] Improve logging
+ - [Thoughts] Automatic WiFi hotspot on first boot
+ - [Me] Buy Tesla Roadster 
  
  ## Shameless plug
  If you found this useful, feel free to use my [Tesla Referral code for free supercharging](https://ts.la/miles16015) 

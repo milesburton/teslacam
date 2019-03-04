@@ -4,16 +4,24 @@
   "description": "",
   "main": "tesla.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/services start",
+    "stop": "node src/services stop",
+    "status": "node src/services status"
   },
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "eslint": "^5.9.0",
+    "eslint": "^5.10.0",
     "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.14.0"
   },
   "dependencies": {
-    "internet-available": "^1.0.0"
+    "babel-eslint": "^10.0.1",
+    "eslint-config-airbnb": "^17.1.0",
+    "eslint-plugin-jsx-a11y": "^6.1.2",
+    "eslint-plugin-react": "^7.11.1",
+    "internet-available": "^1.0.0",
+    "react-virtualized": "^9.21.0"
   }
 }
