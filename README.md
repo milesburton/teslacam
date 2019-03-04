@@ -100,6 +100,3 @@ With all this in mind, logically speaking the following steps need to be followe
  - [System] Improve logging
  - [Thoughts] Automatic WiFi hotspot on first boot
  - [Me] Buy Tesla Roadster 
- 
- ## Shameless plug
- If you found this useful, feel free to use my [Tesla Referral code for free supercharging](https://ts.la/miles16015) 
