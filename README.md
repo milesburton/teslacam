@@ -52,13 +52,13 @@ Using a couple of tricks I've learned through tinkering with various single boar
 * Emergency recordings are 10 minutes at most
 * Copying 27 minutes (around 800MiB of data) of footage from a disk image to the ext4 file system takes approximately 4.2 minutes. SDHC class 10
 * Time to unmount, repair and copy ~30 minutes of footage is around 4 minutes. In this test the file system wasn't corrupt.
-* The Dash cam and USB ports only operate in the following situations
+* The Dash cam, USB & 12V ports only operate in the following situations
   * The car is powered on by unlocking the vehicle
   * Climate control is left on when you leave the car
   * It would appear as of V9 the USB ports are powered whilst charging (TBC). May not apply if you use range mode.
-* Climate control will only run for 3 hours - and is a rather wasteful from an energy perspective. This means the dashcam is not suitable for 24hr recording, a 'normal' dash cam is better suited if you have this requirement. 
+  * Sentry mode is enabled
 * The Tesla Dash cam tends to be vastly clearer than a interior camera, particularly at night - very easy to make out number plates.
-* FAT32, the file system supported by Tesla, cannot be mounted twice without corruption
+* FAT32, the file system supported by Tesla, cannot be mounted twice without corruption (ie, Real Time streaming is not possible, though near real-time with a 1 minute lag is)
 * The car will cut off power to the USB ports without warning, this can cause corruption of video files and any file systems which can not tolerate power loss. This is a tricky issue as there are number of caches (software and hardware) that need to be flushed before power is removed.
 * Lipo batteries are not advised within the cabin, temperatures of over 60c have been reported in summer.
 
