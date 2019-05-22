@@ -3,6 +3,7 @@
 /* eslint no-await-in-loop: 0 */
 /* eslint no-constant-condition: 0 */
 const fs = require('fs');
+const { readdir, stat } = require('fs').promises;
 const { benchmark, execSync, sleep, isOnline } = require('./common.js');
 const {
   BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL, DELETE_ON_UPLOAD
@@ -24,6 +25,15 @@ const attemptUpload = (filename, opts = { deleteWhenComplete: true, noop: false 
     return false;
   }
 };
+
+async function getFiles(dir) {
+  const subdirs = await readdir(dir);
+  const files = await Promise.all(subdirs.map(async (subdir) => {
+    const res = resolve(dir, subdir);
+    return (await stat(res)).isDirectory() ? getFiles(res) : res;
+  }));
+  return Array.prototype.concat(...files);
+}
 
 const getVideos = files => files.map(({ name }) => name).filter(f => f.endsWith('mp4'));
 
@@ -60,8 +70,7 @@ const init = async () => {
   let uploadHistory = [];
 
   while (true) {
-    const files = fs
-      .readdirSync(BACKUP_DIR, { withFileTypes: true });
+    const files = await getFiles(BACKUP_DIR);
 
     if (isOnline && !hasLockFile(files)) {
       benchmark(() => uploadHistory = onlyNewVideos(uploadHistory, getVideos(files), uploadVideoFiles));
