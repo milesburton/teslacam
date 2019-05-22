@@ -44,4 +44,10 @@ jspm_packages/
 images/*
 video/*
 supervise/*
-
+services/**/log/*
+services/**/log/run/*
+services/**/log/main/*
+services/**/log/supervise/*
+!services/**/log/run
+!services/**/log/main
+!services/**/log/supervise
