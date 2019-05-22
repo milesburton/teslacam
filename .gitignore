@@ -46,7 +46,6 @@ video/*
 supervise/*
 services/**/log/*
 services/**/supervise/*
-!images/.gitkeep
 !video/.gitkeep
 !images/.gitkeep
 !services/dropbox-upload/supervise/.gitkeep
