@@ -38,8 +38,8 @@ Using a couple of tricks I've learned through tinkering with various single boar
 5. Install [Nodejs for Linux Arm V6](https://nodejs.org/en/download/). Gunzip this to /opt/node, symlink to /usr/bin
 6. As root (sudo su)
   * Clone [Dropbox-Uploader](https://github.com/andreafabrizi/Dropbox-Uploader) (if you want dropbox upload capability). Be sure to follow the instructions including creating a 'TeslaCam' app on the dropbox portal
-  * Clone this repository to /root/teslacam
-  * Create the services sym links as follows cd /etc/service ln -s /root/teslacam/services/* .
+  * Clone this repository to /home/pi/teslacam
+  * Create the services sym links as follows cd /etc/service ln -s /home/pi/teslacam/services/* .
 7. Plug the Pi Zero W into the Tesla media USB ports (the front ports). Make sure you use the data port on the Pi, google if you are unsure.
 8. Reboot, once the automatic configuration completes (circa 20 minutes) the car should detect the Pi as a USB drive.
 
