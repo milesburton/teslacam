@@ -18,7 +18,7 @@ const MAX_DISK_UTILISATION_PERCENT = 0.8;
 // An apparent bug in the Tesla software causes the dashcam to be unmounted whilst the car is not actively powered up
 // A reboot is required to restore dashcam functionality, it may be better to simply pause the dashcam whilst parked
 // This wont resolve the problem whilst charging away from home.
-const PAUSE_RECORDING_ON_WIFI = true;
+const PAUSE_RECORDING_ON_WIFI = false;
 
 module.exports = {
   IMAGE_DIR,

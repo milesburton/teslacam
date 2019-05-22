@@ -41,6 +41,7 @@ jspm_packages/
 .idea
 
 # TeslaCam specifics
-images
-video
-supervise
+images/*
+video/*
+supervise/*
+

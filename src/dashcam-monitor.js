@@ -20,14 +20,20 @@ const mount = (imageNum) => {
   execSync(`sudo /sbin/modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} stall=0,0, ro=0,0 removable=1,1`);
 };
 
-const mountLocal = (imageNum) => {
+const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
   console.log(`Preparing to local mount image ${imageNum}`);
-  execSync(`sudo /bin/mount -t vfat -o gid=pi,uid=pi ${IMAGE_DIR}/cam${imageNum} ${IMAGE_MOUNT_POINT}`);
+  const filepath = `${IMAGE_DIR}/cam${imageNum}`;
+  const partitionOffset = calculatePartitionOffsetForImage(filepath);
+  execSync(`sudo /sbin/losetup -o ${partitionOffset} /dev/loop${imageNum} "${filepath}"`); 
+  if(opts.mountToDirectory){
+     execSync(`sudo /bin/mount -t vfat -o gid=pi,uid=pi,offset=${partitionOffset} ${filepath} ${IMAGE_MOUNT_POINT}`);
+  }
 };
 
 const unmountLocal = (imageNum) => {
   console.log(`Preparing to unmount local image ${imageNum}`);
-  execSync('sudo /bin/umount /mnt');
+  execSync(`sudo /bin/umount ${IMAGE_MOUNT_POINT}`);
+  execSync(`sudo /sbin/losetup -d /dev/loop${imageNum}`); 
 };
 
 const fixLocal = (imageNum) => {
@@ -61,14 +67,12 @@ const copyLocal = (imageNum) => {
   );
 
   const teslacamPath = `${IMAGE_MOUNT_POINT}/TeslaCam`;
-
   removeErroneousVideos(teslacamPath);
 
   const filesInPath = countFilesInDirectory(teslacamPath);
-
   console.log(`Found ${filesInPath} files in ${teslacamPath}`);
 
-  if (filesInPath > 0) {
+  if (filesInPath) {
     const filesBeforeCopy = countFilesInDirectory(BACKUP_DIR);
 
     execSync(`touch ${BACKUP_DIR}/lock`);
@@ -82,6 +86,15 @@ const copyLocal = (imageNum) => {
   }
 };
 
+const calculatePartitionOffsetForImage = (absoluteFilename) =>{
+   // Shamelessly taken from @marcone 
+  const sizeInBytes = +execSync(`sfdisk -l -o Size -q --bytes "${absoluteFilename}" | tail -1`);
+  const sizeInSectors = +execSync(`sfdisk -l -o Sectors -q "${absoluteFilename}" | tail -1`);
+  const sectorSize = sizeInBytes / sizeInSectors;
+  const partitionStartSector = +execSync(`sfdisk -l -o Start -q "${absoluteFilename}" | tail -1`);
+  return partitionStartSector * sectorSize;
+}
+
 const performSanityCheck = () => {
   const createIfNotExists = (dirName) => {
     if (!fs.existsSync(dirName)) {
@@ -92,8 +105,11 @@ const performSanityCheck = () => {
   const createImageIfNotExists = (imageNum) => {
     const expectedFilename = `${IMAGE_DIR}/cam${imageNum}`;
     if (!fs.existsSync(expectedFilename)) {
-      execSync(`dd bs=1M if=/dev/zero of=${IMAGE_DIR}/cam${imageNum} count=${IMAGE_SIZE_MB}`);
-      execSync(`mkdosfs ${IMAGE_DIR}/cam${imageNum} -F 32 -I`);
+      execSync(`fallocate -l ${IMAGE_SIZE_MB}M ${IMAGE_DIR}/cam${imageNum}`);
+      execSync(`echo "type=c" | /sbin/sfdisk ${IMAGE_DIR}/cam${imageNum}`);
+      mountLocal(imageNum, { mountToDirectory: false });
+      execSync(`sudo mkfs.vfat /dev/loop${imageNum} -F 32 -I`);
+      unmountLocal(imageNum);
     }
   };
 
@@ -141,8 +157,8 @@ const processVideo = async (imageNum) => {
   mount(imageNum ^ 1);
 
   const elapsedTimeMs = benchmark(() => {
-    fixLocal(imageNum);
     mountLocal(imageNum);
+    fixLocal(imageNum);
     copyLocal(imageNum);
     unmountLocal(imageNum);
   });
