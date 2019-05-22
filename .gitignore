@@ -44,7 +44,8 @@ jspm_packages/
 images/*
 video/*
 supervise/*
-services/**/log/*
+services/**/log/main/*
+services/**/log/supervise/*
 services/**/supervise/*
 !video/.gitkeep
 !images/.gitkeep
