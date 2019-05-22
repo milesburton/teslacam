@@ -44,8 +44,10 @@ jspm_packages/
 images/*
 video/*
 supervise/*
-services/**/log
+services/**/log/*
+services/**/supervise/*
 !./images/.gitkeep
+!./video/.gitkeep
 !./services/dropbox-upload/supervise/.gitkeep
 !./services/dropbox-upload/log/main/.gitkeep
 !./services/dropbox-upload/log/supervise/.gitkeep
