@@ -2,7 +2,7 @@
 
 /* eslint no-await-in-loop: 0 */
 /* eslint no-constant-condition: 0 */
-const fs = require('fs');
+const { join } = require('path');
 const { readdir, stat } = require('fs').promises;
 const { benchmark, execSync, sleep, isOnline } = require('./common.js');
 const {
@@ -12,10 +12,10 @@ const {
 
 const attemptUpload = (filename, opts = { deleteWhenComplete: true, noop: false }) => {
   try {
-    execSync(`${DROPBOX_UPLOADER} -s upload ${BACKUP_DIR}/${filename} .`, { bubbleError: true, noop: opts.noop });
+    execSync(`${DROPBOX_UPLOADER} -s upload ${filename} .`, { bubbleError: true, noop: opts.noop });
 
     if (opts.deleteWhenComplete) {
-      execSync(`rm ${BACKUP_DIR}/${filename}`);
+      execSync(`rm ${filename}`);
     }
 
     console.log(`Uploaded ${filename}`);
@@ -26,18 +26,26 @@ const attemptUpload = (filename, opts = { deleteWhenComplete: true, noop: false 
   }
 };
 
+
 async function getFiles(dir) {
-  const subdirs = await readdir(dir);
-  const files = await Promise.all(subdirs.map(async (subdir) => {
-    const res = resolve(dir, subdir);
-    return (await stat(res)).isDirectory() ? getFiles(res) : res;
-  }));
-  return Array.prototype.concat(...files);
+  const files = (await readdir(dir)).map(f => join(dir, f));
+
+
+   const children = await Promise.all(files.map(async f => {
+        if ((await stat(f)).isDirectory()) {
+          return getFiles(f);
+        }else{
+          return [f];
+        }
+      })
+  );
+
+  return children.reduce((acc, c)=>([...acc, ...c]), []);
 }
 
-const getVideos = files => files.map(({ name }) => name).filter(f => f.endsWith('mp4'));
+const getVideos = files => files.filter(f => f.endsWith('mp4'));
 
-const hasLockFile = files => !!files.find(({ name }) => name === LOCK_FILE_NAME);
+const hasLockFile = files => !!files.find(f => f.includes(LOCK_FILE_NAME));
 
 const uploadVideoFiles = (videos) => {
 
