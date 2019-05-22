@@ -40,8 +40,10 @@ Using a couple of tricks I've learned through tinkering with various single boar
   * Clone [Dropbox-Uploader](https://github.com/andreafabrizi/Dropbox-Uploader) (if you want dropbox upload capability). Be sure to follow the instructions including creating a 'TeslaCam' app on the dropbox portal
   * Clone this repository to /home/pi/teslacam
   * Create the services sym links as follows cd /etc/service ln -s /home/pi/teslacam/services/* .
-7. Plug the Pi Zero W into the Tesla media USB ports (the front ports). Make sure you use the data port on the Pi, google if you are unsure.
-8. Reboot, once the automatic configuration completes (circa 20 minutes) the car should detect the Pi as a USB drive.
+7. Under /home/pi/teslacam run npm install
+8. Under /home/pi/teslacam/src/remote run npm install
+9. Plug the Pi Zero W into the Tesla media USB ports (the front ports). Make sure you use the data port on the Pi, google if you are unsure.
+10. Reboot, once the automatic configuration completes (circa 20 minutes) the car should detect the Pi as a USB drive.
 
 # Research & notes
 * Tesla V9 Dashcam records up to one hour, in a circular buffer type fashion split into one minute increments
