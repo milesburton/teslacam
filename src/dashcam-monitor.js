@@ -172,7 +172,7 @@ const init = async () => {
 
   while (true) {
     if(PAUSE_RECORDING_ON_WIFI && isOnline()){
-      await sleep(WAIT_INTERVAL);
+      //await sleep(WAIT_INTERVAL);
     }else{
       await processVideo(imageNum);
       imageNum ^= 1;
