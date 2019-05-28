@@ -140,7 +140,6 @@ const startup = () => {
   unmount('All');
   unmountLocal(0);
   removeErroneousVideos(BACKUP_DIR);
-
   performSanityCheck();
 };
 
@@ -148,7 +147,6 @@ const waitForVideoFiles = async (minusLagTime = 0) => {
   console.log('Waiting for video files');
   await sleep(RECORD_WINDOW_MS - minusLagTime);
 };
-
 
 const processVideo = async (imageNum) => {
   mount(imageNum);
@@ -158,8 +156,8 @@ const processVideo = async (imageNum) => {
   mount(imageNum ^ 1);
 
   const elapsedTimeMs = benchmark(() => {
-    mountLocal(imageNum);
     fixLocal(imageNum);
+    mountLocal(imageNum);
     copyLocal(imageNum);
     unmountLocal(imageNum);
   });
