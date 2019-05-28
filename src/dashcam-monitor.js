@@ -91,6 +91,7 @@ const calculatePartitionOffsetForImage = (absoluteFilename) =>{
   const sizeInBytes = +execSync(`sfdisk -l -o Size -q --bytes "${absoluteFilename}" | tail -1`);
   const sizeInSectors = +execSync(`sfdisk -l -o Sectors -q "${absoluteFilename}" | tail -1`);
   const sectorSize = sizeInBytes / sizeInSectors;
+  console.log(`Sector size: ${sectorSize}`);
   const partitionStartSector = +execSync(`sfdisk -l -o Start -q "${absoluteFilename}" | tail -1`);
   return partitionStartSector * sectorSize;
 }
