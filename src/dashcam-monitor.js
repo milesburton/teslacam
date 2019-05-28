@@ -24,9 +24,11 @@ const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
   console.log(`Preparing to local mount image ${imageNum}`);
   const filepath = `${IMAGE_DIR}/cam${imageNum}`;
   const partitionOffset = calculatePartitionOffsetForImage(filepath);
-  execSync(`sudo /sbin/losetup -o ${partitionOffset} /dev/loop${imageNum} "${filepath}"`); 
+  
   if(opts.mountToDirectory){
      execSync(`sudo /bin/mount -t vfat -o gid=pi,uid=pi,offset=${partitionOffset} ${filepath} ${IMAGE_MOUNT_POINT}`);
+  }else{
+    execSync(`sudo /sbin/losetup -o ${partitionOffset} /dev/loop${imageNum} "${filepath}"`); 
   }
 };
 
