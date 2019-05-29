@@ -22,7 +22,7 @@ const mount = (imageNum) => {
 
 const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
   console.log(`Preparing to local mount image ${imageNum}`);
-  const filepath = `${IMAGE_DIR}/cam${imageNum}`;
+  const filepath = `/dev/loop${imageNum}`;
   const partitionOffset = calculatePartitionOffsetForImage(filepath);
   
   if(opts.mountToDirectory){
@@ -40,7 +40,7 @@ const unmountLocal = (imageNum) => {
 
 const fixLocal = (imageNum) => {
   console.log('Attempting to fix image');
-  execSync(`fsck -a ${IMAGE_DIR}/cam${imageNum}`);
+  execSync(`sudo fsck -a /dev/loop${imageNum}`);
 };
 
 const countFilesInDirectory = dirPath => fs
