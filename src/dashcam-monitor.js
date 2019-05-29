@@ -30,7 +30,7 @@ const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
   execSync(`sudo /sbin/losetup -o ${partitionOffset} ${loopPath} ${imagePath}`); 
   
   if(opts.mountToDirectory){
-     execSync(`sudo /bin/mount -t vfat -o gid=pi,uid=pi,offset=${partitionOffset} ${loopPath} ${IMAGE_MOUNT_POINT}`);
+     execSync(`sudo /bin/mount ${loopPath} ${IMAGE_MOUNT_POINT}`);
   }
   
 };
