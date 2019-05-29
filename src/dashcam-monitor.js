@@ -40,7 +40,7 @@ const unmountLocal = (imageNum) => {
 
 const fixLocal = (imageNum) => {
   console.log('Attempting to fix image');
-  execSync(`sudo fsck -a /dev/loop${imageNum}`);
+  execSync(`sudo /sbin/fsck -a /dev/loop${imageNum}`);
 };
 
 const countFilesInDirectory = dirPath => fs
@@ -111,7 +111,7 @@ const performSanityCheck = () => {
       execSync(`fallocate -l ${IMAGE_SIZE_MB}M ${IMAGE_DIR}/cam${imageNum}`);
       execSync(`echo "type=c" | /sbin/sfdisk ${IMAGE_DIR}/cam${imageNum}`);
       mountLocal(imageNum, { mountToDirectory: false });
-      execSync(`sudo mkfs.vfat /dev/loop${imageNum} -F 32 -I`);
+      execSync(`sudo /sbin/mkfs.vfat /dev/loop${imageNum} -F 32 -I`);
       unmountLocal(imageNum);
     }
   };
