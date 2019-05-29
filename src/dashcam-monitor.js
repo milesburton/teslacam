@@ -43,7 +43,9 @@ const unmountLocal = (imageNum) => {
 
 const fixLocal = (imageNum) => {
   console.log('Attempting to fix image');
+  mountLocal(imageNum, { mountToDirectory: false }); // Required to mount loopback to /dev/loop${imageNum}
   execSync(`sudo /sbin/fsck.vfat -a /dev/loop${imageNum}`);
+  unmountLocal(imageNum);
 };
 
 const countFilesInDirectory = dirPath => fs
