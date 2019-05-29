@@ -40,8 +40,8 @@ Cmnd_Alias UMOUNT_TESLA=            /sbin/modprobe -r g_mass_storage
 Cmnd_Alias MOUNT_TESLA_IMAGE_0=     /sbin/modprobe g_mass_storage file\=~/teslacam/images/cam0 stall\=0\,0\, ro\=0\,0 removable\=1\,1
 Cmnd_Alias MOUNT_TESLA_IMAGE_1=     /sbin/modprobe g_mass_storage file\=~/teslacam/images/cam1 stall\=0\,0\, ro\=0\,0 removable\=1\,1
 
-Cmnd_Alias FIX_TESLA_IMAGE_0=       /sbin/fsck -a /dev/loop0
-Cmnd_Alias FIX_TESLA_IMAGE_1=       /sbin/fsck -a /dev/loop1
+Cmnd_Alias FIX_TESLA_IMAGE_0=       /sbin/fsck.vfat -a /dev/loop0
+Cmnd_Alias FIX_TESLA_IMAGE_1=       /sbin/fsck.vfat -a /dev/loop1
 
 pi ALL=NOPASSWD:UMOUNT_IMAGE, MOUNT_IMAGE_0, MOUNT_IMAGE_1, UMOUNT_TESLA, MOUNT_TESLA_IMAGE_0, MOUNT_TESLA_IMAGE_1, FIX_TESLA_IMAGE_0, FIX_TESLA_IMAGE_1
 
