@@ -23,13 +23,13 @@ const mount = (imageNum) => {
 const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
   console.log(`Preparing to local mount image ${imageNum}`);
   const filepath = `/dev/loop${imageNum}`;
+  execSync(`sudo /sbin/losetup -o ${partitionOffset} /dev/loop${imageNum} "${filepath}"`); 
   const partitionOffset = calculatePartitionOffsetForImage(filepath);
   
   if(opts.mountToDirectory){
      execSync(`sudo /bin/mount -t vfat -o gid=pi,uid=pi,offset=${partitionOffset} ${filepath} ${IMAGE_MOUNT_POINT}`);
-  }else{
-    execSync(`sudo /sbin/losetup -o ${partitionOffset} /dev/loop${imageNum} "${filepath}"`); 
   }
+  
 };
 
 const unmountLocal = (imageNum) => {
