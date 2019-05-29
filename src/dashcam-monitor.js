@@ -30,7 +30,7 @@ const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
   execSync(`sudo /sbin/losetup -o ${partitionOffset} ${loopPath} ${imagePath}`); 
   
   if(opts.mountToDirectory){
-     execSync(`sudo /bin/mount ${loopPath} ${IMAGE_MOUNT_POINT}`);
+     execSync(`sudo /bin/mount -o gid=pi,uid=pi ${loopPath} ${IMAGE_MOUNT_POINT}`);
   }
   
 };
