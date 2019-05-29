@@ -2,7 +2,7 @@
 Cmnd_Alias START_DASHCAM=           /usr/bin/svc -u /home/pi/teslacam/services/dashcam-monitor
 Cmnd_Alias STOP_DASHCAM=            /usr/bin/svc -d /home/pi/teslacam/services/dashcam-monitor
 Cmnd_Alias STAT_DASHCAM=            /usr/bin/svok /home/pi/teslacam/services/dashcam-monitor
-Cmnd_Alias STATUS_DASHCAM= 	    /usr/bin/svstat /home/pi/teslacam/services/dashcam-monitor
+Cmnd_Alias STATUS_DASHCAM=          /usr/bin/svstat /home/pi/teslacam/services/dashcam-monitor
 
 pi ALL=NOPASSWD:START_DASHCAM,STOP_DASHCAM,STAT_DASHCAM,STAT_DASHCAM,STATUS_DASHCAM
 
@@ -33,11 +33,15 @@ pi ALL=NOPASSWD:STAT_ROTATE,START_ROTATE,STOP_ROTATE,STATUS_ROTATE
 # Image mounting
 
 Cmnd_Alias UMOUNT_IMAGE=            /bin/umount /mnt
-Cmnd_Alias MOUNT_IMAGE_0=           /bin/mount -t vfat -o gid=pi\,uid=pi /home/pi/teslacam/images/cam0 /mnt
-Cmnd_Alias MOUNT_IMAGE_1=           /bin/mount -t vfat -o gid=pi\,uid=pi /home/pi/teslacam/images/cam1 /mnt
+Cmnd_Alias MOUNT_IMAGE_0=           /bin/mount -t vfat -o gid=pi\,uid=pi /dev/loop0 /mnt
+Cmnd_Alias MOUNT_IMAGE_1=           /bin/mount -t vfat -o gid=pi\,uid=pi /dev/loop1 /mnt
 
 Cmnd_Alias UMOUNT_TESLA=            /sbin/modprobe -r g_mass_storage
-Cmnd_Alias MOUNT_TESLA_IMAGE_0=     /sbin/modprobe g_mass_storage file\=/home/pi/teslacam/images/cam0 stall\=0\,0\, ro\=0\,0 removable\=1\,1
-Cmnd_Alias MOUNT_TESLA_IMAGE_1=     /sbin/modprobe g_mass_storage file\=/home/pi/teslacam/images/cam1 stall\=0\,0\, ro\=0\,0 removable\=1\,1
+Cmnd_Alias MOUNT_TESLA_IMAGE_0=     /sbin/modprobe g_mass_storage file\=~/teslacam/images/cam0 stall\=0\,0\, ro\=0\,0 removable\=1\,1
+Cmnd_Alias MOUNT_TESLA_IMAGE_1=     /sbin/modprobe g_mass_storage file\=~/teslacam/images/cam1 stall\=0\,0\, ro\=0\,0 removable\=1\,1
 
-pi ALL=NOPASSWD:UMOUNT_IMAGE, MOUNT_IMAGE_0, MOUNT_IMAGE_1, UMOUNT_TESLA, MOUNT_TESLA_IMAGE_0, MOUNT_TESLA_IMAGE_1
+Cmnd_Alias FIX_TESLA_IMAGE_0=       /sbin/fsck -a /dev/loop0
+Cmnd_Alias FIX_TESLA_IMAGE_1=       /sbin/fsck -a /dev/loop1
+
+pi ALL=NOPASSWD:UMOUNT_IMAGE, MOUNT_IMAGE_0, MOUNT_IMAGE_1, UMOUNT_TESLA, MOUNT_TESLA_IMAGE_0, MOUNT_TESLA_IMAGE_1, FIX_TESLA_IMAGE_0, FIX_TESLA_IMAGE_1
+
