@@ -17,7 +17,7 @@ const unmount = (imageNum) => {
 
 const mount = (imageNum) => {
   console.log(`Preparing to mount image ${imageNum}`);
-  execSync(`sudo /sbin/modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} stall=0,0, ro=0,0 removable=1,1`);
+  execSync(`sudo /sbin/modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} removable=1 ro=0 stall=0 iSerialNumber=123456`);
 };
 
 const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
