@@ -84,17 +84,17 @@ const copyLocal = async (imageNum) => {
   const teslacamPath = `${IMAGE_MOUNT_POINT}/TeslaCam`;
   await removeErroneousVideos(teslacamPath);
 
-  const filesInPath = countFilesInDirectory(teslacamPath);
+  const filesInPath = await countFilesInDirectory(teslacamPath);
   console.log(`Found ${filesInPath} files in ${teslacamPath}`);
 
   if (filesInPath) {
-    const filesBeforeCopy = countFilesInDirectory(BACKUP_DIR);
+    const filesBeforeCopy = await countFilesInDirectory(BACKUP_DIR);
 
     execSync(`touch ${BACKUP_DIR}/lock`, { bubbleError: true });
     execSync(`mv ${teslacamPath}/* ${BACKUP_DIR}`, { bubbleError: true });
     execSync(`rm ${BACKUP_DIR}/lock`, { bubbleError: true });
 
-    const filesAfterCopy = countFilesInDirectory(BACKUP_DIR);
+    const filesAfterCopy = await countFilesInDirectory(BACKUP_DIR);
     if (filesAfterCopy - filesBeforeCopy < filesInPath) {
       console.log('Copy error, number of files moved is incorrect');
     }
@@ -123,7 +123,7 @@ const performSanityCheck = async () => {
     const teslaCamDirectoryLocal = `${IMAGE_MOUNT_POINT}/TeslaCam`;
     mountLocal(imageNum);
     createIfNotExists(teslaCamDirectoryLocal);
-    const teslaCamFiles = countFilesInDirectory(teslaCamDirectoryLocal);
+    const teslaCamFiles = await countFilesInDirectory(teslaCamDirectoryLocal);
     if (teslaCamFiles) {
       await copyLocal(imageNum);
     } else {
