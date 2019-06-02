@@ -6,11 +6,22 @@
 
 const fs = require('fs');
 const {
-  IMAGE_DIR, BACKUP_DIR, IMAGE_MOUNT_POINT, RECORD_WINDOW_MS, IMAGE_SIZE_MB, PAUSE_RECORDING_ON_WIFI, WAIT_INTERVAL
+  IMAGE_DIR, BACKUP_DIR, IMAGE_MOUNT_POINT, RECORD_WINDOW_MS,
+  IMAGE_SIZE_MB, PAUSE_RECORDING_ON_WIFI, WAIT_INTERVAL
 } = require('../etc/config.js');
 const {
   benchmark, execSync, sleep, isOnline, getFiles
 } = require('./common.js');
+
+const calculatePartitionOffsetForImage = (absoluteFilename) => {
+  // Shamelessly taken from @marcone
+  const sizeInBytes = +execSync(`sfdisk -l -o Size -q --bytes "${absoluteFilename}" | tail -1`, { bubbleError: true });
+  const sizeInSectors = +execSync(`sfdisk -l -o Sectors -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
+  const sectorSize = sizeInBytes / sizeInSectors;
+  console.log(`Sector size: ${sectorSize}`);
+  const partitionStartSector = +execSync(`sfdisk -l -o Start -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
+  return partitionStartSector * sectorSize;
+};
 
 const unmount = (imageNum) => {
   console.log(`Unmounting image ${imageNum}`);
@@ -44,7 +55,8 @@ const unmountLocal = (imageNum) => {
 
 const fixLocal = (imageNum) => {
   console.log('Attempting to fix image');
-  mountLocal(imageNum, { mountToDirectory: false }); // Required to mount loopback to /dev/loop${imageNum}
+  // Required to mount loopback to /dev/loop${imageNum}
+  mountLocal(imageNum, { mountToDirectory: false });
   execSync(`sudo /sbin/fsck.vfat -a /dev/loop${imageNum}`);
   unmountLocal(imageNum);
 };
@@ -89,17 +101,7 @@ const copyLocal = async (imageNum) => {
   }
 };
 
-const calculatePartitionOffsetForImage = (absoluteFilename) => {
-  // Shamelessly taken from @marcone
-  const sizeInBytes = +execSync(`sfdisk -l -o Size -q --bytes "${absoluteFilename}" | tail -1`, { bubbleError: true });
-  const sizeInSectors = +execSync(`sfdisk -l -o Sectors -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
-  const sectorSize = sizeInBytes / sizeInSectors;
-  console.log(`Sector size: ${sectorSize}`);
-  const partitionStartSector = +execSync(`sfdisk -l -o Start -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
-  return partitionStartSector * sectorSize;
-};
-
-const performSanityCheck = () => {
+const performSanityCheck = async () => {
   const createIfNotExists = (dirName) => {
     if (!fs.existsSync(dirName)) {
       fs.mkdirSync(dirName);
@@ -117,13 +119,13 @@ const performSanityCheck = () => {
     }
   };
 
-  const mountAndCheckUsbImage = (imageNum) => {
+  const mountAndCheckUsbImage = async (imageNum) => {
     const teslaCamDirectoryLocal = `${IMAGE_MOUNT_POINT}/TeslaCam`;
     mountLocal(imageNum);
     createIfNotExists(teslaCamDirectoryLocal);
     const teslaCamFiles = countFilesInDirectory(teslaCamDirectoryLocal);
     if (teslaCamFiles) {
-      copyLocal(imageNum);
+      await copyLocal(imageNum);
     } else {
       console.log('No files found');
     }
@@ -134,8 +136,8 @@ const performSanityCheck = () => {
   createIfNotExists(IMAGE_DIR);
   createImageIfNotExists(0);
   createImageIfNotExists(1);
-  mountAndCheckUsbImage(0);
-  mountAndCheckUsbImage(1);
+  await mountAndCheckUsbImage(0);
+  await mountAndCheckUsbImage(1);
 };
 
 const startup = async () => {
@@ -143,7 +145,7 @@ const startup = async () => {
   unmount('All');
   unmountLocal(0);
   await removeErroneousVideos(BACKUP_DIR);
-  performSanityCheck();
+  await performSanityCheck();
 };
 
 const waitForVideoFiles = async (minusLagTime = 0) => {
@@ -158,17 +160,17 @@ const processVideo = async (imageNum) => {
   unmount(imageNum);
   mount(imageNum ^ 1);
 
-  const elapsedTimeMs = benchmark(() => {
+  const elapsedTimeMs = benchmark(async () => {
     fixLocal(imageNum);
     mountLocal(imageNum);
-    copyLocal(imageNum);
+    await copyLocal(imageNum);
     unmountLocal(imageNum);
   });
   await waitForVideoFiles(elapsedTimeMs);
 };
 
 const init = async () => {
-  startup();
+  await startup();
 
   let imageNum = 0;
 
