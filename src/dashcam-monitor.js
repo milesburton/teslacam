@@ -53,7 +53,7 @@ const countFilesInDirectory = async dirPath =>
       .length;
 
 const removeErroneousVideos = async  dirPath =>
-    await getFiles(dirPath)
+    (await getFiles(dirPath))
   .filter(n => fs.existsSync(n))
   .map(name => {
     const { size } = fs.statSync(name);
