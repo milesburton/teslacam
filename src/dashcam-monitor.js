@@ -30,7 +30,8 @@ const unmount = (imageNum) => {
 
 const mount = (imageNum) => {
   console.log(`Preparing to mount image ${imageNum}`);
-  execSync(`sudo /sbin/modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} removable=1 ro=0 stall=0 iSerialNumber=123456`, { bubbleError: true });
+  const randomSn = Math.floor(Math.random() * (123456));
+  execSync(`sudo /sbin/modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} removable=1 ro=0 stall=0 iSerialNumber=${randomSn}`, { bubbleError: true });
 };
 
 const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
