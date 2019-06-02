@@ -49,11 +49,11 @@ const fixLocal = (imageNum) => {
 };
 
 const countFilesInDirectory = async dirPath =>
-  await getFiles(dirPath)
+    (await getFiles(dirPath))
       .length;
 
-const removeErroneousVideos = async  dirPath =>
-    await getFiles(dirPath)
+const removeErroneousVideos = async dirPath =>
+    (await getFiles(dirPath))
   .filter(n => fs.existsSync(n))
   .map(name => {
     const { size } = fs.statSync(name);
@@ -123,7 +123,7 @@ const performSanityCheck = () => {
     mountLocal(imageNum);
     createIfNotExists(teslaCamDirectoryLocal);
     const teslaCamFiles = countFilesInDirectory(teslaCamDirectoryLocal);
-    if (teslaCamFiles > 0) {
+    if (teslaCamFiles) {
       copyLocal(imageNum);
     } else {
       console.log('No files found');
@@ -139,11 +139,11 @@ const performSanityCheck = () => {
   mountAndCheckUsbImage(1);
 };
 
-const startup = () => {
+const startup = async () => {
   console.log('Starting Tesla Sync script');
   unmount('All');
   unmountLocal(0);
-  removeErroneousVideos(BACKUP_DIR);
+  await removeErroneousVideos(BACKUP_DIR);
   performSanityCheck();
 };
 
