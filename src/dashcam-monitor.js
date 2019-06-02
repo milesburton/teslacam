@@ -114,7 +114,7 @@ const performSanityCheck = async () => {
     if (!fs.existsSync(expectedFilename)) {
       execSync(`fallocate -l ${IMAGE_SIZE_MB}M ${IMAGE_DIR}/cam${imageNum}`, { bubbleError: true });
       execSync(`echo "type=c" | /sbin/sfdisk ${IMAGE_DIR}/cam${imageNum}`, { bubbleError: true });
-      mountLocal(imageNum, { mountToDirectory: false });
+      mountLocal(imageNum, { mountToDirectory: false, bubbleError: true });
       execSync(`sudo /sbin/mkfs.vfat /dev/loop${imageNum} -F 32 -I`, { bubbleError: true });
       unmountLocal(imageNum);
     }
