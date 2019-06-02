@@ -8,7 +8,9 @@ const fs = require('fs');
 const {
   IMAGE_DIR, BACKUP_DIR, IMAGE_MOUNT_POINT, RECORD_WINDOW_MS, IMAGE_SIZE_MB, PAUSE_RECORDING_ON_WIFI, WAIT_INTERVAL
 } = require('../etc/config.js');
-const { benchmark, execSync, sleep, isOnline, getFiles } = require('./common.js');
+const {
+  benchmark, execSync, sleep, isOnline, getFiles
+} = require('./common.js');
 
 const unmount = (imageNum) => {
   console.log(`Unmounting image ${imageNum}`);
@@ -24,21 +26,20 @@ const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
   console.log(`Preparing to local mount image ${imageNum}`);
   const imagePath = `${IMAGE_DIR}/cam${imageNum}`;
   const loopPath = `/dev/loop${imageNum}`;
-  
+
   const partitionOffset = calculatePartitionOffsetForImage(`${IMAGE_DIR}/cam${imageNum}`);
-  
-  execSync(`sudo /sbin/losetup -o ${partitionOffset} ${loopPath} ${imagePath}`); 
-  
-  if(opts.mountToDirectory){
-     execSync(`sudo /bin/mount -o gid=pi,uid=pi ${loopPath} ${IMAGE_MOUNT_POINT}`);
+
+  execSync(`sudo /sbin/losetup -o ${partitionOffset} ${loopPath} ${imagePath}`);
+
+  if (opts.mountToDirectory) {
+    execSync(`sudo /bin/mount -o gid=pi,uid=pi ${loopPath} ${IMAGE_MOUNT_POINT}`);
   }
-  
 };
 
 const unmountLocal = (imageNum) => {
   console.log(`Preparing to unmount local image ${imageNum}`);
   execSync(`sudo /bin/umount ${IMAGE_MOUNT_POINT}`);
-  execSync(`sudo /sbin/losetup -d /dev/loop${imageNum}`); 
+  execSync(`sudo /sbin/losetup -d /dev/loop${imageNum}`);
 };
 
 const fixLocal = (imageNum) => {
@@ -48,14 +49,12 @@ const fixLocal = (imageNum) => {
   unmountLocal(imageNum);
 };
 
-const countFilesInDirectory = async dirPath =>
-    (await getFiles(dirPath))
-      .length;
+const countFilesInDirectory = async dirPath => (await getFiles(dirPath))
+  .length;
 
-const removeErroneousVideos = async dirPath =>
-  (await getFiles(dirPath))
+const removeErroneousVideos = async dirPath => (await getFiles(dirPath))
   .filter(n => fs.existsSync(n))
-  .map(name => {
+  .map((name) => {
     const { size } = fs.statSync(name);
     return { name, size };
   })
@@ -90,15 +89,15 @@ const copyLocal = (imageNum) => {
   }
 };
 
-const calculatePartitionOffsetForImage = (absoluteFilename) =>{
-   // Shamelessly taken from @marcone 
+const calculatePartitionOffsetForImage = (absoluteFilename) => {
+  // Shamelessly taken from @marcone
   const sizeInBytes = +execSync(`sfdisk -l -o Size -q --bytes "${absoluteFilename}" | tail -1`);
   const sizeInSectors = +execSync(`sfdisk -l -o Sectors -q "${absoluteFilename}" | tail -1`);
   const sectorSize = sizeInBytes / sizeInSectors;
   console.log(`Sector size: ${sectorSize}`);
   const partitionStartSector = +execSync(`sfdisk -l -o Start -q "${absoluteFilename}" | tail -1`);
   return partitionStartSector * sectorSize;
-}
+};
 
 const performSanityCheck = () => {
   const createIfNotExists = (dirName) => {
@@ -174,9 +173,9 @@ const init = async () => {
   let imageNum = 0;
 
   while (true) {
-    if(PAUSE_RECORDING_ON_WIFI && isOnline()){
+    if (PAUSE_RECORDING_ON_WIFI && isOnline()) {
       await sleep(WAIT_INTERVAL);
-    }else{
+    } else {
       await processVideo(imageNum);
       imageNum ^= 1;
     }

@@ -2,7 +2,9 @@
 
 /* eslint no-await-in-loop: 0 */
 /* eslint no-constant-condition: 0 */
-const { benchmark, execSync, sleep, isOnline, getFiles } = require('./common.js');
+const {
+  benchmark, execSync, sleep, isOnline, getFiles
+} = require('./common.js');
 const {
   BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL, DELETE_ON_UPLOAD
 } = require('../etc/config.js');
@@ -30,7 +32,6 @@ const getVideos = files => files.filter(f => f.endsWith('mp4'));
 const hasLockFile = files => !!files.find(f => f.includes(LOCK_FILE_NAME));
 
 const uploadVideoFiles = (videos) => {
-
   if (!videos.length) {
     return [];
   }
