@@ -19,7 +19,7 @@ const unmount = (imageNum) => {
 
 const mount = (imageNum) => {
   console.log(`Preparing to mount image ${imageNum}`);
-  execSync(`sudo /sbin/modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} removable=1 ro=0 stall=0 iSerialNumber=123456`);
+  execSync(`sudo /sbin/modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} removable=1 ro=0 stall=0 iSerialNumber=123456`, { bubbleError: true });
 };
 
 const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
@@ -29,10 +29,10 @@ const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
 
   const partitionOffset = calculatePartitionOffsetForImage(`${IMAGE_DIR}/cam${imageNum}`);
 
-  execSync(`sudo /sbin/losetup -o ${partitionOffset} ${loopPath} ${imagePath}`);
+  execSync(`sudo /sbin/losetup -o ${partitionOffset} ${loopPath} ${imagePath}`, { bubbleError: true });
 
   if (opts.mountToDirectory) {
-    execSync(`sudo /bin/mount -o gid=pi,uid=pi ${loopPath} ${IMAGE_MOUNT_POINT}`);
+    execSync(`sudo /bin/mount -o gid=pi,uid=pi ${loopPath} ${IMAGE_MOUNT_POINT}`, { bubbleError: true });
   }
 };
 
@@ -78,9 +78,9 @@ const copyLocal = (imageNum) => {
   if (filesInPath) {
     const filesBeforeCopy = countFilesInDirectory(BACKUP_DIR);
 
-    execSync(`touch ${BACKUP_DIR}/lock`);
-    execSync(`mv ${teslacamPath}/* ${BACKUP_DIR}`);
-    execSync(`rm ${BACKUP_DIR}/lock`);
+    execSync(`touch ${BACKUP_DIR}/lock`, { bubbleError: true });
+    execSync(`mv ${teslacamPath}/* ${BACKUP_DIR}`, { bubbleError: true });
+    execSync(`rm ${BACKUP_DIR}/lock`, { bubbleError: true });
 
     const filesAfterCopy = countFilesInDirectory(BACKUP_DIR);
     if (filesAfterCopy - filesBeforeCopy < filesInPath) {
@@ -91,11 +91,11 @@ const copyLocal = (imageNum) => {
 
 const calculatePartitionOffsetForImage = (absoluteFilename) => {
   // Shamelessly taken from @marcone
-  const sizeInBytes = +execSync(`sfdisk -l -o Size -q --bytes "${absoluteFilename}" | tail -1`);
-  const sizeInSectors = +execSync(`sfdisk -l -o Sectors -q "${absoluteFilename}" | tail -1`);
+  const sizeInBytes = +execSync(`sfdisk -l -o Size -q --bytes "${absoluteFilename}" | tail -1`, { bubbleError: true });
+  const sizeInSectors = +execSync(`sfdisk -l -o Sectors -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
   const sectorSize = sizeInBytes / sizeInSectors;
   console.log(`Sector size: ${sectorSize}`);
-  const partitionStartSector = +execSync(`sfdisk -l -o Start -q "${absoluteFilename}" | tail -1`);
+  const partitionStartSector = +execSync(`sfdisk -l -o Start -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
   return partitionStartSector * sectorSize;
 };
 
@@ -109,10 +109,10 @@ const performSanityCheck = () => {
   const createImageIfNotExists = (imageNum) => {
     const expectedFilename = `${IMAGE_DIR}/cam${imageNum}`;
     if (!fs.existsSync(expectedFilename)) {
-      execSync(`fallocate -l ${IMAGE_SIZE_MB}M ${IMAGE_DIR}/cam${imageNum}`);
-      execSync(`echo "type=c" | /sbin/sfdisk ${IMAGE_DIR}/cam${imageNum}`);
+      execSync(`fallocate -l ${IMAGE_SIZE_MB}M ${IMAGE_DIR}/cam${imageNum}`, { bubbleError: true });
+      execSync(`echo "type=c" | /sbin/sfdisk ${IMAGE_DIR}/cam${imageNum}`, { bubbleError: true });
       mountLocal(imageNum, { mountToDirectory: false });
-      execSync(`sudo /sbin/mkfs.vfat /dev/loop${imageNum} -F 32 -I`);
+      execSync(`sudo /sbin/mkfs.vfat /dev/loop${imageNum} -F 32 -I`, { bubbleError: true });
       unmountLocal(imageNum);
     }
   };
