@@ -64,13 +64,13 @@ const removeErroneousVideos = async dirPath => (await getFiles(dirPath))
     execSync(`rm ${name}`);
   });
 
-const copyLocal = (imageNum) => {
+const copyLocal = async (imageNum) => {
   console.log(
     `Preparing to copy videos from ${IMAGE_MOUNT_POINT}/TeslaCam to ${BACKUP_DIR} for image ${imageNum}`,
   );
 
   const teslacamPath = `${IMAGE_MOUNT_POINT}/TeslaCam`;
-  removeErroneousVideos(teslacamPath);
+  await removeErroneousVideos(teslacamPath);
 
   const filesInPath = countFilesInDirectory(teslacamPath);
   console.log(`Found ${filesInPath} files in ${teslacamPath}`);
