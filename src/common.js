@@ -1,4 +1,6 @@
 const { execSync: execSyncNoLogging } = require('child_process');
+const { readdir, stat } = require('fs').promises;
+const { join } = require('path');
 const {
   performance: { now },
 } = require('perf_hooks');
@@ -65,4 +67,20 @@ const isOnline = async () => {
   }
 };
 
-module.exports = { sleep, execSync, benchmark, isOnline };
+async function getFiles(dir) {
+  const files = (await readdir(dir)).map(f => join(dir, f));
+
+
+  const children = await Promise.all(files.map(async f => {
+        if ((await stat(f)).isDirectory()) {
+          return getFiles(f);
+        }else{
+          return [f];
+        }
+      })
+  );
+
+  return children.reduce((acc, c)=>([...acc, ...c]), []);
+}
+
+module.exports = { sleep, execSync, benchmark, isOnline, getFiles };
