@@ -84,7 +84,7 @@ const copyLocal = (imageNum) => {
     const filesBeforeCopy = countFilesInDirectory(BACKUP_DIR);
 
     execSync(`touch ${BACKUP_DIR}/lock`);
-    execSync(`mv -r ${teslacamPath}/* ${BACKUP_DIR}`);
+    execSync(`mv ${teslacamPath}/* ${BACKUP_DIR}`);
     execSync(`rm ${BACKUP_DIR}/lock`);
 
     const filesAfterCopy = countFilesInDirectory(BACKUP_DIR);
