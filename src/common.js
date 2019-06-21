@@ -26,9 +26,14 @@ const outputShellResult = (preamble, buffer) => {
 const sleep = async ms => new Promise(r => setTimeout(r, ms));
 
 const execSync = (cmd, opts = { bubbleError: false, noop: false }) => {
-  console.log(`Running [${cmd}]`);
+  console.log(`Running ssh [${cmd}]`);
+
+  const useSsh = true; // TODO: grab from config
+  const teslacamIp = '192.168.25.176'; // 'dockerhost' // TODO: grab from config
+  const actualCommand = useSsh ? `ssh pi@${teslacamIp} "${cmd}"` : cmd;
+
   try {
-    const buffer = !opts.noop ? execSyncNoLogging(cmd) : '';
+    const buffer = !opts.noop ? execSyncNoLogging(actualCommand) : '';
     return outputShellResult('Success', buffer);
   } catch (err) {
     const buffer = err.stderr;

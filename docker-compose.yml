@@ -1,0 +1,9 @@
+version: '3.3'
+services:
+  dashcam-monitor:
+    build: .
+    volumes: 
+      - ./etc/ssh:/root/.ssh
+    extra_hosts:
+      # - dockerhost:172.17.0.1
+      - dockerhost:192.168.25.176

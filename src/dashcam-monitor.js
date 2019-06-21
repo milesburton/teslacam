@@ -15,11 +15,11 @@ const {
 
 const calculatePartitionOffsetForImage = (absoluteFilename) => {
   // Shamelessly taken from @marcone
-  const sizeInBytes = +execSync(`sfdisk -l -o Size -q --bytes "${absoluteFilename}" | tail -1`, { bubbleError: true });
-  const sizeInSectors = +execSync(`sfdisk -l -o Sectors -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
+  const sizeInBytes = +execSync(`/sbin/sfdisk -l -o Size -q --bytes ${absoluteFilename} | tail -1`, { bubbleError: true });
+  const sizeInSectors = +execSync(`/sbin/sfdisk -l -o Sectors -q ${absoluteFilename} | tail -1`, { bubbleError: true });
   const sectorSize = sizeInBytes / sizeInSectors;
   console.log(`Sector size: ${sectorSize}`);
-  const partitionStartSector = +execSync(`sfdisk -l -o Start -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
+  const partitionStartSector = +execSync(`/sbin/sfdisk -l -o Start -q ${absoluteFilename} | tail -1`, { bubbleError: true });
   return partitionStartSector * sectorSize;
 };
 
@@ -90,7 +90,7 @@ const copyLocal = async (imageNum) => {
 
   if (filesInPath) {
     const filesBeforeCopy = await countFilesInDirectory(BACKUP_DIR);
-    
+
     execSync(`touch ${BACKUP_DIR}/lock`, { bubbleError: true });
     execSync(`rsync -av ${teslacamPath}/* ${BACKUP_DIR}`, { bubbleError: true });
     execSync(`rm -rf ${teslacamPath}/*`, { bubbleError: true });
