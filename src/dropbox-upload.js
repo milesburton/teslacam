@@ -2,9 +2,9 @@
 
 /* eslint no-await-in-loop: 0 */
 /* eslint no-constant-condition: 0 */
-const { join } = require('path');
-const { readdir, stat } = require('fs').promises;
-const { benchmark, execSync, sleep, isOnline } = require('./common.js');
+const {
+  benchmark, execSync, sleep, isOnline, getFiles
+} = require('./common.js');
 const {
   BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL, DELETE_ON_UPLOAD
 } = require('../etc/config.js');
@@ -27,28 +27,11 @@ const attemptUpload = (filename, opts = { deleteWhenComplete: true, noop: false 
 };
 
 
-async function getFiles(dir) {
-  const files = (await readdir(dir)).map(f => join(dir, f));
-
-
-   const children = await Promise.all(files.map(async f => {
-        if ((await stat(f)).isDirectory()) {
-          return getFiles(f);
-        }else{
-          return [f];
-        }
-      })
-  );
-
-  return children.reduce((acc, c)=>([...acc, ...c]), []);
-}
-
 const getVideos = files => files.filter(f => f.endsWith('mp4'));
 
 const hasLockFile = files => !!files.find(f => f.includes(LOCK_FILE_NAME));
 
 const uploadVideoFiles = (videos) => {
-
   if (!videos.length) {
     return [];
   }

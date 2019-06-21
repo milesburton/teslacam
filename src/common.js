@@ -1,18 +1,19 @@
 const { execSync: execSyncNoLogging } = require('child_process');
+const { readdir, stat } = require('fs').promises;
+const { join } = require('path');
 const {
   performance: { now },
 } = require('perf_hooks');
 const internetAvailable = require('internet-available');
 
 const outputShellResult = (preamble, buffer) => {
-
   const trimmedBuffer = buffer ? buffer.toString().trim() : '';
 
   if (!trimmedBuffer) {
     return '';
   }
 
-  if (trimmedBuffer.split('\n').length>2) {
+  if (trimmedBuffer.split('\n').length > 2) {
     console.log(`======================= ${preamble}`);
     console.log(trimmedBuffer);
     console.log(`======================= /${preamble}`);
@@ -46,7 +47,7 @@ const benchmark = (fn) => {
 
   const hasSomethingWorthLogging = (output || typeof output === 'object' && output.length);
 
-  if(!hasSomethingWorthLogging){
+  if (!hasSomethingWorthLogging) {
     return;
   }
 
@@ -65,4 +66,20 @@ const isOnline = async () => {
   }
 };
 
-module.exports = { sleep, execSync, benchmark, isOnline };
+async function getFiles(dir) {
+  const files = (await readdir(dir)).map(f => join(dir, f));
+
+
+  const children = await Promise.all(files.map(async (f) => {
+    if ((await stat(f)).isDirectory()) {
+      return getFiles(f);
+    }
+    return [f];
+  }));
+
+  return children.reduce((acc, c) => ([...acc, ...c]), []);
+}
+
+module.exports = {
+  sleep, execSync, benchmark, isOnline, getFiles
+};

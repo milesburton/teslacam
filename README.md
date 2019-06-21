@@ -102,3 +102,7 @@ With all this in mind, logically speaking the following steps need to be followe
  - [System] Improve logging
  - [Thoughts] Automatic WiFi hotspot on first boot
  - [Me] Buy Tesla Roadster 
+
+## Referrals, and coffee 
+- Tesla Referral link for 1000 free supercharging miles if you buy a new Tesla: https://ts.la/miles16015
+- If this was useful and you fancy sending some e-coffee, check out https://paypal.me/milesburton1337

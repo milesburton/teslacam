@@ -6,9 +6,22 @@
 
 const fs = require('fs');
 const {
-  IMAGE_DIR, BACKUP_DIR, IMAGE_MOUNT_POINT, RECORD_WINDOW_MS, IMAGE_SIZE_MB, PAUSE_RECORDING_ON_WIFI, WAIT_INTERVAL
+  IMAGE_DIR, BACKUP_DIR, IMAGE_MOUNT_POINT, RECORD_WINDOW_MS,
+  IMAGE_SIZE_MB, PAUSE_RECORDING_ON_WIFI, WAIT_INTERVAL
 } = require('../etc/config.js');
-const { benchmark, execSync, sleep, isOnline } = require('./common.js');
+const {
+  benchmark, execSync, sleep, isOnline, getFiles
+} = require('./common.js');
+
+const calculatePartitionOffsetForImage = (absoluteFilename) => {
+  // Shamelessly taken from @marcone
+  const sizeInBytes = +execSync(`sfdisk -l -o Size -q --bytes "${absoluteFilename}" | tail -1`, { bubbleError: true });
+  const sizeInSectors = +execSync(`sfdisk -l -o Sectors -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
+  const sectorSize = sizeInBytes / sizeInSectors;
+  console.log(`Sector size: ${sectorSize}`);
+  const partitionStartSector = +execSync(`sfdisk -l -o Start -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
+  return partitionStartSector * sectorSize;
+};
 
 const unmount = (imageNum) => {
   console.log(`Unmounting image ${imageNum}`);
@@ -17,49 +30,44 @@ const unmount = (imageNum) => {
 
 const mount = (imageNum) => {
   console.log(`Preparing to mount image ${imageNum}`);
-  execSync(`sudo /sbin/modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} removable=1 ro=0 stall=0 iSerialNumber=123456`);
+  const randomSn = Math.floor(Math.random() * (123456));
+  execSync(`sudo /sbin/modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} removable=1 ro=0 stall=0 iSerialNumber=${randomSn}`, { bubbleError: true });
 };
 
 const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
   console.log(`Preparing to local mount image ${imageNum}`);
   const imagePath = `${IMAGE_DIR}/cam${imageNum}`;
   const loopPath = `/dev/loop${imageNum}`;
-  
+
   const partitionOffset = calculatePartitionOffsetForImage(`${IMAGE_DIR}/cam${imageNum}`);
-  
-  execSync(`sudo /sbin/losetup -o ${partitionOffset} ${loopPath} ${imagePath}`); 
-  
-  if(opts.mountToDirectory){
-     execSync(`sudo /bin/mount -o gid=pi,uid=pi ${loopPath} ${IMAGE_MOUNT_POINT}`);
+
+  execSync(`sudo /sbin/losetup -o ${partitionOffset} ${loopPath} ${imagePath}`, { bubbleError: true });
+
+  if (opts.mountToDirectory) {
+    execSync(`sudo /bin/mount -o gid=pi,uid=pi ${loopPath} ${IMAGE_MOUNT_POINT}`, { bubbleError: true });
   }
-  
 };
 
 const unmountLocal = (imageNum) => {
   console.log(`Preparing to unmount local image ${imageNum}`);
   execSync(`sudo /bin/umount ${IMAGE_MOUNT_POINT}`);
-  execSync(`sudo /sbin/losetup -d /dev/loop${imageNum}`); 
+  execSync(`sudo /sbin/losetup -d /dev/loop${imageNum}`);
 };
 
 const fixLocal = (imageNum) => {
   console.log('Attempting to fix image');
-  mountLocal(imageNum, { mountToDirectory: false }); // Required to mount loopback to /dev/loop${imageNum}
+  // Required to mount loopback to /dev/loop${imageNum}
+  mountLocal(imageNum, { mountToDirectory: false });
   execSync(`sudo /sbin/fsck.vfat -a /dev/loop${imageNum}`);
   unmountLocal(imageNum);
 };
 
-const countFilesInDirectory = dirPath => fs
-  .readdirSync(dirPath, { withFileTypes: true })
-  .filter(f => f.isFile())
+const countFilesInDirectory = async dirPath => (await getFiles(dirPath))
   .length;
 
-// TODO: Not recursive
-const removeErroneousVideos = dirPath => fs
-  .readdirSync(dirPath, { withFileTypes: true })
-  .filter(f => f.isFile())
-  .map(({ name }) => `${dirPath}/${name}`)
+const removeErroneousVideos = async dirPath => (await getFiles(dirPath))
   .filter(n => fs.existsSync(n))
-  .map(name => {
+  .map((name) => {
     const { size } = fs.statSync(name);
     return { name, size };
   })
@@ -69,42 +77,33 @@ const removeErroneousVideos = dirPath => fs
     execSync(`rm ${name}`);
   });
 
-const copyLocal = (imageNum) => {
+const copyLocal = async (imageNum) => {
   console.log(
     `Preparing to copy videos from ${IMAGE_MOUNT_POINT}/TeslaCam to ${BACKUP_DIR} for image ${imageNum}`,
   );
 
   const teslacamPath = `${IMAGE_MOUNT_POINT}/TeslaCam`;
-  removeErroneousVideos(teslacamPath);
+  await removeErroneousVideos(teslacamPath);
 
-  const filesInPath = countFilesInDirectory(teslacamPath);
+  const filesInPath = await countFilesInDirectory(teslacamPath);
   console.log(`Found ${filesInPath} files in ${teslacamPath}`);
 
   if (filesInPath) {
-    const filesBeforeCopy = countFilesInDirectory(BACKUP_DIR);
+    const filesBeforeCopy = await countFilesInDirectory(BACKUP_DIR);
+    
+    execSync(`touch ${BACKUP_DIR}/lock`, { bubbleError: true });
+    execSync(`rsync -av ${teslacamPath}/* ${BACKUP_DIR}`, { bubbleError: true });
+    execSync(`rm -rf ${teslacamPath}/*`, { bubbleError: true });
+    execSync(`rm ${BACKUP_DIR}/lock`, { bubbleError: true });
 
-    execSync(`touch ${BACKUP_DIR}/lock`);
-    execSync(`mv ${teslacamPath}/* ${BACKUP_DIR}`);
-    execSync(`rm ${BACKUP_DIR}/lock`);
-
-    const filesAfterCopy = countFilesInDirectory(BACKUP_DIR);
+    const filesAfterCopy = await countFilesInDirectory(BACKUP_DIR);
     if (filesAfterCopy - filesBeforeCopy < filesInPath) {
       console.log('Copy error, number of files moved is incorrect');
     }
   }
 };
 
-const calculatePartitionOffsetForImage = (absoluteFilename) =>{
-   // Shamelessly taken from @marcone 
-  const sizeInBytes = +execSync(`sfdisk -l -o Size -q --bytes "${absoluteFilename}" | tail -1`);
-  const sizeInSectors = +execSync(`sfdisk -l -o Sectors -q "${absoluteFilename}" | tail -1`);
-  const sectorSize = sizeInBytes / sizeInSectors;
-  console.log(`Sector size: ${sectorSize}`);
-  const partitionStartSector = +execSync(`sfdisk -l -o Start -q "${absoluteFilename}" | tail -1`);
-  return partitionStartSector * sectorSize;
-}
-
-const performSanityCheck = () => {
+const performSanityCheck = async () => {
   const createIfNotExists = (dirName) => {
     if (!fs.existsSync(dirName)) {
       fs.mkdirSync(dirName);
@@ -114,21 +113,21 @@ const performSanityCheck = () => {
   const createImageIfNotExists = (imageNum) => {
     const expectedFilename = `${IMAGE_DIR}/cam${imageNum}`;
     if (!fs.existsSync(expectedFilename)) {
-      execSync(`fallocate -l ${IMAGE_SIZE_MB}M ${IMAGE_DIR}/cam${imageNum}`);
-      execSync(`echo "type=c" | /sbin/sfdisk ${IMAGE_DIR}/cam${imageNum}`);
-      mountLocal(imageNum, { mountToDirectory: false });
-      execSync(`sudo /sbin/mkfs.vfat /dev/loop${imageNum} -F 32 -I`);
+      execSync(`fallocate -l ${IMAGE_SIZE_MB}M ${IMAGE_DIR}/cam${imageNum}`, { bubbleError: true });
+      execSync(`echo "type=c" | /sbin/sfdisk ${IMAGE_DIR}/cam${imageNum}`, { bubbleError: true });
+      mountLocal(imageNum, { mountToDirectory: false, bubbleError: true });
+      execSync(`sudo /sbin/mkfs.vfat /dev/loop${imageNum} -F 32 -I`, { bubbleError: true });
       unmountLocal(imageNum);
     }
   };
 
-  const mountAndCheckUsbImage = (imageNum) => {
+  const mountAndCheckUsbImage = async (imageNum) => {
     const teslaCamDirectoryLocal = `${IMAGE_MOUNT_POINT}/TeslaCam`;
     mountLocal(imageNum);
     createIfNotExists(teslaCamDirectoryLocal);
-    const teslaCamFiles = countFilesInDirectory(teslaCamDirectoryLocal);
-    if (teslaCamFiles > 0) {
-      copyLocal(imageNum);
+    const teslaCamFiles = await countFilesInDirectory(teslaCamDirectoryLocal);
+    if (teslaCamFiles) {
+      await copyLocal(imageNum);
     } else {
       console.log('No files found');
     }
@@ -139,16 +138,16 @@ const performSanityCheck = () => {
   createIfNotExists(IMAGE_DIR);
   createImageIfNotExists(0);
   createImageIfNotExists(1);
-  mountAndCheckUsbImage(0);
-  mountAndCheckUsbImage(1);
+  await mountAndCheckUsbImage(0);
+  await mountAndCheckUsbImage(1);
 };
 
-const startup = () => {
+const startup = async () => {
   console.log('Starting Tesla Sync script');
   unmount('All');
   unmountLocal(0);
-  removeErroneousVideos(BACKUP_DIR);
-  performSanityCheck();
+  await removeErroneousVideos(BACKUP_DIR);
+  await performSanityCheck();
 };
 
 const waitForVideoFiles = async (minusLagTime = 0) => {
@@ -163,24 +162,24 @@ const processVideo = async (imageNum) => {
   unmount(imageNum);
   mount(imageNum ^ 1);
 
-  const elapsedTimeMs = benchmark(() => {
+  const elapsedTimeMs = benchmark(async () => {
     fixLocal(imageNum);
     mountLocal(imageNum);
-    copyLocal(imageNum);
+    await copyLocal(imageNum);
     unmountLocal(imageNum);
   });
   await waitForVideoFiles(elapsedTimeMs);
 };
 
 const init = async () => {
-  startup();
+  await startup();
 
   let imageNum = 0;
 
   while (true) {
-    if(PAUSE_RECORDING_ON_WIFI && isOnline()){
+    if (PAUSE_RECORDING_ON_WIFI && isOnline()) {
       await sleep(WAIT_INTERVAL);
-    }else{
+    } else {
       await processVideo(imageNum);
       imageNum ^= 1;
     }
