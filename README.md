@@ -91,7 +91,7 @@ With all this in mind, logically speaking the following steps need to be followe
 
 ## TODO
  - [Streaming] Experiment with streaming, it's trivial to stream to youtube with FFMPEG
- - [System|Remote] Intelligent service switching (ie, entirely disable dropbox)
+ - [System] Reverse VPN so the PI is accessible irrespective of the cars location (assuming WIFI is available)
  - [Remote] Remote configuration
  - [Remote] Infinite pagination
  - [Dropbox] Prioritise emergency video upload 
