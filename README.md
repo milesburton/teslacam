@@ -3,7 +3,7 @@
 ## Current capabilities
  - [Backup] Storage of Tesla Cam videos
  - [Dropbox] Upload videos to Dropbox when a internet connection is available
- - [Remote] Basic Mobile App (Web UI) which lets you view videos on your phone, download videos and ability to enable/disable services at will. Available on port 3000 on the IP address of your Pi
+ - [Remote] Basic Mobile App (Web UI) which lets you view videos on your phone, download videos and ability to enable/disable services at will. Available on port 3000 on the IP address of your Pi (Temporarily disabled)
  - [Security] Services now run as the pi user and all super user commands are whitelisted
  - [Housekeeping] System will delete old videos when remaining storage space falls below 20%
 
