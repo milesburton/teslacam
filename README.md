@@ -43,7 +43,7 @@ Using a couple of tricks I've learned through tinkering with various single boar
 7. Under /home/pi/teslacam run npm install
 8. Under /home/pi/teslacam/src/remote run npm install
 9. Plug the Pi Zero W into the Tesla media USB ports (the front ports). Make sure you use the data port on the Pi, google if you are unsure.
-10. Reboot, once the automatic configuration completes (circa 20 minutes) the car should detect the Pi as a USB drive.
+10. Reboot, once the automatic configuration completes (circa 1 minute) the car should detect the Pi as a USB drive.
 
 # Research & notes
 * Tesla V9 Dashcam records up to one hour, in a circular buffer type fashion split into one minute increments
