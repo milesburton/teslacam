@@ -50,9 +50,17 @@ Using a couple of tricks I've learned through tinkering with various single boar
    Pin-Priority: 1000
    ```
 
+   Install docker ce:
+
+   ```
+   $ curl -fsSL get.docker.com -o get-docker.sh && sh get-docker.sh
+   ```
+
 1. Setup OTG Mode
 
 #### Running
+
+The container uses SSH to talk back to the host system and run commands. Because of this there is a one time setup required to get credentials authorized.
 
 1. Generate SSH Key
    ```
