@@ -4,7 +4,7 @@
 
 - [Backup] Storage of Tesla Cam videos
 - [Dropbox] Upload videos to Dropbox when a internet connection is available
-- [Remote] Basic Mobile App (Web UI) which lets you view videos on your phone, download videos and ability to enable/disable services at will. Available on port 3000 on the IP address of your Pi
+- [Remote] Basic Mobile App (Web UI) which lets you view videos on your phone, download videos and ability to enable/disable services at will. Available on port 3000 on the IP address of your Pi (Temporarily disabled)
 - [Security] Services now run as the pi user and all super user commands are whitelisted
 - [Housekeeping] System will delete old videos when remaining storage space falls below 20%
 
@@ -100,7 +100,7 @@ Using a couple of tricks I've learned through tinkering with various single boar
 7. Under /home/pi/teslacam run npm install
 8. Under /home/pi/teslacam/src/remote run npm install
 9. Plug the Pi Zero W into the Tesla media USB ports (the front ports). Make sure you use the data port on the Pi, google if you are unsure.
-10. Reboot, once the automatic configuration completes (circa 20 minutes) the car should detect the Pi as a USB drive.
+10. Reboot, once the automatic configuration completes (circa 1 minute) the car should detect the Pi as a USB drive.
 
 # Research & notes
 
@@ -150,7 +150,7 @@ With all this in mind, logically speaking the following steps need to be followe
 ## TODO
 
 - [Streaming] Experiment with streaming, it's trivial to stream to youtube with FFMPEG
-- [System|Remote] Intelligent service switching (ie, entirely disable dropbox)
+- [System] Reverse VPN so the PI is accessible irrespective of the cars location (assuming WIFI is available)
 - [Remote] Remote configuration
 - [Remote] Infinite pagination
 - [Dropbox] Prioritise emergency video upload
