@@ -56,7 +56,6 @@ Using a couple of tricks I've learned through tinkering with various single boar
 	--restart=always \
 	-d \
 	-v /home/pi/etc/ssh:/root/.ssh \
-	-v /mnt:/mnt \
 	-v /home/pi/teslacam/video:/home/pi/teslacam/video \
 	-e "USE_SSH=true" \
 	--add-host teslapi:172.17.0.1 \

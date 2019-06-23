@@ -65,6 +65,7 @@ const fixLocal = (imageNum) => {
 const countFilesInDirectory = async dirPath => (await getFiles(dirPath))
   .length;
 
+// TODO: remove the fs calls here so this works over ssh
 const removeErroneousVideos = async dirPath => (await getFiles(dirPath))
   .filter(n => fs.existsSync(n))
   .map((name) => {
@@ -83,7 +84,7 @@ const copyLocal = async (imageNum) => {
   );
 
   const teslacamPath = `${IMAGE_MOUNT_POINT}/TeslaCam`;
-  await removeErroneousVideos(teslacamPath);
+  // await removeErroneousVideos(teslacamPath);
 
   const filesInPath = await countFilesInDirectory(teslacamPath);
   console.log(`Found ${filesInPath} files in ${teslacamPath}`);
@@ -105,14 +106,15 @@ const copyLocal = async (imageNum) => {
 
 const performSanityCheck = async () => {
   const createIfNotExists = (dirName) => {
-    if (!fs.existsSync(dirName)) {
-      fs.mkdirSync(dirName);
-    }
+    execSync(`mkdir -p ${dirName}`);
   };
 
   const createImageIfNotExists = (imageNum) => {
     const expectedFilename = `${IMAGE_DIR}/cam${imageNum}`;
-    if (!fs.existsSync(expectedFilename)) {
+
+    try { // TODO: don't use exception handling for this logic
+      execSync(`ls ${expectedFilename}`, { bubbleError: true });
+    } catch { // Image file not found, let us create it
       execSync(`fallocate -l ${IMAGE_SIZE_MB}M ${IMAGE_DIR}/cam${imageNum}`, { bubbleError: true });
       execSync(`echo "type=c" | /sbin/sfdisk ${IMAGE_DIR}/cam${imageNum}`, { bubbleError: true });
       mountLocal(imageNum, { mountToDirectory: false, bubbleError: true });
