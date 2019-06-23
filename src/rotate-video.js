@@ -60,7 +60,7 @@ const getVideosToDelete = (minimumDiskSpaceToRecoverInBytes, path) => {
 };
 
 const deleteVideo = (...videos) => videos.forEach(({ name: filename }) => {
-  execSync(`rm ${BACKUP_DIR}/${filename}`, { noop: true });
+  execSync(`rm ${BACKUP_DIR}/${filename}`);
 });
 
 const init = async () => {

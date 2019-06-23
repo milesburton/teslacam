@@ -73,8 +73,6 @@ const isOnline = async () => {
 
 async function getFiles(dir) {
   const files = (await readdir(dir)).map(f => join(dir, f));
-
-
   const children = await Promise.all(files.map(async (f) => {
     if ((await stat(f)).isDirectory()) {
       return getFiles(f);
