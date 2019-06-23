@@ -7,4 +7,4 @@ RUN yarn --production
 COPY . .
 VOLUME ["/root/.ssh"]
 VOLUME ["/home/pi/teslacam/video"]
-ENTRYPOINT ["node", "./src/dashcam-monitor"]
+ENTRYPOINT ["node", "./src/clean-recent-clips"]
