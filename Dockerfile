@@ -8,3 +8,4 @@ COPY . .
 VOLUME ["/root/.ssh"]
 VOLUME ["/home/pi/teslacam/video"]
 VOLUME ["/mnt"]
+ENTRYPOINT ["node", "./src/dashcam-monitor"]
