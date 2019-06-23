@@ -33,23 +33,35 @@ Using a couple of tricks I've learned through tinkering with various single boar
 ## Docker Instructions
 1. Generate SSH Key
 	```
-	$ docker run --rm -it -v /home/pi/etc/ssh:/root/.ssh wurmr/dashcam-monitor ssh-keygen
+	$ docker run \
+	--rm \
+	-it \
+	-v /home/pi/etc/ssh:/root/.ssh \
+	--entrypoint "ssh-keygen" \
+	wurmr/dashcam-monitor
 	```
 1. Copy SSH Key
 	```
-	$ docker run --rm -it -v /home/pi/etc/ssh:/root/.ssh --add-host dockerhost:172.17.0.1 wurmr/dashcam-monitor ssh-copy-id pi@dockerhost
+	$ docker run \
+	--rm \
+	-it \
+	-v /home/pi/etc/ssh:/root/.ssh \
+	--add-host dockerhost:172.17.0.1 \
+	--entrypoint "ssh-copy-id pi@dockerhost" \
+	wurmr/dashcam-monitor
 	```
 1. Run dashscam
 	```
-	$ docker run -it \
-	--rm \
+	$ docker run \
+	--restart=always \
+	-d \
 	-v /home/pi/etc/ssh:/root/.ssh \
 	-v /mnt:/mnt \
 	-v /home/pi/teslacam/video:/home/pi/teslacam/video \
-	-e USE_SSH:true \
+	-e "USE_SSH=true" \
 	--add-host teslapi:172.17.0.1 \
-	wurmr/dashcam-monitor \
-	ash
+	--name dashcam-monitor \
+	wurmr/dashcam-monitor
 	```
 ## Instructions (Detail to come)
 1. [Download](https://www.raspberrypi.org/downloads/raspbian/) and burn the latest "lite" Raspbian to a suitable SDHC card using [Etcher](https://www.balena.io/etcher/) (or equivalent) 
