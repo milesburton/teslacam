@@ -28,8 +28,8 @@ const sleep = async ms => new Promise(r => setTimeout(r, ms));
 const execSync = (cmd, opts = { bubbleError: false, noop: false }) => {
   console.log(`Running ssh [${cmd}]`);
 
-  const useSsh = true || process.env.USE_SSH; // TODO: grab from config
-  const teslacamIp = '192.168.25.176' || process.env.TESLACAM_IP || 'teslapi'; // TODO: grab from config
+  const useSsh = process.env.USE_SSH; // TODO: grab from config
+  const teslacamIp = process.env.TESLACAM_IP || 'teslapi'; // TODO: grab from config
   const actualCommand = useSsh ? `ssh pi@${teslacamIp} "${cmd}"` : cmd;
 
   try {
