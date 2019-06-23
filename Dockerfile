@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM arm32v6/node:lts-alpine
 RUN apk add --update --no-cache openssh
 WORKDIR /usr/local/teslacam
 COPY package.json .
