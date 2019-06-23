@@ -30,6 +30,27 @@ Using a couple of tricks I've learned through tinkering with various single boar
 5. OTG Mode enabled in the boot configuration
 6. [Dropbox uploader](https://github.com/andreafabrizi/Dropbox-Uploader)
 
+## Docker Instructions
+1. Generate SSH Key
+	```
+	$ docker run --rm -it -v /home/pi/etc/ssh:/root/.ssh wurmr/dashcam-monitor ssh-keygen
+	```
+1. Copy SSH Key
+	```
+	$ docker run --rm -it -v /home/pi/etc/ssh:/root/.ssh --add-host dockerhost:172.17.0.1 wurmr/dashcam-monitor ssh-copy-id pi@dockerhost
+	```
+1. Run dashscam
+	```
+	$ docker run -it \
+	--rm \
+	-v /home/pi/etc/ssh:/root/.ssh \
+	-v /mnt:/mnt \
+	-v /home/pi/teslacam/video:/home/pi/teslacam/video \
+	-e USE_SSH:true \
+	--add-host teslapi:172.17.0.1 \
+	wurmr/dashcam-monitor \
+	ash
+	```
 ## Instructions (Detail to come)
 1. [Download](https://www.raspberrypi.org/downloads/raspbian/) and burn the latest "lite" Raspbian to a suitable SDHC card using [Etcher](https://www.balena.io/etcher/) (or equivalent) 
 2. Modify the /boot partition to [enable USB OTG](https://gist.github.com/gbaman/50b6cca61dd1c3f88f41) We need to enable g_mass_storage and dw2.
