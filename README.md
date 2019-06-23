@@ -34,7 +34,25 @@ Using a couple of tricks I've learned through tinkering with various single boar
 5. OTG Mode enabled in the boot configuration
 6. [Dropbox uploader](https://github.com/andreafabrizi/Dropbox-Uploader)
 
-## Docker Instructions
+### Optional Docker Instructions
+
+#### Software install instructions
+
+1. Etcher -> Raspbian
+1. Install Docker (getdocker curl)
+
+   - note about locking the version due to the [bug](https://github.com/moby/moby/issues/38175#issuecomment-463164203).
+     `/etc/apt/preferences.d/docker-ce`
+
+   ```
+   Package: docker-ce
+   Pin: version 18.06.*
+   Pin-Priority: 1000
+   ```
+
+1. Setup OTG Mode
+
+#### Running
 
 1. Generate SSH Key
    ```
