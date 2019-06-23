@@ -55,7 +55,7 @@ Using a couple of tricks I've learned through tinkering with various single boar
    --entrypoint "ssh-copy-id pi@dockerhost" \
    wurmr/dashcam-monitor
    ```
-1. Run dashscam
+1. Run dashcam-monitor
 
    ```
    $ docker run \
