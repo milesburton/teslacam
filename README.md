@@ -110,6 +110,19 @@ The container uses SSH to talk back to the host system and run commands. Because
    wurmr/clean-recent-clips
    ```
 
+1. Run rsync upload service, note you will have to run `ssh-copy-id` from your TeslaCam pi to your target server
+   ```
+   $ docker run \
+   --restart=always \
+   -d \
+   -v /home/pi/etc/ssh:/root/.ssh \
+   -e "USE_SSH=true" \
+   -e "RSYNC_TARGET=user@server:~/TeslaCam" \
+   --add-host teslapi:172.17.0.1 \
+   --name rsync-upload \
+   wurmr/dashcam-rsync-upload
+   ```
+
 ## Instructions (Detail to come)
 
 1. [Download](https://www.raspberrypi.org/downloads/raspbian/) and burn the latest "lite" Raspbian to a suitable SDHC card using [Etcher](https://www.balena.io/etcher/) (or equivalent)
