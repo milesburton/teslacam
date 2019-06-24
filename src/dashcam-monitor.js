@@ -16,7 +16,7 @@ const {
   USE_SSH
 } = require('../etc/config.js');
 const {
-  benchmark, execSync, sleep, isOnline, getFiles
+  execSync, sleep, isOnline, getFiles
 } = require('./common.js');
 
 const calculatePartitionOffsetForImage = (absoluteFilename) => {
