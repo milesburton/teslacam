@@ -155,31 +155,30 @@ const startup = async () => {
   console.log('Starting Tesla Sync script');
   unmount('All');
   unmountLocal(0);
-  if (!USE_SSH) { // TODO: Remove this check and fix the removal call.
+  if (!USE_SSH) {
+    // TODO: Remove this check and fix the removal call.
     await removeErroneousVideos(BACKUP_DIR);
   }
   await performSanityCheck();
 };
 
-const waitForVideoFiles = async (minusLagTime = 0) => {
+const waitForVideoFiles = async () => {
   console.log('Waiting for video files');
-  await sleep(RECORD_WINDOW_MS - minusLagTime);
+  await sleep(RECORD_WINDOW_MS);
 };
 
 const processVideo = async (imageNum) => {
+  const cleanup = async () => {
+    const nextImage = imageNum ^ 1;
+    fixLocal(nextImage);
+    mountLocal(nextImage);
+    await copyLocal(nextImage);
+    unmountLocal(nextImage);
+  };
+
   mount(imageNum);
-
-  await waitForVideoFiles();
+  await Promise.all([waitForVideoFiles(), cleanup()]);
   unmount(imageNum);
-  mount(imageNum ^ 1);
-
-  const elapsedTimeMs = benchmark(async () => {
-    fixLocal(imageNum);
-    mountLocal(imageNum);
-    await copyLocal(imageNum);
-    unmountLocal(imageNum);
-  });
-  await waitForVideoFiles(elapsedTimeMs);
 };
 
 const init = async () => {
