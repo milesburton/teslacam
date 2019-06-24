@@ -64,8 +64,7 @@ const isOnline = async () => {
   try {
     await internetAvailable();
     return true;
-  } catch (err) {
-    console.log(err.toString());
+  } catch {
     return false;
   }
 };
