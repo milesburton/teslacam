@@ -8,9 +8,10 @@ const BACKUP_DIR = `${HOME_PATH}/video`;
 /*
  File size per minute of footage, 28MiB
  Minutes of recording: 30
- Disk image size: 30 * 28 = 840MiB + margin of error
+ Number of cameras recording: 3
+ Disk image size: 30 * 28 * 3= 2520MiB + margin of error
  */
-const IMAGE_SIZE_MB = process.env.IMAGE_SIZE_MB || 1024;
+const IMAGE_SIZE_MB = process.env.IMAGE_SIZE_MB || 3072;
 const RECORD_WINDOW_MS = 30 * 60 * 1000;
 const IMAGE_MOUNT_POINT = '/mnt';
 const DROPBOX_UPLOADER = '/home/pi/dropbox_uploader.sh';
