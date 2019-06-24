@@ -20,6 +20,7 @@ const WAIT_INTERVAL = 30 * 1000;
 const MAX_DISK_UTILISATION_PERCENT = 0.8;
 const USE_SSH = process.env.USE_SSH || false;
 const TESLACAM_IP = process.env.TESLACAM_IP || 'teslapi';
+const { RSYNC_TARGET } = process.env;
 // An apparent bug in the Tesla software causes the dashcam to be unmounted whilst the car is not actively powered up
 // A reboot is required to restore dashcam functionality, it may be better to simply pause the dashcam whilst parked
 // This wont resolve the problem whilst charging away from home.
@@ -39,5 +40,6 @@ module.exports = {
   MAX_DISK_UTILISATION_PERCENT,
   PAUSE_RECORDING_ON_WIFI,
   USE_SSH,
-  TESLACAM_IP
+  TESLACAM_IP,
+  RSYNC_TARGET
 };
