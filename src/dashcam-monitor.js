@@ -12,7 +12,8 @@ const {
   RECORD_WINDOW_MS,
   IMAGE_SIZE_MB,
   PAUSE_RECORDING_ON_WIFI,
-  WAIT_INTERVAL
+  WAIT_INTERVAL,
+  USE_SSH
 } = require('../etc/config.js');
 const {
   benchmark, execSync, sleep, isOnline, getFiles
@@ -154,7 +155,9 @@ const startup = async () => {
   console.log('Starting Tesla Sync script');
   unmount('All');
   unmountLocal(0);
-  await removeErroneousVideos(BACKUP_DIR);
+  if (!USE_SSH) { // TODO: Remove this check and fix the removal call.
+    await removeErroneousVideos(BACKUP_DIR);
+  }
   await performSanityCheck();
 };
 
