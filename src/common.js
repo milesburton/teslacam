@@ -5,6 +5,7 @@ const {
   performance: { now },
 } = require('perf_hooks');
 const internetAvailable = require('internet-available');
+const { USE_SSH, TESLACAM_IP } = require('../etc/config');
 
 const outputShellResult = (preamble, buffer) => {
   const trimmedBuffer = buffer ? buffer.toString().trim() : '';
@@ -28,9 +29,7 @@ const sleep = async ms => new Promise(r => setTimeout(r, ms));
 const execSync = (cmd, opts = { bubbleError: false, noop: false }) => {
   console.log(`Running ssh [${cmd}]`);
 
-  const useSsh = process.env.USE_SSH; // TODO: grab from config
-  const teslacamIp = process.env.TESLACAM_IP || 'teslapi'; // TODO: grab from config
-  const actualCommand = useSsh ? `ssh pi@${teslacamIp} "${cmd}"` : cmd;
+  const actualCommand = USE_SSH ? `ssh pi@${TESLACAM_IP} "${cmd}"` : cmd;
 
   try {
     const buffer = !opts.noop ? execSyncNoLogging(actualCommand) : '';
