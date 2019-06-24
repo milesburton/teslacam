@@ -104,7 +104,7 @@ const copyLocal = async (imageNum) => {
 
   const teslacamPath = `${IMAGE_MOUNT_POINT}/TeslaCam`;
 
-  execSync(`rsync -aq --remove-source-files ${teslacamPath}/ ${BACKUP_DIR}`, {
+  execSync(`rsync -avh --remove-source-files ${teslacamPath}/ ${BACKUP_DIR}`, {
     bubbleError: true
   });
 
