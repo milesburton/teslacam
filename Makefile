@@ -1,4 +1,4 @@
-TAG    := $$(git log -1 --pretty=%h)
+TAG    := $$(git rev-parse --short HEAD)
 
 build:
 	@docker build -t teslacam/dashcam-monitor:${TAG} .
