@@ -20,7 +20,7 @@ const LOCK_FILE_NAME = 'lock';
 const WAIT_INTERVAL = 30 * 1000;
 const MAX_DISK_UTILISATION_PERCENT = 0.8;
 const USE_SSH = process.env.USE_SSH || false;
-const TESLACAM_IP = process.env.TESLACAM_IP || 'teslapi';
+const TESLACAM_IP = process.env.TESLACAM_IP || '172.17.0.1';
 const NUMBER_OF_DAYS_TO_KEEP = process.env.NUMBER_OF_DAYS_TO_KEEP || 5;
 const { RSYNC_TARGET } = process.env;
 // An apparent bug in the Tesla software causes the dashcam to be unmounted whilst the car is not actively powered up

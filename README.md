@@ -69,7 +69,7 @@ The container uses SSH to talk back to the host system and run commands. Because
    -it \
    -v /home/pi/etc/ssh:/root/.ssh \
    --entrypoint "ssh-keygen" \
-   wurmr/dashcam-monitor
+   teslacam/dashcam-monitor
    ```
 1. Copy SSH Key
    ```
@@ -77,9 +77,8 @@ The container uses SSH to talk back to the host system and run commands. Because
    --rm \
    -it \
    -v /home/pi/etc/ssh:/root/.ssh \
-   --add-host dockerhost:172.17.0.1 \
    --entrypoint "ssh-copy-id pi@dockerhost" \
-   wurmr/dashcam-monitor
+   teslacam/dashcam-monitor
    ```
 1. Run dashcam-monitor
 
@@ -91,9 +90,9 @@ The container uses SSH to talk back to the host system and run commands. Because
    -v /home/pi/teslacam/video:/home/pi/teslacam/video \
    -v /mnt:/mnt \
    -e "USE_SSH=true" \
-   --add-host teslapi:172.17.0.1 \
+   -e "IMAGE_SIZE_MB=3072" \
    --name dashcam-monitor \
-   wurmr/dashcam-monitor
+   teslacam/dashcam-monitor
    ```
 
 1. Run clip cleaner
@@ -105,9 +104,9 @@ The container uses SSH to talk back to the host system and run commands. Because
    -v /home/pi/etc/ssh:/root/.ssh \
    -v /home/pi/teslacam/video:/home/pi/teslacam/video \
    -e "USE_SSH=true" \
-   --add-host teslapi:172.17.0.1 \
+   -e "NUMBER_OF_DAYS_TO_KEEP=3"
    --name clean-recent-clips \
-   wurmr/clean-recent-clips
+   teslacam/clean-recent-clips
    ```
 
 1. Run rsync upload service, note you will have to run `ssh-copy-id` from your TeslaCam pi to your target server
@@ -117,8 +116,7 @@ The container uses SSH to talk back to the host system and run commands. Because
    -d \
    -v /home/pi/etc/ssh:/root/.ssh \
    -e "USE_SSH=true" \
-   -e "RSYNC_TARGET=user@server:~/TeslaCam" \
-   --add-host teslapi:172.17.0.1 \
+   -e "RSYNC_TARGET=user@server:~/TeslaCam/SavedClips" \
    --name rsync-upload \
    wurmr/dashcam-rsync-upload
    ```
