@@ -3,7 +3,7 @@
 /* eslint no-await-in-loop: 0 */
 /* eslint no-constant-condition: 0 */
 
-const { BACKUP_DIR, WAIT_INTERVAL } = require('../etc/config.js');
+const { BACKUP_DIR, WAIT_INTERVAL, NUMBER_OF_DAYS_TO_KEEP } = require('../etc/config.js');
 const { execSync, sleep } = require('./common.js');
 
 const cleanRecentClips = (numberOfDays) => {
@@ -14,7 +14,7 @@ const cleanRecentClips = (numberOfDays) => {
 
 const init = async () => {
   while (true) {
-    cleanRecentClips(5);
+    cleanRecentClips(NUMBER_OF_DAYS_TO_KEEP);
     await sleep(WAIT_INTERVAL);
   }
 };
