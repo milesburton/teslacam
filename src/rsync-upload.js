@@ -15,12 +15,14 @@ const init = async () => {
     return;
   }
 
+  const savedClipsPath = `${BACKUP_DIR}/SavedClips`;
+
   while (true) {
     if (await isOnline()) {
       execSync(
         `rsync ${
           DELETE_ON_UPLOAD ? '--remove-source-files' : ''
-        } -avhe ssh ${BACKUP_DIR} ${RSYNC_TARGET}`
+        } -avhe ssh ${savedClipsPath} ${RSYNC_TARGET}`
       );
     }
 
