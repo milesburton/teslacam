@@ -8,9 +8,12 @@ const {
   execSync, sleep, isOnline, getFiles
 } = require('./common.js');
 const {
-  BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL, DELETE_ON_UPLOAD
+  BACKUP_DIR,
+  DROPBOX_UPLOADER,
+  LOCK_FILE_NAME,
+  WAIT_INTERVAL,
+  DELETE_ON_UPLOAD
 } = require('../etc/config.js');
-
 
 const attemptUpload = (filename, opts = { deleteWhenComplete: true, noop: false }) => {
   try {
@@ -27,7 +30,6 @@ const attemptUpload = (filename, opts = { deleteWhenComplete: true, noop: false 
     return false;
   }
 };
-
 
 const getVideos = files => files.filter(f => f.endsWith('mp4'));
 
