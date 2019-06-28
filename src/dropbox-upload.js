@@ -1,9 +1,11 @@
 #!/bin/node
 
+// TODO: Do everything in the container, no reason to use execSync
+
 /* eslint no-await-in-loop: 0 */
 /* eslint no-constant-condition: 0 */
 const {
-  benchmark, execSync, sleep, isOnline, getFiles
+  execSync, sleep, isOnline, getFiles
 } = require('./common.js');
 const {
   BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL, DELETE_ON_UPLOAD
@@ -58,13 +60,13 @@ const onlyNewVideos = (uploadHistory, videos, fn) => {
 const init = async () => {
   console.log('TeslaCam Dropbox Upload daemon');
 
-  let uploadHistory = [];
-
   while (true) {
     const files = await getFiles(BACKUP_DIR);
 
     if (isOnline && !hasLockFile(files)) {
-      benchmark(() => uploadHistory = onlyNewVideos(uploadHistory, getVideos(files), uploadVideoFiles));
+      const upload = uploadHistory => onlyNewVideos(uploadHistory, getVideos(files), uploadVideoFiles);
+
+      upload();
     }
 
     await sleep(WAIT_INTERVAL);
