@@ -29,85 +29,38 @@ Using a couple of tricks I've learned through tinkering with various single boar
 
 1. 2018-11-13-raspbian-stretch-lite or later
 2. Etcher to write the disk image to the SDHC card (dd, win32diskimager etc etc will also work)
-3. daemontools package
-4. NodeJS 10.x for Arm v6
-5. OTG Mode enabled in the boot configuration
-6. [Dropbox uploader](https://github.com/andreafabrizi/Dropbox-Uploader)
+3. Docker
+4. OTG Mode enabled in the boot configuration
 
-### Optional Docker Instructions
+## Instructions
 
-#### Software install instructions
+### On your desktop computer
 
-1. Etcher -> Raspbian
-1. Install Docker (getdocker curl)
+1. [Download](https://www.raspberrypi.org/downloads/raspbian/) and burn the latest "lite" Raspbian to a suitable SDHC card using [Etcher](https://www.balena.io/etcher/) (or equivalent)
+1. Modify the `/boot` partition to [enable USB OTG](https://gist.github.com/gbaman/975e2db164b3ca2b51ae11e45e8fd40a).
+   - Add `dtoverlay=dwc2` as a new line to the bottom of `config.txt`
+   - Enable g_mass_storage and dw2 by adding `modules-load=dwc2,g_mass_storage` right after `rootwait` in `cmdline.txt`
+1. Add your [WIFI configuration details](https://www.raspberrypi-spy.co.uk/2017/04/manually-setting-up-pi-wifi-using-wpa_supplicant-conf/) (consider adding several, including a portable hotspot such as your phone)
+1. Enable ssh by adding an empty file called `ssh` on the `/boot` partition
 
-   - note about locking the version due to the [bug](https://github.com/moby/moby/issues/38175#issuecomment-463164203).
-     `/etc/apt/preferences.d/docker-ce`
+### On your TeslaCam Pi (via SSH)
+
+1. Plug the Pi Zero W into the Tesla media USB ports (the front ports). Make sure you use the data port on the Pi, google if you are unsure.
+1. Connect to the Pi
+   ```
+   $ ssh pi@raspberrypi.local
+   ```
+1. Execute the get-teslacam script, this should install everything you need to get up and running.
 
    ```
-   Package: docker-ce
-   Pin: version 18.06.*
-   Pin-Priority: 1000
+   $ curl -fsSL https://raw.githubusercontent.com/milesburton/teslacam/master/get-teslacam.sh | sh
    ```
 
-   Install docker ce:
+1. Once the automatic configuration completes the car should detect the Pi as a USB drive.
 
-   ```
-   $ curl -fsSL get.docker.com -o get-docker.sh && sh get-docker.sh
-   ```
+### Optionally install extra services
 
-1. Setup OTG Mode
-
-#### Running
-
-The container uses SSH to talk back to the host system and run commands. Because of this there is a one time setup required to get credentials authorized.
-
-1. Generate SSH Key
-   ```
-   $ docker run \
-   --rm \
-   -it \
-   -v /home/pi/etc/ssh:/root/.ssh \
-   --entrypoint "ssh-keygen" \
-   teslacam/dashcam-monitor
-   ```
-1. Copy SSH Key
-   ```
-   $ docker run \
-   --rm \
-   -it \
-   -v /home/pi/etc/ssh:/root/.ssh \
-   --entrypoint "ssh-copy-id pi@dockerhost" \
-   teslacam/dashcam-monitor
-   ```
-1. Run dashcam-monitor
-
-   ```
-   $ docker run \
-   --restart=always \
-   -d \
-   -v /home/pi/etc/ssh:/root/.ssh \
-   -v /home/pi/teslacam/video:/home/pi/teslacam/video \
-   -v /mnt:/mnt \
-   -e "USE_SSH=true" \
-   -e "IMAGE_SIZE_MB=3072" \
-   --name dashcam-monitor \
-   teslacam/dashcam-monitor
-   ```
-
-1. Run clip cleaner
-
-   ```
-   $ docker run \
-   --restart=always \
-   -d \
-   -v /home/pi/etc/ssh:/root/.ssh \
-   -v /home/pi/teslacam/video:/home/pi/teslacam/video \
-   -e "USE_SSH=true" \
-   -e "NUMBER_OF_DAYS_TO_KEEP=3" \
-   --name clean-recent-clips \
-   teslacam/clean-recent-clips
-   ```
+#### Rsync
 
 1. Run rsync upload service, note you will have to run `ssh-copy-id` from your TeslaCam pi to your target server
    ```
@@ -116,28 +69,15 @@ The container uses SSH to talk back to the host system and run commands. Because
    -d \
    -v /home/pi/etc/ssh:/root/.ssh \
    -e "USE_SSH=true" \
+   -e "BACKUP_DIR=~/teslacam/video" \
    -e "RSYNC_TARGET=user@server:~/TeslaCam/SavedClips" \
    --name rsync-upload \
    teslacam/dashcam-rsync-upload
    ```
 
-## Instructions (Detail to come)
+#### Dropbox Upload
 
-1. [Download](https://www.raspberrypi.org/downloads/raspbian/) and burn the latest "lite" Raspbian to a suitable SDHC card using [Etcher](https://www.balena.io/etcher/) (or equivalent)
-2. Modify the /boot partition to [enable USB OTG](https://gist.github.com/gbaman/50b6cca61dd1c3f88f41) We need to enable g_mass_storage and dw2.
-3. Add your [WIFI configuration details](https://www.raspberrypi-spy.co.uk/2017/04/manually-setting-up-pi-wifi-using-wpa_supplicant-conf/) (consider adding several, including a portable hotspot such as your phone)
-4. Install daemontools. Follow [these steps](https://isotope11.com/blog/manage-your-services-with-daemontools) up until "Making Services"
-5. Install [Nodejs for Linux Arm V6](https://nodejs.org/en/download/). Gunzip this to /opt/node, symlink to /usr/bin
-6. As root (sudo su)
-
-- Clone [Dropbox-Uploader](https://github.com/andreafabrizi/Dropbox-Uploader) (if you want dropbox upload capability). Be sure to follow the instructions including creating a 'TeslaCam' app on the dropbox portal
-- Clone this repository to /home/pi/teslacam
-- Create the services sym links as follows cd /etc/service ln -s /home/pi/teslacam/services/\* .
-
-7. Under /home/pi/teslacam run npm install
-8. Under /home/pi/teslacam/src/remote run npm install
-9. Plug the Pi Zero W into the Tesla media USB ports (the front ports). Make sure you use the data port on the Pi, google if you are unsure.
-10. Reboot, once the automatic configuration completes (circa 1 minute) the car should detect the Pi as a USB drive.
+_Coming soon_
 
 # Research & notes
 
