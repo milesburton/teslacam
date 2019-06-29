@@ -5,6 +5,8 @@ COPY package.json .
 COPY yarn.lock .
 RUN yarn --production
 COPY . .
-VOLUME ["/root/.ssh"]
-VOLUME ["/home/pi/teslacam/video"]
+VOLUME ["/video"]
+ENV BACKUP_DIR /video
+ENV USE_SSH false
+ENV WAIT_INTERVAL 600000
 ENTRYPOINT ["node", "./src/clean-recent-clips"]

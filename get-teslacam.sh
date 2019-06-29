@@ -44,10 +44,8 @@ install() {
     sudo docker run \
     --restart=always \
     -d \
-    -v /home/pi/etc/ssh:/root/.ssh \
-    -v /home/pi/teslacam/video:/home/pi/teslacam/video \
-    -e "USE_SSH=true" \
-    -e "NUMBER_OF_DAYS_TO_KEEP=3" \
+    -v /home/pi/teslacam/video:/video \
+    -e "NUMBER_OF_DAYS_TO_KEEP=2" \
     --name clean-recent-clips \
     teslacam/clean-recent-clips
 }
