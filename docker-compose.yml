@@ -1,9 +1,23 @@
-version: '3.3'
+version: 3
 services:
   dashcam-monitor:
-    build: .
-    volumes: 
-      - ./etc/ssh:/root/.ssh
-    extra_hosts:
-      # - dockerhost:172.17.0.1
-      - dockerhost:192.168.25.176
+    restart: always
+    volumes:
+      - "~/teslacam/.etc/ssh:/root/.ssh"
+      - "~/teslacam/video:/home/pi/teslacam/video"
+      - "/mnt:/mnt"
+    environment:
+      - USE_SSH=true
+      - IMAGE_SIZE_MB=3072
+      - IMAGE_DIR=~/teslacam/.images
+      - BACKUP_DIR=~/teslacam/video
+    container_name: dashcam-monitor
+    image: teslacam/dashcam-monitor
+  clean-recent-clips:
+    restart: always
+    volumes:
+      - "/home/pi/teslacam/video:/video"
+    environment:
+      - NUMBER_OF_DAYS_TO_KEEP=2
+    container_name: clean-recent-clips
+    image: teslacam/clean-recent-clips
