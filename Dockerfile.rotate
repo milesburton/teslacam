@@ -7,6 +7,6 @@ RUN yarn --production
 COPY . .
 VOLUME ["/video"]
 ENV BACKUP_DIR /video
-ENV USE_SSH false
 ENV WAIT_INTERVAL 600000
+RUN unset USE_SSH
 ENTRYPOINT ["node", "./src/clean-recent-clips"]
