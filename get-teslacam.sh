@@ -4,7 +4,7 @@ set -e
 echo "Installing TeslaCam"
 
 install() {
-    curl -fsSL get.docker.com | VERSION=18.06.* sh ./get-docker.sh
+    curl -fsSL get.docker.com | VERSION=18.06.* sh
 
     mkdir -p ~/teslacam/video
     mkdir -p ~/teslacam/.images
