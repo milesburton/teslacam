@@ -11,7 +11,6 @@ services:
       - IMAGE_SIZE_MB=3072
       - IMAGE_DIR=~/teslacam/.images
       - BACKUP_DIR=~/teslacam/video
-    container_name: dashcam-monitor
     image: teslacam/dashcam-monitor
   clean-recent-clips:
     restart: always
@@ -19,5 +18,4 @@ services:
       - "/home/pi/teslacam/video:/video"
     environment:
       - NUMBER_OF_DAYS_TO_KEEP=2
-    container_name: clean-recent-clips
     image: teslacam/clean-recent-clips

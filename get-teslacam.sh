@@ -4,7 +4,7 @@ set -e
 echo "Installing TeslaCam"
 
 install() {
-    curl -fsSL get.docker.com | VERSION=18.06.* sh ./get-docker.sh
+    curl -fsSL get.docker.com | VERSION=18.06.* sh
 
     mkdir -p ~/teslacam/video
     mkdir -p ~/teslacam/.images
@@ -26,28 +26,11 @@ install() {
     teslacam/dashcam-monitor \
     pi@172.17.0.1
 
-    echo "Installing Dashcam Monitor"
-    sudo docker run \
-    --restart=always \
-    -d \
-    -v ~/teslacam/.etc/ssh:/root/.ssh \
-    -v ~/teslacam/video:/home/pi/teslacam/video \
-    -v /mnt:/mnt \
-    -e "USE_SSH=true" \
-    -e "IMAGE_SIZE_MB=3072" \
-    -e "IMAGE_DIR=~/teslacam/.images" \
-    -e "BACKUP_DIR=~/teslacam/video" \
-    --name dashcam-monitor \
-    teslacam/dashcam-monitor
+    echo "Installing Docker Compose"
+    sudo apt-get -y install docker-compose
 
-    echo "Installing Clip Cleaner"
-    sudo docker run \
-    --restart=always \
-    -d \
-    -v /home/pi/teslacam/video:/video \
-    -e "NUMBER_OF_DAYS_TO_KEEP=2" \
-    --name clean-recent-clips \
-    teslacam/clean-recent-clips
+    echo "Installing and starting services"
+    curl -fsSL https://raw.githubusercontent.com/wurmr/teslacam/feature/containerize-dashcam-monitor/docker-compose.yml | sudo docker-compose -f - -p teslacam up -d
 }
 
 install
