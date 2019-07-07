@@ -59,7 +59,7 @@ const fixLocal = (imageNum) => {
   console.log('Attempting to fix image');
   // Required to mount loopback to /dev/loop${imageNum}
   mountLocal(imageNum, { mountToDirectory: false });
-  execSync(`sudo /sbin/fsck -a /dev/loop${imageNum}`);
+  execSync(`sudo /sbin/fsck -a /dev/loop${imageNum}pt1`);
   unmountLocal(imageNum);
 };
 
