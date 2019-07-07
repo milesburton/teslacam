@@ -33,15 +33,17 @@ pi ALL=NOPASSWD:STAT_ROTATE,START_ROTATE,STOP_ROTATE,STATUS_ROTATE
 # Image mounting
 
 Cmnd_Alias UMOUNT_IMAGE=            /bin/umount /mnt
-Cmnd_Alias MOUNT_IMAGE_0=           /bin/mount -t vfat -o gid=pi\,uid=pi /dev/loop0 /mnt
-Cmnd_Alias MOUNT_IMAGE_1=           /bin/mount -t vfat -o gid=pi\,uid=pi /dev/loop1 /mnt
+Cmnd_Alias MOUNT_IMAGE_0=           /bin/mount /dev/loop0 /mnt
+Cmnd_Alias MOUNT_IMAGE_1=           /bin/mount /dev/loop1 /mnt
 
 Cmnd_Alias UMOUNT_TESLA=            /sbin/modprobe -r g_mass_storage
 Cmnd_Alias MOUNT_TESLA_IMAGE_0=     /sbin/modprobe g_mass_storage file\=~/teslacam/images/cam0 stall\=0\,0\, ro\=0\,0 removable\=1\,1
 Cmnd_Alias MOUNT_TESLA_IMAGE_1=     /sbin/modprobe g_mass_storage file\=~/teslacam/images/cam1 stall\=0\,0\, ro\=0\,0 removable\=1\,1
 
-Cmnd_Alias FIX_TESLA_IMAGE_0=       /sbin/fsck.vfat -a /dev/loop0
-Cmnd_Alias FIX_TESLA_IMAGE_1=       /sbin/fsck.vfat -a /dev/loop1
+Cmnd_Alias FIX_TESLA_IMAGE_0=       /sbin/fsck.ext4 /dev/loop0p1
+Cmnd_Alias FIX_TESLA_IMAGE_1=       /sbin/fsck.ext4 /dev/loop1p1
 
-pi ALL=NOPASSWD:UMOUNT_IMAGE, MOUNT_IMAGE_0, MOUNT_IMAGE_1, UMOUNT_TESLA, MOUNT_TESLA_IMAGE_0, MOUNT_TESLA_IMAGE_1, FIX_TESLA_IMAGE_0, FIX_TESLA_IMAGE_1
+Cmnd_Alias OWN_MNT= 		    /bin/chown -R pi:pi /mnt 
+
+pi ALL=NOPASSWD:UMOUNT_IMAGE, MOUNT_IMAGE_0, MOUNT_IMAGE_1, UMOUNT_TESLA, MOUNT_TESLA_IMAGE_0, MOUNT_TESLA_IMAGE_1, FIX_TESLA_IMAGE_0, FIX_TESLA_IMAGE_1, OWN_MNT
 
