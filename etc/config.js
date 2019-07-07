@@ -7,7 +7,7 @@ const BACKUP_DIR = `${HOME_PATH}/video`;
  Minutes of recording: 30
  Disk image size: 30 * 28 = 840MiB + margin of error
  */
-const IMAGE_SIZE_MB = 1024;
+const IMAGE_SIZE_MB = 6048;
 const RECORD_WINDOW_MS = 30 * 60 * 1000;
 const IMAGE_MOUNT_POINT = '/mnt';
 const DROPBOX_UPLOADER = '/home/pi/dropbox_uploader.sh';

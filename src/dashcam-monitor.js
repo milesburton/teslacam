@@ -41,10 +41,11 @@ const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
 
   const partitionOffset = calculatePartitionOffsetForImage(`${IMAGE_DIR}/cam${imageNum}`);
 
-  execSync(`sudo /sbin/losetup -o ${partitionOffset} ${loopPath} ${imagePath}`, { bubbleError: true });
+  execSync(`sudo /sbin/losetup ${loopPath} ${imagePath}`, { bubbleError: true });
 
   if (opts.mountToDirectory) {
-    execSync(`sudo /bin/mount -o gid=pi,uid=pi ${loopPath} ${IMAGE_MOUNT_POINT}`, { bubbleError: true });
+    execSync(`sudo /bin/mount ${loopPath}p1 ${IMAGE_MOUNT_POINT}`, { bubbleError: true });
+    execSync(`sudo chown -R pi:pi ${IMAGE_MOUNT_POINT}`, { bubbleError: true });
   }
 };
 
@@ -58,7 +59,7 @@ const fixLocal = (imageNum) => {
   console.log('Attempting to fix image');
   // Required to mount loopback to /dev/loop${imageNum}
   mountLocal(imageNum, { mountToDirectory: false });
-  execSync(`sudo /sbin/fsck.vfat -a /dev/loop${imageNum}`);
+  execSync(`sudo /sbin/fsck -a /dev/loop${imageNum}`);
   unmountLocal(imageNum);
 };
 
@@ -114,9 +115,9 @@ const performSanityCheck = async () => {
     const expectedFilename = `${IMAGE_DIR}/cam${imageNum}`;
     if (!fs.existsSync(expectedFilename)) {
       execSync(`fallocate -l ${IMAGE_SIZE_MB}M ${IMAGE_DIR}/cam${imageNum}`, { bubbleError: true });
-      execSync(`echo "type=c" | /sbin/sfdisk ${IMAGE_DIR}/cam${imageNum}`, { bubbleError: true });
+      execSync(`echo "type=83" | /sbin/sfdisk ${IMAGE_DIR}/cam${imageNum}`, { bubbleError: true });
       mountLocal(imageNum, { mountToDirectory: false, bubbleError: true });
-      execSync(`sudo /sbin/mkfs.vfat /dev/loop${imageNum} -F 32 -I`, { bubbleError: true });
+      execSync(`sudo /sbin/mkfs.ext4 /dev/loop${imageNum}p1`, { bubbleError: true });
       unmountLocal(imageNum);
     }
   };
