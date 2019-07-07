@@ -91,11 +91,13 @@ const copyLocal = async (imageNum) => {
 
   if (filesInPath) {
     const filesBeforeCopy = await countFilesInDirectory(BACKUP_DIR);
-    
-    execSync(`touch ${BACKUP_DIR}/lock`, { bubbleError: true });
-    execSync(`rsync -av ${teslacamPath}/* ${BACKUP_DIR}`, { bubbleError: true });
-    execSync(`rm -rf ${teslacamPath}/*`, { bubbleError: true });
-    execSync(`rm ${BACKUP_DIR}/lock`, { bubbleError: true });
+
+    execSync(`rsync -avh --remove-source-files ${teslacamPath}/ ${BACKUP_DIR}`, {
+      bubbleError: true
+    });
+
+    // Clean up any empty directories
+    execSync(`find ${teslacamPath}/* -type d -delete`);
 
     const filesAfterCopy = await countFilesInDirectory(BACKUP_DIR);
     if (filesAfterCopy - filesBeforeCopy < filesInPath) {

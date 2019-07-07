@@ -3,7 +3,7 @@
 /* eslint no-await-in-loop: 0 */
 /* eslint no-constant-condition: 0 */
 const {
-  benchmark, execSync, sleep, isOnline, getFiles
+  execSync, sleep, isOnline, getFiles
 } = require('./common.js');
 const {
   BACKUP_DIR, DROPBOX_UPLOADER, LOCK_FILE_NAME, WAIT_INTERVAL, DELETE_ON_UPLOAD
@@ -64,7 +64,7 @@ const init = async () => {
     const files = await getFiles(BACKUP_DIR);
 
     if (isOnline && !hasLockFile(files)) {
-      benchmark(() => uploadHistory = onlyNewVideos(uploadHistory, getVideos(files), uploadVideoFiles));
+      uploadHistory = onlyNewVideos(uploadHistory, getVideos(files), uploadVideoFiles);
     }
 
     await sleep(WAIT_INTERVAL);
