@@ -92,15 +92,11 @@ With all this in mind, logically speaking the following steps need to be followe
 
 ## TODO
  - [Streaming] Experiment with streaming, it's trivial to stream to youtube with FFMPEG
- - [System|Remote] Intelligent service switching (ie, entirely disable dropbox)
  - [Remote] Remote configuration
  - [Remote] Infinite pagination
- - [Dropbox] Prioritise emergency video upload 
  - [Github] Explain setup instructions (more detail required)
  - [Github] Write decent installation script to automatically configure the application on a Pi
  - [System] Use a read only file system to avoid corruption of the operating system
- - [System] Make performance metrics more useful (time to upload video etc)
- - [System] Improve logging
  - [Thoughts] Automatic WiFi hotspot on first boot
  - [Me] Buy Tesla Roadster 
 
