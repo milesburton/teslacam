@@ -5,12 +5,15 @@ echo "Installing TeslaCam"
 
 install() {
     curl -fsSL get.docker.com | VERSION=18.06.* sh
+    # adding local user to docker group
+    sudo usermod -aG docker $USER
 
     mkdir -p ~/teslacam/video
     mkdir -p ~/teslacam/.images
     mkdir -p ~/teslacam/.etc/ssh
 
-    sudo docker run \
+    sudo -u $USER \
+    docker run \
     --rm \
     -it \
     -v ~/teslacam/.etc/ssh:/root/.ssh \
@@ -18,7 +21,8 @@ install() {
     teslacam/dashcam-monitor \
     -f /root/.ssh/id_rsa -q -N ""
 
-    sudo docker run \
+    sudo -u $USER \
+    docker run \
     --rm \
     -it \
     -v ~/teslacam/.etc/ssh:/root/.ssh \
@@ -30,7 +34,9 @@ install() {
     sudo apt-get -y install docker-compose
 
     echo "Installing and starting services"
-    curl -fsSL https://raw.githubusercontent.com/wurmr/teslacam/feature/containerize-dashcam-monitor/docker-compose.yml | sudo docker-compose -f - -p teslacam up -d
+    curl -fsSL \
+    https://raw.githubusercontent.com/wurmr/teslacam/feature/containerize-dashcam-monitor/docker-compose.yml | \
+    sudo -u $USER docker-compose -f - -p teslacam up -d
 }
 
 install
