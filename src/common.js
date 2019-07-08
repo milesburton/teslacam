@@ -27,7 +27,7 @@ const outputShellResult = (preamble, buffer) => {
 const sleep = async ms => new Promise(r => setTimeout(r, ms));
 
 const execSync = (cmd, opts = { bubbleError: false, noop: false }) => {
-  console.log(`Running ssh [${cmd}]`);
+  console.log(`Running ${USE_SSH ? 'ssh' : ''} [${cmd}]`);
 
   const actualCommand = USE_SSH ? `ssh pi@${TESLACAM_IP} "${cmd}"` : cmd;
 
