@@ -18,7 +18,6 @@ const calculatePartitionOffsetForImage = (absoluteFilename) => {
   const sizeInBytes = +execSync(`sfdisk -l -o Size -q --bytes "${absoluteFilename}" | tail -1`, { bubbleError: true });
   const sizeInSectors = +execSync(`sfdisk -l -o Sectors -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
   const sectorSize = sizeInBytes / sizeInSectors;
-  console.log(`Sector size: ${sectorSize}`);
   const partitionStartSector = +execSync(`sfdisk -l -o Start -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
   return partitionStartSector * sectorSize;
 };
@@ -59,7 +58,7 @@ const fixLocal = (imageNum) => {
   console.log('Attempting to fix image');
   // Required to mount loopback to /dev/loop${imageNum}
   mountLocal(imageNum, { mountToDirectory: false });
-  execSync(`sudo /sbin/fsck -a /dev/loop${imageNum}`);
+  execSync(`sudo /sbin/fsck.ext4 -a /dev/loop${imageNum}p1`);
   unmountLocal(imageNum);
 };
 
