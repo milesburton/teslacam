@@ -63,6 +63,7 @@ Using a couple of tricks I've learned through tinkering with various single boar
 #### Rsync
 
 1. Run rsync upload service, note you will have to run `ssh-copy-id` from your TeslaCam pi to your target server
+2. Run the following command after you update the `RSYNC_TARGET`
    ```
    $ docker run \
    --restart=always \
@@ -70,7 +71,7 @@ Using a couple of tricks I've learned through tinkering with various single boar
    -v /home/pi/etc/ssh:/root/.ssh \
    -e "USE_SSH=true" \
    -e "BACKUP_DIR=~/teslacam/video" \
-   -e "RSYNC_TARGET=user@server:~/TeslaCam/SavedClips" \
+   -e "RSYNC_TARGET=user@server:~/TeslaCam" \
    --name rsync-upload \
    teslacam/dashcam-rsync-upload
    ```
