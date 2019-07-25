@@ -52,9 +52,12 @@ Using a couple of tricks I've learned through tinkering with various single boar
    ```
 1. Execute the get-teslacam script, this should install everything you need to get up and running.
 
-   ```
-   $ curl -fsSL https://raw.githubusercontent.com/milesburton/teslacam/master/get-teslacam.sh | sh
-   ```
+    ```
+    $ GET_TESLACAM=`mktemp` \
+    curl -fsSL https://git.io/fjPiW -o ${GET_TESLACAM} && \ 
+    sh ${GET_TESLACAM} && \
+    rm ${GET_TESLACAM}
+    ```
 
 1. Once the automatic configuration completes the car should detect the Pi as a USB drive.
 
@@ -62,19 +65,37 @@ Using a couple of tricks I've learned through tinkering with various single boar
 
 #### Rsync
 
-1. Run rsync upload service, note you will have to run `ssh-copy-id` from your TeslaCam pi to your target server
-2. Run the following command after you update the `RSYNC_TARGET`
-   ```
-   $ docker run \
-   --restart=always \
-   -d \
-   -v /home/pi/etc/ssh:/root/.ssh \
-   -e "USE_SSH=true" \
-   -e "BACKUP_DIR=~/teslacam/video" \
-   -e "RSYNC_TARGET=user@server:~/TeslaCam" \
-   --name rsync-upload \
-   teslacam/dashcam-rsync-upload
-   ```
+1. Generate a ssh key for the rsync service
+    ```
+    $ docker run \
+    --rm \
+    -v teslacam_rsync_ssh:/root/.ssh \
+    --entrypoint "ssh-keygen" \
+    teslacam/dashcam-rsync-upload \
+    -f /root/.ssh/id_rsa -q -N ""
+    ```
+
+1. Run rsync upload service initial setup to copy making sure to update `user@server` to where you want to upload your key
+    ```
+    $ docker run \
+    --rm \
+    -it \
+    -v teslacam_rsync_ssh:/root/.ssh \
+    --entrypoint "ssh-copy-id" \
+    teslacam/dashcam-rsync-upload \
+    user@server
+
+1. Run the following command after you update the `RSYNC_TARGET`
+    ```
+    $ docker run \
+    --restart=always \
+    -d \
+    -v teslacam_rsync_ssh:/root/.ssh \
+    -v ${HOME}/teslacam/video:/video \
+    -e "RSYNC_TARGET=user@server:~/TeslaCam" \
+    --name rsync-upload \
+    teslacam/dashcam-rsync-upload
+    ```
 
 #### Dropbox Upload
 
