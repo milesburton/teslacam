@@ -78,7 +78,25 @@ Using a couple of tricks I've learned through tinkering with various single boar
 
 #### Dropbox Upload
 
-_Coming soon_
+1. Obtain a dropbox token for your account
+1. Configure the uploader container by running
+    ```
+    $ docker run \
+    --rm \
+    -it \
+    -v dropbox_uploader_config:/config \
+    --entrypoint=./dropbox_uploader.sh \
+    teslacam/dropbox-uploader \
+    -f /config/dropbox_uploader.conf
+    ```
+1. Run the container and set it to restart always
+    ```
+    docker run \
+    --restart=always \
+    -v dropbox_uploader_config:/config \
+    --name dropbox-uploader \
+    teslacam/dropbox-uploader
+    ```
 
 # Research & notes
 
