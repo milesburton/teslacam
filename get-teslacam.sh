@@ -4,6 +4,7 @@ set -e
 echo "Installing TeslaCam"
 
 install() {
+    # Lock to docker-ce 18.06
     curl -fsSL get.docker.com | VERSION=18.06.* sh
     # adding local user to docker group
     sudo usermod -aG docker $USER
@@ -14,7 +15,6 @@ install() {
     sudo -u $USER \
     docker run \
     --rm \
-    -it \
     -v teslacam_ssh:/root/.ssh \
     --entrypoint "ssh-keygen" \
     teslacam/dashcam-monitor \
