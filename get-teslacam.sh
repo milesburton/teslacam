@@ -10,13 +10,12 @@ install() {
 
     mkdir -p ~/teslacam/video
     mkdir -p ~/teslacam/.images
-    mkdir -p ~/teslacam/.etc/ssh
 
     sudo -u $USER \
     docker run \
     --rm \
     -it \
-    -v ~/teslacam/.etc/ssh:/root/.ssh \
+    -v teslacam_ssh:/root/.ssh \
     --entrypoint "ssh-keygen" \
     teslacam/dashcam-monitor \
     -f /root/.ssh/id_rsa -q -N ""
@@ -25,7 +24,7 @@ install() {
     docker run \
     --rm \
     -it \
-    -v ~/teslacam/.etc/ssh:/root/.ssh \
+    -v teslacam_ssh:/root/.ssh \
     --entrypoint "ssh-copy-id" \
     teslacam/dashcam-monitor \
     pi@172.17.0.1
@@ -35,7 +34,7 @@ install() {
     docker run \
     --restart=always \
     -d \
-    -v ~/teslacam/.etc/ssh:/root/.ssh \
+    -v teslacam_ssh:/root/.ssh \
     -v ~/teslacam/video:/home/pi/teslacam/video \
     -v /mnt:/mnt \
     -e "USE_SSH=true" \
