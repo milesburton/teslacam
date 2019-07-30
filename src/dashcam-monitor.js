@@ -13,20 +13,6 @@ const {
   benchmark, execSync, sleep, isOnline, getFiles
 } = require('./common.js');
 
-const calculatePartitionOffsetForImage = (absoluteFilename) => {
-  // Shamelessly taken from @marcone
-  const sizeInBytes = +execSync(`sfdisk -l -o Size -q --bytes "${absoluteFilename}" | tail -1`, { bubbleError: true });
-  const sizeInSectors = +execSync(`sfdisk -l -o Sectors -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
-  const sectorSize = sizeInBytes / sizeInSectors;
-  const partitionStartSector = +execSync(`sfdisk -l -o Start -q "${absoluteFilename}" | tail -1`, { bubbleError: true });
-  return partitionStartSector * sectorSize;
-};
-
-const unmount = (imageNum) => {
-  console.log(`Unmounting image ${imageNum}`);
-  execSync('sudo /sbin/modprobe -r g_mass_storage');
-};
-
 const mount = (imageNum) => {
   console.log(`Preparing to mount image ${imageNum}`);
   const randomSn = Math.floor(Math.random() * (123456));
@@ -37,8 +23,6 @@ const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
   console.log(`Preparing to local mount image ${imageNum}`);
   const imagePath = `${IMAGE_DIR}/cam${imageNum}`;
   const loopPath = `/dev/loop${imageNum}`;
-
-  const partitionOffset = calculatePartitionOffsetForImage(`${IMAGE_DIR}/cam${imageNum}`);
 
   execSync(`sudo /sbin/losetup ${loopPath} ${imagePath}`, { bubbleError: true });
 
