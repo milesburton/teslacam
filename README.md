@@ -37,7 +37,7 @@ Using a couple of tricks I've learned through tinkering with various single boar
 2b. Edit your cmdline.txt to include "loop.max_part=31". The file should look similar to: "dwc_otg.lpm_enable=0 console=serial0,115200 console=tty1 root=PARTUUID=53202854-02 rootfstype=ext4 elevator=deadline fsck.repair=yes loop.max_part=31 rootwait modules-load=dwc2,g_mass_storage" 
 3. Add your [WIFI configuration details](https://www.raspberrypi-spy.co.uk/2017/04/manually-setting-up-pi-wifi-using-wpa_supplicant-conf/) (consider adding several, including a portable hotspot such as your phone)
 4. Install daemontools. Follow [these steps](https://isotope11.com/blog/manage-your-services-with-daemontools) up until "Making Services"
-5. Install [Nodejs for Linux Arm V6](https://nodejs.org/en/download/). Gunzip this to /opt/node, symlink to /usr/bin
+5. Install [Nodejs for Linux Arm V6](https://nodejs.org/en/download/). Gunzip this to /opt/node, symlink /opt/node/bin to /usr/bin
 6. As root (sudo su)
   * Clone [Dropbox-Uploader](https://github.com/andreafabrizi/Dropbox-Uploader) (if you want dropbox upload capability). Be sure to follow the instructions including creating a 'TeslaCam' app on the dropbox portal
   * Clone this repository to /home/pi/teslacam

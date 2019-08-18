@@ -153,11 +153,10 @@ async function init() {
 
   console.log('Installing Node');
   const nodebinary = await findBinary(tempDir, 'xz');
-  execSyncOrFail(`rm -rf ${mountPoint}/opt/node && mkdir -p ${mountPoint}/opt/node`);
-  execSyncOrFail(`tar xvf ${nodebinary} -C ${mountPoint}/opt/node`);
-  execSyncOrFail(`rm -f ${mountPoint}/usr/bin/node && ln -s ${mountPoint}/opt/node/bin/node ${mountPoint}/usr/bin/node`);
-  execSyncOrFail(`rm -f ${mountPoint}/usr/bin/npm && ln -s ${mountPoint}/opt/node/bin/npm ${mountPoint}/usr/bin/npm`);
-
+  execSync(`rm -rf ${mountPoint}/opt/node`);
+  execSyncOrFail(`rm -rf ${mountPoint}/opt/node && mkdir  ${mountPoint}/opt/node`);
+  execSyncOrFail(`tar xvf ${nodebinary} --strip-components=1 --wildcards -C ${mountPoint}/opt/node node*/`);
+  execSyncOrFail(`ln -s ${mountPoint}/opt/node/bin/* ${mountPoint}/usr/bin`);
 
   console.log('Preparing for daemontools');
   execSyncOrFail(`rm -rf ${mountPoint}/etc/service && mkdir ${mountPoint}/etc/service`);
