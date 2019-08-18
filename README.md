@@ -6,6 +6,7 @@
  - [Remote] Basic Mobile App (Web UI) which lets you view videos on your phone, download videos and ability to enable/disable services at will. Available on port 3000 on the IP address of your Pi
  - [Security] Services now run as the pi user and all super user commands are whitelisted
  - [Housekeeping] System will delete old videos when remaining storage space falls below 20%
+ - [Housekeeping] Alpha state installer with download and configure a raspbien disk image ready to be burned to a disk. See src/prepare-flash-image.sh (Linux required)
 
 ## Overview
 As of late 2018 Tesla released V9 which among a number of improvements included dash cam functionality. This works by placing a suitably sized USB drive in one of the available USB ports at the front of the vehicle (Model S).
@@ -40,7 +41,7 @@ Using a couple of tricks I've learned through tinkering with various single boar
 6. As root (sudo su)
   * Clone [Dropbox-Uploader](https://github.com/andreafabrizi/Dropbox-Uploader) (if you want dropbox upload capability). Be sure to follow the instructions including creating a 'TeslaCam' app on the dropbox portal
   * Clone this repository to /home/pi/teslacam
-  * Create the services sym links as follows cd /etc/service ln -s /home/pi/teslacam/services/* .
+  * Create the services sym links as follows ln -s /home/pi/teslacam/services/* /etc/service
 7. Under /home/pi/teslacam run npm install
 8. Under /home/pi/teslacam/src/remote run npm install
 9. Plug the Pi Zero W into the Tesla media USB ports (the front ports). Make sure you use the data port on the Pi, google if you are unsure.
@@ -97,7 +98,6 @@ With all this in mind, logically speaking the following steps need to be followe
  - [Remote] Infinite pagination
  - [Dropbox] Prioritise emergency video upload 
  - [Github] Explain setup instructions (more detail required)
- - [Github] Write decent installation script to automatically configure the application on a Pi
  - [System] Use a read only file system to avoid corruption of the operating system
  - [System] Make performance metrics more useful (time to upload video etc)
  - [System] Improve logging

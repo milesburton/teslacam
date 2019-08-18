@@ -66,12 +66,12 @@ const isOnline = async () => {
   }
 };
 
-async function getFiles(dir) {
+async function getFiles(dir, opts = { recursive: true }) {
   const files = (await readdir(dir)).map(f => join(dir, f));
 
 
   const children = await Promise.all(files.map(async (f) => {
-    if ((await stat(f)).isDirectory()) {
+    if ((await stat(f)).isDirectory() && opts.recursive) {
       return getFiles(f);
     }
     return [f];

@@ -1,0 +1,8 @@
+
+
+if [ -e /boot/setup.txt]
+then
+    sh /home/pi/teslacam/installation/postinstall.sh
+    rm /boot/setup.txt
+fi
+
