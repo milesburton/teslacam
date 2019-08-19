@@ -172,9 +172,6 @@ async function init() {
     execSyncOrFail(`echo "OAUTH_ACCESS_TOKEN=${commandObject['--dropbox']}" > ${mountPoint}/home/pi/.dropbox_uploader`);
   }
 
-  console.log('Adding services');
-  execSyncOrFail(`ln -s ${mountPoint}/home/pi/teslacam/services/* ${mountPoint}/etc/service`);
-
   console.log('Configuring rc.local to finalise setup after install');
   // For some reason there's no quick way to insert at n line in bash?!
   const piRclPath = `${mountPoint}/etc/rc.local`;

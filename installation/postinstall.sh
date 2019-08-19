@@ -12,6 +12,11 @@ apt install -y daemontools daemontools-run git
 # Symlink node so it is on the $PATH
 ln -s /opt/node/bin/* /usr/bin
 
+# Setup services
+ln -s /home/pi/teslacam/services/* /etc/service
+find /home/pi/teslacam -name run -exec chmod 755 {} \;
+
+
 # Setup the teslacam folder and make sure everything is installed.
 chown -R pi:pi /home/pi/teslacam
 cd /home/pi/teslacam
