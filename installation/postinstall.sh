@@ -7,6 +7,8 @@ apt upgrade -y
 apt install -y daemontools daemontools-run git
 
 # Setup the teslacam folder and make sure everything is installed.
+
+ln -s /opt/node/bin/* /usr/bin
 chown -R pi:pi /home/pi/teslacam
 cd /home/pi/teslacam
 git pull #

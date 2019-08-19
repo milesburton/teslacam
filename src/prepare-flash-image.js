@@ -156,7 +156,6 @@ async function init() {
   execSync(`rm -rf ${mountPoint}/opt/node`);
   execSyncOrFail(`rm -rf ${mountPoint}/opt/node && mkdir  ${mountPoint}/opt/node`);
   execSyncOrFail(`tar xvf ${nodebinary} --strip-components=1 --wildcards -C ${mountPoint}/opt/node node*/`);
-  execSyncOrFail(`ln -s ${mountPoint}/opt/node/bin/* ${mountPoint}/usr/bin`);
 
   console.log('Preparing for daemontools');
   execSyncOrFail(`rm -rf ${mountPoint}/etc/service && mkdir ${mountPoint}/etc/service`);
