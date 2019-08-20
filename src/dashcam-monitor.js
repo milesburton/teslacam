@@ -1,4 +1,4 @@
-#!/bin/node
+#!/usr/bin/node
 
 /* eslint no-bitwise: 0 */
 /* eslint no-await-in-loop: 0 */
