@@ -184,7 +184,7 @@ async function init() {
   unmountImage(mountPoint);
 
   console.log('TeslaCam drive image is now ready to burn to your sdhc card using Etcher or dd');
-  console.log(`dd if=${imagePath} of=/dev/sdc`);
+  console.log(`${imagePath}`);
 }
 
 init();

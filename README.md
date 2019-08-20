@@ -31,6 +31,18 @@ Using a couple of tricks I've learned through tinkering with various single boar
 5. OTG Mode enabled in the boot configuration
 6. [Dropbox uploader](https://github.com/andreafabrizi/Dropbox-Uploader)
 
+## Automatic Disk Image generation
+Under src there is a nodejs script called prepare-flash-image.js. This will download and automatically configure a raspbian image you can flash to an SDHC card, no further input is required.
+Each argument for the script is optional. Before you begin please make sure nodejs is available on your PATH. Drop me an email if you want an image set up on your behalf.
+ 
+1. Download the TeslaCam repository to an empty directory
+2. cd src
+3. sudo ./prepare-flash-image.js --setup-wifi true --ssid YOUR_ACCESS_POINT_NAME --psk YOUR_PASSWORD --dropbox DROPBOX_API_TOKEN
+3. Assuming the script executed successfully it will print out the path to your disk image, similar to /tmp/teslacam-zvwdlvyh/2019-07-10-raspbian-buster-lite.img. Using etcher or dd you can burn this to a SDHC card
+
+* If for some reason your SDHC is corrupt, just re-flash the disk image.  
+* To create a Dropbox API you need to create a new "app" on the [Dropbox portal](https://www.dropbox.com/developers/apps/create) 
+
 ## Instructions (Detail to come)
 1. [Download](https://www.raspberrypi.org/downloads/raspbian/) and burn the latest "lite" Raspbian to a suitable SDHC card using [Etcher](https://www.balena.io/etcher/) (or equivalent) 
 2. Modify the /boot partition to [enable USB OTG](https://gist.github.com/gbaman/50b6cca61dd1c3f88f41) We need to enable g_mass_storage and dw2.
