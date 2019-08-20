@@ -136,7 +136,7 @@ async function init() {
   console.log('Enabling SSH');
   execSyncOrFail(`touch ${mountPoint}/ssh`);
   console.log('Enabling USB OTG for fake thumb drive support');
-  execSyncOrFail(`tr -d '\n' < ${mountPoint}/cmdline.txt && sed 's/rootwait//g ${mountPoint}/cmdline.txt`);
+  execSyncOrFail(`tr -d '\n' < ${mountPoint}/cmdline.txt && sed 's/rootwait//g' ${mountPoint}/cmdline.txt`);
   execSyncOrFail(`echo " loop.max_part=31 rootwait modules-load=dwc2,g_mass_storage" >> ${mountPoint}/cmdline.txt`);
   execSyncOrFail(`echo " dtoverlay=dwc2" >> ${mountPoint}/config.txt`);
 
