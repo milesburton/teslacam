@@ -38,7 +38,9 @@ Each argument for the script is optional. Before you begin please make sure node
 1. Download the TeslaCam repository to an empty directory
 2. cd src
 3. sudo ./prepare-flash-image.js --setup-wifi true --ssid YOUR_ACCESS_POINT_NAME --psk YOUR_PASSWORD --dropbox DROPBOX_API_TOKEN
-3. Assuming the script executed successfully it will print out the path to your disk image, similar to /tmp/teslacam-zvwdlvyh/2019-07-10-raspbian-buster-lite.img. Using etcher or dd you can burn this to a SDHC card
+4. Assuming the script executed successfully it will print out the path to your disk image, similar to /tmp/teslacam-zvwdlvyh/2019-07-10-raspbian-buster-lite.img. Using etcher or dd you can burn this to a SDHC card
+5. It'll take maybe 5-10 minutes to configure when you first insert the flashcard into the Raspberry Pi. I would recommend you test it out on your computer before moving to the car. If the installation process was successful 
+a USB drive should appear on your pc.
 
 * If for some reason your SDHC is corrupt, just re-flash the disk image.  
 * To create a Dropbox API you need to create a new "app" on the [Dropbox portal](https://www.dropbox.com/developers/apps/create) 
