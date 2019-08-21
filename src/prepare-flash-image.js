@@ -20,7 +20,7 @@ const supportedCommands = ['--temporary-directory', '--setup-wifi', '--ssid', '-
 const BINARY_RASPIAN = 'http://director.downloads.raspberrypi.org/raspbian_lite/images/raspbian_lite-2019-07-12/2019-07-10-raspbian-buster-lite.zip';
 const BINARY_NODE = 'https://nodejs.org/dist/v10.16.3/node-v10.16.3-linux-armv6l.tar.xz';
 
-const execSyncOrFail = (cmd)=>execSync(cmd, { bubbleError: true });
+const execSyncOrFail = cmd => execSync(cmd, { bubbleError: true });
 
 const getPartitions = (imagePath) => {
   // Derived from @marcone
@@ -135,10 +135,6 @@ async function init() {
 
   console.log('Enabling SSH');
   execSyncOrFail(`touch ${mountPoint}/ssh`);
-  console.log('Enabling USB OTG for fake thumb drive support');
-  execSyncOrFail(`tr -d '\n' < ${mountPoint}/cmdline.txt && sed 's/rootwait//g' ${mountPoint}/cmdline.txt`);
-  execSyncOrFail(`echo " loop.max_part=31 rootwait modules-load=dwc2,g_mass_storage" >> ${mountPoint}/cmdline.txt`);
-  execSyncOrFail(`echo " dtoverlay=dwc2" >> ${mountPoint}/config.txt`);
 
   if (commandObject['--setup-wifi']) {
     console.log('Adding WIFI config');

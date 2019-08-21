@@ -29,4 +29,11 @@ npm install
 cd src/remote
 npm install
 
+# Enable OTG
+sed -i 's/rootwait/loop.max_part=31 rootwait/g' /boot/cmdline.txt
+sed -i 's/rootwait/rootwait modules-load=dwc2,g_mass_storage/g' /boot/cmdline.txt
+tr -d '\\n' < /boot/cmdline.txt`
+echo " dtoverlay=dwc2" >> /boot/config.txt`
+
 echo "TeslaCam Ready!"
+reboot
