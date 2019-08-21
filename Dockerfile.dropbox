@@ -1,0 +1,15 @@
+FROM node:lts-alpine
+RUN apk add --update --no-cache curl bash
+WORKDIR /usr/local/teslacam
+COPY package.json .
+COPY yarn.lock .
+RUN yarn --production
+COPY . .
+ADD https://raw.githubusercontent.com/andreafabrizi/Dropbox-Uploader/master/dropbox_uploader.sh .
+RUN chmod +x ./dropbox_uploader.sh
+ENV DROPBOX_UPLOADER "./dropbox_uploader.sh -f /config/dropbox_uploader.conf"
+ENV USE_SSH false
+ENV BACKUP_DIR /video
+ENV WAIT_INTERVAL 300000
+VOLUME ["/video", "/config"]
+ENTRYPOINT ["node", "src/dropbox-upload.js"]

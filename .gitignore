@@ -63,3 +63,4 @@ services/**/supervise/*
 !services/remote/log/supervise/.gitkeep
 !supervise/.gitkeep
 
+.env

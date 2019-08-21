@@ -2,9 +2,10 @@ const { execSync: execSyncNoLogging } = require('child_process');
 const { readdir, stat } = require('fs').promises;
 const { join } = require('path');
 const {
-  performance: { now },
+  performance: { now }
 } = require('perf_hooks');
 const internetAvailable = require('internet-available');
+const { USE_SSH, TESLACAM_IP } = require('../etc/config');
 
 const outputShellResult = (preamble, buffer) => {
   const trimmedBuffer = buffer ? buffer.toString().trim() : '';
@@ -26,9 +27,12 @@ const outputShellResult = (preamble, buffer) => {
 const sleep = async ms => new Promise(r => setTimeout(r, ms));
 
 const execSync = (cmd, opts = { bubbleError: false, noop: false }) => {
-  console.log(`Running [${cmd}]`);
+  console.log(`Running ${USE_SSH ? 'ssh' : ''} [${cmd}]`);
+
+  const actualCommand = USE_SSH ? `ssh pi@${TESLACAM_IP} "${cmd}"` : cmd;
+
   try {
-    const buffer = !opts.noop ? execSyncNoLogging(cmd) : '';
+    const buffer = !opts.noop ? execSyncNoLogging(actualCommand) : '';
     return outputShellResult('Success', buffer);
   } catch (err) {
     const buffer = err.stderr;
@@ -45,7 +49,7 @@ const benchmark = (fn) => {
   const t0 = now();
   const output = fn();
 
-  const hasSomethingWorthLogging = (output || typeof output === 'object' && output.length);
+  const hasSomethingWorthLogging = output || (typeof output === 'object' && output.length);
 
   if (!hasSomethingWorthLogging) {
     return;
@@ -60,24 +64,32 @@ const isOnline = async () => {
   try {
     await internetAvailable();
     return true;
-  } catch (err) {
-    console.log(err.toString());
+  } catch {
     return false;
   }
 };
 
 async function getFiles(dir) {
+  if (USE_SSH) {
+    throw new Error('Warning, getFiles called under SSH, This will not work.');
+  }
   const files = (await readdir(dir)).map(f => join(dir, f));
-  const children = await Promise.all(files.map(async (f) => {
-    if ((await stat(f)).isDirectory()) {
-      return getFiles(f);
-    }
-    return [f];
-  }));
+  const children = await Promise.all(
+    files.map(async (f) => {
+      if ((await stat(f)).isDirectory()) {
+        return getFiles(f);
+      }
+      return [f];
+    })
+  );
 
-  return children.reduce((acc, c) => ([...acc, ...c]), []);
+  return children.reduce((acc, c) => [...acc, ...c], []);
 }
 
 module.exports = {
-  sleep, execSync, benchmark, isOnline, getFiles
+  sleep,
+  execSync,
+  benchmark,
+  isOnline,
+  getFiles
 };
