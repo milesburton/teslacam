@@ -31,7 +31,7 @@ const unmount = (imageNum) => {
 const mount = (imageNum) => {
   console.log(`Preparing to mount image ${imageNum}`);
   const randomSn = Math.floor(Math.random() * (123456));
-  execSync(`sudo /sbin/modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} removable=1 ro=0 stall=0 idVendor=0x0781 idProduct=0x5572 bcdDevice=0x011a iManufacturer="SanDisk" iProduct="Cruzer Switch" iSerialNumber=${randomSn}`, { bubbleError: true });
+  execSync(`sudo /sbin/modprobe g_mass_storage file=${IMAGE_DIR}/cam${imageNum} removable=1 ro=0 stall=0 idVendor=0x0781 idProduct=0x5572 bcdDevice=0x011a iManufacturer="SanDisk" iProduct="Cruzer Switch" iSerialNumber="${randomSn}"`, { bubbleError: true });
 };
 
 const mountLocal = (imageNum, opts = { mountToDirectory: true }) => {
