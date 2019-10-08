@@ -54,7 +54,7 @@ Using a couple of tricks I've learned through tinkering with various single boar
 
     ```
     $ GET_TESLACAM=`mktemp` \
-    curl -fsSL https://git.io/fjPiW -o ${GET_TESLACAM} && \ 
+    curl -fsSL https://git.io/JeWlq -o ${GET_TESLACAM} && \ 
     sh ${GET_TESLACAM} && \
     rm ${GET_TESLACAM}
     ```
