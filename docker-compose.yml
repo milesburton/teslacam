@@ -1,0 +1,21 @@
+version: "2"
+services:
+  dashcam-monitor:
+    restart: always
+    volumes:
+      - "~/teslacam/.etc/ssh:/root/.ssh"
+      - "~/teslacam/video:/home/pi/teslacam/video"
+      - "/mnt:/mnt"
+    environment:
+      - USE_SSH=true
+      - IMAGE_SIZE_MB=3072
+      - IMAGE_DIR=~/teslacam/.images
+      - BACKUP_DIR=~/teslacam/video
+    image: teslacam/dashcam-monitor
+  clean-recent-clips:
+    restart: always
+    volumes:
+      - "~/teslacam/video:/video"
+    environment:
+      - NUMBER_OF_DAYS_TO_KEEP=2
+    image: teslacam/clean-recent-clips
