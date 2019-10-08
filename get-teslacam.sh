@@ -4,8 +4,11 @@ set -e
 echo "Installing TeslaCam"
 
 install() {
-    # Lock to docker-ce 18.06
-    curl -fsSL get.docker.com | VERSION=18.06.* sh
+    # Download working copy of containerd for the Pi Zero
+    # https://github.com/docker/for-linux/issues/709#issuecomment-536295224
+    wget https://packagecloud.io/Hypriot/rpi/packages/raspbian/buster/containerd.io_1.2.6-1_armhf.deb/download.deb
+    sudo dpkg -i download.deb && sudo rm download.deb
+    curl -fsSL get.docker.com | sh
     # adding local user to docker group
     sudo usermod -aG docker $USER
 
