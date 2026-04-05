@@ -11,7 +11,7 @@
   - Download and service management
   - (Temporarily disabled)
 
-## 🛠 Hardware Requirements
+## Hardware Requirements
 
 1. Tesla (2017 AP 2.5 or newer)
 2. Raspberry Pi Zero W
