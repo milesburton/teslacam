@@ -1,0 +1,28 @@
+name: Trusted PR Auto-Approve and Merge
+
+on:
+  pull_request_target:
+    types: [opened, reopened, synchronize, ready_for_review]
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  trusted-automerge:
+    if: github.event.pull_request.user.login == 'milesburton' || github.event.pull_request.user.login == 'dependabot[bot]'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Auto approve trusted PR
+        uses: hmarr/auto-approve-action@v4
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Attempt admin merge (bypass when permitted)
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          PR_URL: ${{ github.event.pull_request.html_url }}
+        run: |
+          gh pr merge "$PR_URL" --squash --delete-branch --admin || \
+          gh pr merge "$PR_URL" --merge --delete-branch --admin || \
+          gh pr merge "$PR_URL" --auto --squash --delete-branch
