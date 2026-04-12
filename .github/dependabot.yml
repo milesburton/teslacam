@@ -1,0 +1,76 @@
+version: 2
+updates:
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    pull-request-branch-name:
+      separator: "/"
+    auto-merge:
+      auto: true
+    allow:
+      - dependency-type: "all"
+  - package-ecosystem: "pip"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    auto-merge:
+      auto: true
+    allow:
+      - dependency-type: "all"
+  - package-ecosystem: "gradle"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    auto-merge:
+      auto: true
+    allow:
+      - dependency-type: "all"
+  - package-ecosystem: "maven"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    auto-merge:
+      auto: true
+    allow:
+      - dependency-type: "all"
+  - package-ecosystem: "composer"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    auto-merge:
+      auto: true
+    allow:
+      - dependency-type: "all"
+  - package-ecosystem: "bundler"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    auto-merge:
+      auto: true
+    allow:
+      - dependency-type: "all"
+  - package-ecosystem: "pub"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    auto-merge:
+      auto: true
+    allow:
+      - dependency-type: "all"
+  - package-ecosystem: "cargo"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    auto-merge:
+      auto: true
+    allow:
+      - dependency-type: "all"
+  - package-ecosystem: "nuget"
+    directory: "/"
+    schedule:
+      interval: "daily"
+    auto-merge:
+      auto: true
+    allow:
+      - dependency-type: "all"
